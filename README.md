@@ -5,22 +5,28 @@ live random users over the real Socket.IO protocol, chats automatically, skips,
 and moves to the next person. Everything is built from **real captured traffic** —
 no guessing (protocol evidence: `eva/transport/protocol_manifest.json`).
 
-## Quick start
+## Quick start (dashboard — recommended)
 
 ```bash
 pip install aiohttp                       # only dependency
-
-# 1) one-time: build session from your logged-in browser
-python -m ops.tools.extract_session
-
-# 2) offline protocol verification (no live site touched)
-python -m ops.tools.socket_smoke_test     # expect: RESULT: 24/24 checks passed
-
-# 3) go live
-python -m eva.transport.ws_bot --debug
+run_dashboard.bat                         # or: python -m eva.dashboard.server
 ```
 
-Windows: double-click `run_chitchat_bot.bat` (after step 1).
+Then in the browser dashboard (http://127.0.0.1:8800):
+1. **Launch Browser** → a real Chrome/Edge window opens (CDP, dedicated profile)
+2. **Log in to chitchat.gg** in that window (once — profile remembers you)
+3. **Save Session** → cookies pulled via CDP, verified, saved to configs/session.json
+4. **Start Bot** → live matching/chatting, stats + logs update live
+
+## Quick start (CLI alternative)
+
+```bash
+pip install aiohttp
+python -m ops.tools.extract_session            # manual cookie paste
+python -m ops.tools.socket_smoke_test          # expect 24/24
+python -m ops.tools.session_smoke_test         # expect 7/7
+python -m eva.transport.ws_bot --debug --max-matches 1
+```
 
 ## What it does
 
@@ -51,6 +57,7 @@ python -m eva.transport.ws_bot --debug
 | Path | What |
 |---|---|
 | `eva/transport/` | capture-backed protocol implementation (see module docstrings) |
+| `eva/dashboard/` | web dashboard: CDP browser session setup + bot control |
 | `docs/CHITCHAT_PROTOCOL.md` | full protocol analysis with captured evidence |
 | `ops/tools/socket_smoke_test.py` | offline verification against exact captured frames |
 | `ops/skills/ws-debug.md` | troubleshooting guide |

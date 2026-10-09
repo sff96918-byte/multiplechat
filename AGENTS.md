@@ -24,8 +24,16 @@ Read `TASK_MAP.md` (multi-site legacy) and `TASK_PROMPT.md` (chitchat WS bot) fi
 
 ```bash
 python -m unittest tests.test_protocol_units -v
-python -m ops.tools.socket_smoke_test
+python -m ops.tools.socket_smoke_test      # 24/24
+python -m ops.tools.session_smoke_test     # 7/7 (dashboard session flow)
 ```
+
+## Dashboard
+
+- `eva/dashboard/server.py` (web UI + bot control), `cdp_session.py` (browser
+  launch + cookie pull via CDP). Default bind 127.0.0.1 — do NOT change to
+  0.0.0.0 by default (dashboard controls the bot).
+- `configs/session.json` is written by the dashboard Save Session button.
 
 ## Where things are
 

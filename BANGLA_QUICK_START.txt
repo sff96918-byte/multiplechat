@@ -13,26 +13,50 @@ Command Prompt খুলে লেখো:
 3.10 বা তার উপরে হলেই হবে। না থাকলে python.org থেকে install করো।
 
 ────────────────────────────────────────────
-ধাপ ২ — Session file বানানো (একবারই লাগবে)
+ধাপ ২ (সবচেয়ে সহজ) — DASHBOARD দিয়ে সব করো ✨
+────────────────────────────────────────────
+double-click:  run_dashboard.bat
+→ browser-এ http://127.0.0.1:8800 খুলবে, সেখানে:
+
+  ১. "🚀 Launch Browser" চাপো → একটা Chrome window খুলবে
+  ২. ওই window-তে chitchat.gg-তে LOGIN করো (একবারই)
+  ৩. ফিরে এসে "💾 Save Session" চাপো
+     → cookies নিজে টেনে এনে session.json বানাবে ✓
+  ৪. (চাইলে Config ট্যাবে persona ঠিক করে Save Config)
+  ৫. "▶ Start Bot" চাপো — live চলা শুরু! লগ নিচে দেখবে।
+  ৬. বন্ধ করতে "■ Stop"
+
+⚠️ Chrome না থাকলে Edge-ও চলবে; তাও না পেলে dashboard-এ
+   browser path লিখে Set Path চাপো।
+
+────────────────────────────────────────────
+ধাপ ২ (বিকল্প) — Session file হাতে বানানো
 ────────────────────────────────────────────
 ১. Chrome-এ chitchat.gg খোলো + LOGIN থাকো
 ২. F12 চাপো → Application ট্যাব → Cookies → https://chitchat.gg
 ৩. এই ২টা cookie-র value copy করো:
       - token            (eyJhbGciOiJIU... দিয়ে শুরু)
       - __Secure-text-session
-৪. (ভালো হয়) Console ট্যাবে লিখে UA-ও copy করো: navigator.userAgent
-৫. এখন এই ফোল্ডারের ঠিকানায় গিয়ে (zip extract করা ফোল্ডার) cmd খুলে:
+৪. cmd থেকে:
       python -m ops.tools.extract_session
-   → token paste, session paste, UA paste — ব্যস!
-
-   ── বিকল্প (আরও সহজ) ──
-   DevTools-এ Network ট্যাব → যেকোনো api.chitchat.gg request-এ ক্লিক →
-   Request Headers → "cookie:" লাইনের পুরোটা copy করে:
-      python -m ops.tools.extract_session --cookie-string "token=...; __Secure-text-session=..."
-   (config ফোল্ডারে session.json তৈরি হবে)
+   → token paste, session paste — ব্যস!
 
 ────────────────────────────────────────────
 ধাপ ৩ — Offline test (live-এ না গিয়ে verify)
+────────────────────────────────────────────
+      python -m ops.tools.socket_smoke_test       → 24/24 আসতে হবে
+      python -m ops.tools.session_smoke_test      → 7/7 আসতে হবে
+(কোনোটাই live site-এ যায় না, নিজস্ব mock server-এ চলে)
+
+────────────────────────────────────────────
+ধাপ ৪ — LIVE চালাও 🚀
+────────────────────────────────────────────
+সবচেয়ে সহজ: dashboard থেকেই "Start Bot" (ধাপ ২ দেখো)
+
+অথবা cmd থেকে:
+      python -m eva.transport.ws_bot --debug --max-matches 1
+
+ — Offline test (live-এ না গিয়ে verify)
 ────────────────────────────────────────────
       python -m ops.tools.socket_smoke_test
 শেষে দেখবে:  RESULT: 24/24 checks passed

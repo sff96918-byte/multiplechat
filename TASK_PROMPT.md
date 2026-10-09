@@ -46,7 +46,8 @@ Capture repo: `https://github.com/rajuvbygyuiythh/wbbbbbbbbbbsck`
 | CLI bot entry | `eva/transport/ws_bot.py` | ✅ |
 | Offline verification (mock server replays REAL captured frames) | `ops/tools/socket_smoke_test.py` | ✅ **15/15 PASS** |
 | Unit tests | `tests/test_protocol_units.py` | ✅ 12/12 PASS |
-| Session builder tool | `ops/tools/extract_session.py` | ✅ |
+| Session builder tool (manual) | `ops/tools/extract_session.py` | ✅ |
+| **Web dashboard (browser session setup + bot control)** | `eva/dashboard/server.py` + `cdp_session.py` | ✅ **7/7 session tests** |
 | Protocol docs | `docs/CHITCHAT_PROTOCOL.md` + manifest | ✅ |
 | Debug skill | `ops/skills/ws-debug.md` | ✅ |
 
@@ -82,6 +83,10 @@ RESULT: 24/24 checks passed (2 scenarios)
 9. handshake wait-এ server `41`/`44` এলে timeout পর্যন্ত hang → fixed
 10. **নিজের typing echo**-তে bot চিরতরে "partner typing" ভাবত → idle-skip কখনো কাজ করত না → fixed (self-echo guard + 6s expiry)
 
+**Dashboard (v3 addition):** `run_dashboard.bat` → browser-এ http://127.0.0.1:8800 →
+Launch Browser (CDP) → chitchat.gg login → Save Session (auto cookie pull + verify) → Start Bot।
+Session flow verified offline: `python -m ops.tools.session_smoke_test` (7/7, fake Chrome CDP server)।
+
 ---
 
 ## 🔑 USER-এর কাজ (Phase D — live test, agent এটা করতে পারবে না)
@@ -94,6 +99,7 @@ python -m ops.tools.extract_session
 
 # 2. আগে offline verify (optional but recommended):
 python -m ops.tools.socket_smoke_test          # 24/24 আসতে হবে
+python -m ops.tools.session_smoke_test         # 7/7 আসতে হবে (dashboard session flow)
 
 # 3. LIVE run (debug দিয়ে):
 python -m eva.transport.ws_bot --debug
