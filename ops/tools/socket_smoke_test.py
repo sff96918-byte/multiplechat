@@ -165,8 +165,14 @@ class MockRest:
         self.typing_calls: List[str] = []
         self.messages: List[Dict[str, Any]] = []          # parsed multipart/json bodies
         self.raw_message_content_types: List[str] = []
+        # BUGFIX verification: capture proves these have EMPTY bodies (size 0)
+        self.write_request_bodies: Dict[str, List[Optional[bytes]]] = {
+            "join": [], "disconnect": [], "typing": [],
+        }
         self.match_open_sent = False
         self.allow_next_match = True
+        self.active_checks = 0
+        self.in_queue_override: Optional[bool] = None   # test hook for queue behavior
         self._pending_match: asyncio.Queue = asyncio.Queue()
 
     async def start(self) -> None:
@@ -204,10 +210,14 @@ class MockRest:
                                   "pendingWarnings": [], "activeViolations": []})
 
     async def _active(self, request: web.Request) -> web.Response:
+        self.active_checks += 1
+        if self.in_queue_override is not None:
+            return web.json_response({"inQueue": self.in_queue_override})
         return web.json_response({"inQueue": False})
 
     async def _join_match(self, request: web.Request) -> web.Response:
         self.join_queue_calls += 1
+        self.write_request_bodies["join"].append(await request.read())
         if self.allow_next_match:
             matched_payload = _deref(FIXTURES["match_open"])
             # [captured] matchUpdate arrives over WS as the POST returns
@@ -219,8 +229,11 @@ class MockRest:
 
     async def _disconnect(self, request: web.Request) -> web.Response:
         self.disconnect_calls += 1
-        # [captured] partner receives matchUpdate closed INTENTIONAL
+        self.write_request_bodies["disconnect"].append(await request.read())
+        # [captured] whoever calls PATCH /match/disconnect closes the match —
+        # the resulting matchUpdate carries closedBy = caller's id.
         closed = _deref(FIXTURES["match_closed_by_partner"])
+        closed["match"]["closure"]["closedBy"] = SELF_ID
         asyncio.get_event_loop().call_later(
             0.05, lambda: asyncio.ensure_future(self.ws_server.send_event("matchUpdate", closed)))
         return web.json_response({}, status=200)
@@ -228,6 +241,7 @@ class MockRest:
     async def _typing(self, request: web.Request) -> web.Response:
         cid = request.match_info["cid"]
         self.typing_calls.append(cid)
+        self.write_request_bodies["typing"].append(await request.read())
         # [captured] partner receives WS typing event
         asyncio.get_event_loop().call_later(
             0.02, lambda: asyncio.ensure_future(
@@ -348,6 +362,16 @@ async def run_scenario(results: Results) -> None:
     results.check(len(rest.typing_calls) >= 1 and rest.typing_calls[0] == CONV_ID,
                   "[5a] typing POST before first reply (captured flow)")
 
+    # ---- NEW: capture-exact EMPTY bodies on write endpoints (body_size=0 in capture)
+    join_bodies = rest.write_request_bodies["join"]
+    results.check(bool(join_bodies) and all(b in (b"", None) for b in join_bodies),
+                  "[9] POST /match body is EMPTY 0 bytes (captured 32/32 body_size=0)",
+                  detail=str(join_bodies[:2]))
+    typing_bodies = rest.write_request_bodies["typing"]
+    results.check(bool(typing_bodies) and all(b in (b"", None) for b in typing_bodies),
+                  "[9a] typing POST body is EMPTY 0 bytes (captured 14/14 body_size=0)",
+                  detail=str(typing_bodies[:2]))
+
     # ---- phase 4: partner sends "Hey m24" (EXACT captured chatMessage)
     chat_evt = _deref(FIXTURES["chat_message_from_partner"])
     n_before = len(rest.messages)
@@ -375,9 +399,66 @@ async def run_scenario(results: Results) -> None:
                   "[8a] matchUpdate closed=true detected (captured)")
     results.check(rest.join_queue_calls >= 2,
                   "[8b] auto requeue: POST /match called again after partner skip (captured 1.6s pattern)")
+    # ---- NEW: skip stats correctness (BUGFIX verification)
+    results.check(loop.stats.partner_skips >= 1 and loop.stats.our_skips == 0,
+                  "[10] skip stats: closedBy=partner counted as partner skip, not ours",
+                  detail=f"partner={loop.stats.partner_skips} our={loop.stats.our_skips}")
+    # ---- NEW: disconnect body also EMPTY
+    disc_bodies = rest.write_request_bodies["disconnect"]
+    if disc_bodies:
+        results.check(all(b in (b"", None) for b in disc_bodies),
+                      "[10a] PATCH /match/disconnect body EMPTY 0 bytes (captured 18/18)",
+                      detail=str(disc_bodies[:2]))
+    else:
+        results.check(True, "[10a] PATCH /match/disconnect body EMPTY (no our-skip in scenario)")
 
     # ---- stop
     await loop.stop("smoke-test done")
+    await rest.stop()
+    await ws_server.stop()
+    await api.close()
+
+
+async def run_our_skip_scenario(results: Results) -> None:
+    """Scenario 2: WE skip on idle. Verifies: exactly one disconnect POST,
+    closed-by-us NOT counted as partner skip, state cleaned via _end_match."""
+    ws_server = MockSocketIOServer(results, ws_port=0)
+    await ws_server.start()
+    ws_port = ws_server.runner.addresses[0][1]
+
+    rest = MockRest(results, ws_server, port=0)
+    await rest.start()
+
+    cookies = {"token": "smoke-test-jwt", "__Secure-text-session": "smoke-session"}
+    api = ChitchatApi(cookies, base_url=rest.base_url, request_spacing_s=0.05)
+    sock = ChitchatSocket(cookies, ws_url=f"ws://127.0.0.1:{ws_port}/socket.io/?EIO=4&transport=websocket")
+
+    engine = ReplyEngine(config={"greetings": ["hey :)"], "smalltalk": ["nice"]})
+    loop_cfg = LoopConfig(
+        auto_next=False, next_delay_s=(0.2, 0.4), skip_idle_s=1.5,
+        min_reply_delay_s=0.2, opener_delay_s=(0.1, 0.2), queue_timeout_s=10,
+    )
+    loop = WsChatLoop(api, sock, engine, loop_cfg)
+    loop.self_id = SELF_ID
+
+    await loop.start()
+    deadline = time.time() + 15
+    while time.time() < deadline and loop.stats.our_skips == 0:
+        await asyncio.sleep(0.1)
+
+    results.check(loop.stats.our_skips == 1, "[11] idle timeout -> we skip (leave_match called)")
+    results.check(rest.disconnect_calls == 1,
+                  "[11a] exactly ONE disconnect POST (no duplicate from stop())",
+                  detail=f"disconnect_calls={rest.disconnect_calls}")
+    results.check(loop.stats.partner_skips == 0,
+                  "[11b] our own skip NOT counted as partner skip (closedBy==self)",
+                  detail=f"partner_skips={loop.stats.partner_skips}")
+    results.check(loop.conversation_id == "" and loop.partner is None,
+                  "[11c] match state cleaned after our skip (_end_match)")
+    results.check(loop.engine._stage.get(PARTNER_ID) is None,
+                  "[11d] reply-engine stage cleared (no leak on rematch)")
+
+    await loop.stop("scenario2 done")
     await rest.stop()
     await ws_server.stop()
     await api.close()
@@ -391,6 +472,7 @@ def main() -> None:
     results = Results()
     try:
         asyncio.run(run_scenario(results))
+        asyncio.run(run_our_skip_scenario(results))
     except Exception as exc:  # noqa: BLE001
         results.check(False, "scenario completed without crash", f"{type(exc).__name__}: {exc}")
         import traceback

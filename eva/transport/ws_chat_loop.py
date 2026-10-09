@@ -100,7 +100,8 @@ class WsChatLoop:
         self._tasks: List[asyncio.Task] = []
         self._running = False
         self._last_partner_msg_t: float = 0.0
-        self._partner_typing: bool = False
+        self._partner_typing_until: float = 0.0   # BUGFIX: typing expires (was sticky bool)
+        self._send_failures: int = 0        # BUGFIX: consecutive send_message failures
         self._stop_reason: str = ""
         self.stats = LoopStats()
 
@@ -180,11 +181,27 @@ class WsChatLoop:
             except Exception as exc:  # noqa: BLE001
                 log.exception("match cycle failed: %s", exc)
                 await asyncio.sleep(10)
+            else:
+                # BUGFIX: without this, auto_next=False caused a hot infinite
+                # loop re-POSTing /match with zero delay
+                if not self.cfg.auto_next:
+                    await asyncio.sleep(1.0)
 
     async def _run_one_match_cycle(self) -> None:
         # clear stale match events
         while not self._match_events.empty():
             self._match_events.get_nowait()
+
+        # BUGFIX: reset stale queue state from a previous session/cycle before
+        # joining (both endpoints captured; avoids double-queue conflicts)
+        try:
+            active = await self.api.match_active()
+            if active.get("inQueue"):
+                log.info("stale queue state detected (inQueue=true) — resetting")
+                await self.api.leave_match()
+                await asyncio.sleep(0.5)
+        except Exception:  # noqa: BLE001
+            log.exception("match/active pre-check failed (continuing)")
 
         self.state = LoopState.QUEUING
         self._emit("queuing", {})
@@ -193,12 +210,9 @@ class WsChatLoop:
 
         # capture-proven: matchUpdate (closed=false) arrives over WS either
         # instantly with matched=true (~40ms) or later when a partner is found.
-        try:
-            payload = await asyncio.wait_for(self._match_events.get(),
-                                             timeout=self.cfg.queue_timeout_s)
-        except asyncio.TimeoutError:
-            log.warning("queue timeout %.0fs — retrying", self.cfg.queue_timeout_s)
-            return
+        payload = await self._wait_for_open_match()
+        if payload is None:
+            return  # timeout / closed event while waiting; loop again
         await self._enter_match_if_open(payload)
         if not self.conversation_id:
             return  # closed event while waiting; loop again
@@ -215,13 +229,50 @@ class WsChatLoop:
             log.info("next match in %.1fs", delay)
             await asyncio.sleep(delay)
 
+    async def _wait_for_open_match(self) -> Optional[dict]:
+        """Wait for a matchUpdate that opens a match.
+
+        BUGFIX: on timeout we used to blindly re-POST /match — but we may
+        already be inQueue server-side (the browser capture never showed a
+        queue wait, so re-join behavior is protocol-unknown). Now we ask the
+        captured GET /match/active endpoint: while the server says inQueue=true
+        we keep waiting; only when we're NOT in queue anymore without a match
+        do we return None (caller re-joins).
+        """
+        check_every = 15.0
+        while self._running:
+            try:
+                payload = await asyncio.wait_for(self._match_events.get(),
+                                                 timeout=check_every)
+            except asyncio.TimeoutError:
+                try:
+                    active = await self.api.match_active()
+                except Exception:  # noqa: BLE001
+                    log.warning("queue wait: match/active check failed — re-joining")
+                    return None
+                if active.get("inQueue"):
+                    log.info("still in queue — continuing to wait")
+                    continue
+                log.warning("queue wait ended (not in queue, no match event) — re-joining")
+                return None
+            closure = (payload.get("match") or {}).get("closure") or {}
+            if closure.get("closed"):
+                # partner-less closed event while waiting — keep waiting
+                continue
+            return payload
+        return None
+
     async def _handle_match_update_fast(self, payload: dict) -> None:
         match = payload.get("match") or {}
         closure = match.get("closure") or {}
         if closure.get("closed"):
-            self.stats.partner_skips += 1
             closed_by = closure.get("closedBy", "")
-            who = "partner" if closed_by and closed_by != self.self_id else "us"
+            # BUGFIX: only count as partner skip when the closer is NOT us
+            if closed_by and closed_by != self.self_id:
+                self.stats.partner_skips += 1
+                who = "partner"
+            else:
+                who = "us"
             log.info("match closed (reason=%s by=%s)", closure.get("closeReason"), who)
             self._emit("match_closed", {"closedBy": closed_by, "conversationId": self.conversation_id})
 
@@ -239,6 +290,7 @@ class WsChatLoop:
             profile=partner_profile,
         )
         self.history = []
+        self._partner_typing_until = 0.0
         self._last_partner_msg_t = time.time()
         self.stats.matches += 1
         self.state = LoopState.CHATTING
@@ -261,7 +313,8 @@ class WsChatLoop:
         while self._running and self.conversation_id:
             await asyncio.sleep(0.5)
             idle = time.time() - self._last_partner_msg_t
-            if idle > self.cfg.skip_idle_s and not self._partner_typing:
+            partner_typing_now = time.time() < self._partner_typing_until
+            if idle > self.cfg.skip_idle_s and not partner_typing_now:
                 log.info("partner idle %.0fs — skipping", idle)
                 self.stats.our_skips += 1
                 self._emit("we_skip", {"conversationId": self.conversation_id})
@@ -269,17 +322,27 @@ class WsChatLoop:
                     await self.api.leave_match()
                 except Exception:  # noqa: BLE001
                     log.exception("leave_match failed")
-                await asyncio.sleep(1.0)
+                self._end_match()  # BUGFIX: single cleanup (no duplicate disconnect later)
                 break
             # drain match-closed events
             while not self._match_events.empty():
                 payload = self._match_events.get_nowait()
                 closure = (payload.get("match") or {}).get("closure") or {}
                 if closure.get("closed"):
-                    self.conversation_id = ""
+                    self._end_match()
                     return
 
     # ------------------------------------------------------------ messaging
+
+    def _end_match(self) -> None:
+        """Single cleanup point whenever a match ends (skip/close/cap/failure).
+        BUGFIX: engine state used to leak per partner and conversation_id
+        lingered after our own skip (caused a duplicate disconnect in stop())."""
+        if self.partner and self.partner.id:
+            self.engine.forget(self.partner.id)
+        self.conversation_id = ""
+        self.partner = None
+        self._partner_typing_until = 0.0
 
     async def _handle_chat_message(self, payload: dict) -> None:
         msg = payload.get("message") or {}
@@ -292,9 +355,20 @@ class WsChatLoop:
         self.history.append({"from": "partner", "text": content, "t": time.time()})
         self.stats.messages_received += 1
         self._last_partner_msg_t = time.time()
-        self._partner_typing = False
+        self._partner_typing_until = 0.0
         log.info("PARTNER %s: %r", self.partner.display() if self.partner else "?", content[:80])
         self._emit("partner_message", {"conversationId": msg.get("conversationId"), "text": content})
+
+        # BUGFIX: if sending keeps failing, don't sit silent until idle-timeout —
+        # skip this match after 3 consecutive failures
+        if self._send_failures >= 3:
+            log.warning("%d consecutive send failures — skipping match", self._send_failures)
+            try:
+                await self.api.leave_match()
+            except Exception:  # noqa: BLE001
+                pass
+            self._end_match()
+            return
 
         if len(self.history) >= self.cfg.skip_after_msgs * 2:
             log.info("message cap reached — skipping match")
@@ -302,7 +376,7 @@ class WsChatLoop:
                 await self.api.leave_match()
             except Exception:  # noqa: BLE001
                 pass
-            self.conversation_id = ""
+            self._end_match()
             return
 
         reply = self.engine.reply(self.partner.__dict__ | {"username": self.partner.username} if self.partner else {}, content)
@@ -321,8 +395,10 @@ class WsChatLoop:
         try:
             sent = await self.api.send_message(self.conversation_id, text)
         except Exception as exc:  # noqa: BLE001
-            log.error("send_message failed: %s", exc)
+            self._send_failures += 1
+            log.error("send_message failed (%d in a row): %s", self._send_failures, exc)
             return
+        self._send_failures = 0
         self.history.append({"from": "us", "text": text, "t": time.time()})
         self.stats.messages_sent += 1
         self._last_partner_msg_t = time.time()
@@ -330,8 +406,12 @@ class WsChatLoop:
         self._emit("our_message", {"conversationId": self.conversation_id, "text": text})
 
     async def _handle_typing(self, payload: dict) -> None:
+        # BUGFIX: ignore OUR own typing echo — otherwise the bot believes the
+        # partner is typing forever and idle-skip never fires
+        if payload.get("userId") == self.self_id:
+            return
         if payload.get("conversationId") == self.conversation_id:
-            self._partner_typing = True
+            self._partner_typing_until = time.time() + 6.0  # typing lapses after 6s
             self._last_partner_msg_t = max(self._last_partner_msg_t, time.time() - 5)
             self._emit("partner_typing", {"conversationId": payload.get("conversationId")})
 

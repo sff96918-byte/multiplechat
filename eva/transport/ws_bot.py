@@ -35,6 +35,8 @@ from ..replies import Persona, ReplyEngine
 
 ROOT = Path(__file__).resolve().parents[2]
 
+log = logging.getLogger("eva.ws_bot")
+
 
 def load_session(path: Path) -> dict:
     if not path.exists():
@@ -84,19 +86,31 @@ async def run(args: argparse.Namespace) -> None:
     for sig in (signal.SIGINT, signal.SIGTERM):
         try:
             asyncio.get_running_loop().add_signal_handler(sig, stop_evt.set)
-        except NotImplementedError:  # windows
+        except NotImplementedError:  # windows — KeyboardInterrupt path below
             pass
 
-    await loop.start()
-    print("[ok] bot running — WS live, queue joined. Ctrl+C to stop.\n")
-
     reporter = asyncio.create_task(_report_loop(loop))
-    await stop_evt.wait()
-    reporter.cancel()
-    print("\n[.] stopping...")
-    await loop.stop("ctrl-c")
-    await api.close()
-    print("[ok] stopped. stats:", json.dumps(loop.stats.snapshot(), indent=2))
+    try:
+        await loop.start()
+        print("[ok] bot running — WS live, queue joined. Ctrl+C to stop.\n")
+        if args.max_matches:
+            print(f"[i] will stop automatically after {args.max_matches} match(es)")
+            while loop._running and loop.stats.matches < args.max_matches:
+                await asyncio.sleep(0.5)
+        else:
+            await stop_evt.wait()
+    except KeyboardInterrupt:
+        # Windows / ProactorEventLoop path (BUGFIX: used to skip cleanup)
+        pass
+    finally:
+        reporter.cancel()
+        print("\n[.] stopping...")
+        try:
+            await asyncio.wait_for(loop.stop("stopped"), timeout=10)
+        except Exception:  # noqa: BLE001
+            log.exception("stop() raised (continuing)")
+        await api.close()
+        print("[ok] stopped. stats:", json.dumps(loop.stats.snapshot(), indent=2))
 
 
 async def _report_loop(loop: WsChatLoop) -> None:
@@ -122,6 +136,8 @@ def main(argv: Optional[list] = None) -> None:
     ap.add_argument("--session", default="configs/session.json", help="session json path")
     ap.add_argument("--config", default="configs/chitchat_bot.json", help="bot config json path")
     ap.add_argument("--debug", action="store_true", help="verbose protocol logging")
+    ap.add_argument("--max-matches", type=int, default=0,
+                    help="stop after N matches (great for the first live test)")
     args = ap.parse_args(argv)
 
     logging.basicConfig(

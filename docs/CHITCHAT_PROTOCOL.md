@@ -1,7 +1,7 @@
 # CHITCHAT.GG PROTOCOL — Deep Analysis of the Capture
 **Source:** https://github.com/rajuvbygyuiythh/wbbbbbbbbbbsck (837KB capture + split files)
 **Machine-readable version:** `eva/transport/protocol_manifest.json`
-**Status:** ✅ implemented + verified offline (15/15 checks in `ops/tools/socket_smoke_test.py`)
+**Status:** ✅ implemented + deeply audited + verified offline (**24/24 checks** in `ops/tools/socket_smoke_test.py`, 2 scenarios)
 
 ---
 
@@ -70,6 +70,9 @@ bot                          server
 3. **Message POST is multipart/form-data** (captured ct) with `content` + `nonce` fields (inferred from response keys — the one documented inference; JSON fallback built in).
 4. **Rate limit**: `x-ratelimit-remaining: 499 / reset: 60` → ~500 req/min bucket; bot spaces requests 350ms+.
 5. **Flagged 403**: `POST /match` can return 403 `{"message":"Flagged"}` → bot backs off 10 min, logs it.
+6. **Empty-body writes**: `POST /match`, typing, `PATCH /match/disconnect`, read সবগুলোতে browser **0-byte body** পাঠায় (শুধু Content-Type header) — client একই করে (captured 32×/14×/18× body_size=0).
+7. **Own typing echo**: capture-এ নিজের typing ফিরে আসা দেখা যায়নি — client defensive ভাবে `userId == self_id` হলে ignore করে (নাহলে idle-skip কখনো ফায়ার করত না)।
+8. **Queue wait**: capture-এ queue wait ছিল না — তাই client `GET /match/active` (captured endpoint) poll করে এবং শুধু `inQueue=false` হলে re-POST করে।
 
 ## 6. Deliberately NOT implemented (nothing captured = nothing guessed)
 

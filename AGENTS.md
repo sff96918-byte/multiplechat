@@ -14,7 +14,7 @@ Read `TASK_MAP.md` (multi-site legacy) and `TASK_PROMPT.md` (chitchat WS bot) fi
    If a user pastes a token in chat, do not write it into any tracked file.
 4. **Verification gate.** After ANY change under `eva/` run:
    - `python -m unittest tests.test_protocol_units`
-   - `python -m ops.tools.socket_smoke_test` (must stay 15/15)
+   - `python -m ops.tools.socket_smoke_test` (must stay 24/24)
    If you changed protocol behavior intentionally, update
    `tests/fixtures/captured_frames.json` + the manifest together, and say why.
 5. **Rate discipline.** Keep request spacing >= 250ms in `ChitchatApi`

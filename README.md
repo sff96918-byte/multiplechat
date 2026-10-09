@@ -14,7 +14,7 @@ pip install aiohttp                       # only dependency
 python -m ops.tools.extract_session
 
 # 2) offline protocol verification (no live site touched)
-python -m ops.tools.socket_smoke_test     # expect: RESULT: 15/15 checks passed
+python -m ops.tools.socket_smoke_test     # expect: RESULT: 24/24 checks passed
 
 # 3) go live
 python -m eva.transport.ws_bot --debug

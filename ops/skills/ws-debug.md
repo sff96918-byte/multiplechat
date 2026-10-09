@@ -8,7 +8,7 @@ python -m unittest tests.test_protocol_units -v
 
 # 2. Full protocol vs captured frames (mock server, offline, ~10s)
 python -m ops.tools.socket_smoke_test
-#    → 15/15 must PASS. If any FAIL, the protocol layer is broken — fix before live.
+#    → 24/24 must PASS. If any FAIL, the protocol layer is broken — fix before live.
 
 # 3. Live session check (touches real api.chitchat.gg with YOUR cookies)
 python -m eva.transport.ws_bot --debug
@@ -27,6 +27,10 @@ python -m eva.transport.ws_bot --debug
 | bot replies to itself | self_id mismatch — preflight `/users/me` didn't match the session cookies | ensure `token` cookie belongs to the logged-in account |
 | double replies | two bot instances running | only one instance per account (server allows one session; second socket gets `41`) |
 | server sends `41` often | another browser tab/session open with same account | close other chitchat tabs |
+| bot never skips idle partners | own typing echo treated as partner typing (old bug) | FIXED: `userId==self_id` typing events ignored; verify with smoke test [11] |
+| duplicate `PATCH /match/disconnect` calls | conversation_id lingered after skip (old bug) | FIXED: `_end_match()` single cleanup; verify smoke test [11a] |
+| stats show partner_skips increasing when WE skip | closedBy==self counted wrong (old bug) | FIXED: skip-stats guard; smoke test [11b] |
+| rejoin queue storms when no partner online | blind re-POST /match on timeout (old bug) | FIXED: waits on captured `GET /match/active`; re-POST only when inQueue=false |
 
 ## Reading the logs
 

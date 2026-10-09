@@ -124,23 +124,35 @@ class ChitchatApi:
         return await self._request("GET", P.EP_MATCH_ACTIVE)
 
     async def join_match_queue(self) -> bool:
-        """POST /match -> {'matched': bool}. Raises FlaggedError on 403 Flagged."""
-        body = await self._request("POST", P.EP_MATCH, json={})
+        """POST /match -> {'matched': bool}. Raises FlaggedError on 403 Flagged.
+
+        Capture-exact request: EMPTY body (0 bytes, captured 32/32 times,
+        body_size=0) with only a Content-Type: application/json header.
+        """
+        body = await self._request("POST", P.EP_MATCH,
+                                   headers={"Content-Type": "application/json"})
         return bool(body.get("matched", False)) if isinstance(body, dict) else False
 
     async def leave_match(self) -> None:
-        """PATCH /match/disconnect — skip current match / leave queue (empty body)."""
-        await self._request("PATCH", P.EP_MATCH_DISCONNECT, json={})
+        """PATCH /match/disconnect — skip current match / leave queue.
+
+        Capture-exact: empty body (captured 18/18 times, body_size=0).
+        """
+        await self._request("PATCH", P.EP_MATCH_DISCONNECT,
+                            headers={"Content-Type": "application/json"})
 
     async def moderation_standing(self) -> dict:
         return await self._request("GET", P.EP_MOD_STANDING)
 
     async def send_typing(self, conversation_id: str) -> None:
-        """POST /users/me/conversations/{cid}/typing (empty body)."""
-        await self._request("POST", P.EP_CONVERSATION_TYPING.format(cid=conversation_id))
+        """POST /users/me/conversations/{cid}/typing — empty body (captured 14/14, body_size=0)."""
+        await self._request("POST", P.EP_CONVERSATION_TYPING.format(cid=conversation_id),
+                            headers={"Content-Type": "application/json"})
 
     async def mark_read(self, conversation_id: str) -> None:
-        await self._request("PATCH", P.EP_CONVERSATION_READ.format(cid=conversation_id), json={})
+        """PATCH /users/me/conversations/{cid}/read — empty body (captured body_size=0)."""
+        await self._request("PATCH", P.EP_CONVERSATION_READ.format(cid=conversation_id),
+                            headers={"Content-Type": "application/json"})
 
     async def fetch_messages(self, conversation_id: str, limit: int = 50, offset: int = 0) -> list:
         path = P.EP_CONVERSATION_MESSAGES.format(cid=conversation_id)

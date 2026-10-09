@@ -82,6 +82,12 @@ class ReplyEngine:
     def farewell(self, partner: dict) -> str:
         return self._fmt(random.choice(self.bye), partner)
 
+    def forget(self, partner_id: str) -> None:
+        """Drop per-partner state when a match ends (prevents stale stage on
+        rematch + unbounded memory growth in long runs)."""
+        self._stage.pop(partner_id, None)
+        self.topic_memory.pop(partner_id, None)
+
     def delay_for(self, incoming: str) -> float:
         """Human-like reply delay: typing speed ~ 5.2 chars/sec + jitter."""
         base = 1.2 + min(len(incoming) * 0.075, 6.0)

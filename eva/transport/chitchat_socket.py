@@ -233,7 +233,10 @@ class ChitchatSocket:
 
     async def _expect(self, ws: aiohttp.ClientWebSocketResponse, kinds: tuple,
                       service_frames: bool = False, timeout: float = 15.0) -> codec.Frame:
-        """Receive frames until one of `kinds` arrives; pings are answered on the way."""
+        """Receive frames until one of `kinds` arrives; pings are answered on the way.
+
+        BUGFIX: a server DISCONNECT (41) / CONNECT_ERROR (44) while waiting now
+        raises immediately instead of stalling until timeout."""
         deadline = time.monotonic() + timeout
         while True:
             remaining = deadline - time.monotonic()
@@ -250,6 +253,10 @@ class ChitchatSocket:
                     continue
                 if frame.kind in kinds:
                     return frame
+                if frame.kind in ("disconnect", "connect_error"):
+                    raise ConnectionError(
+                        f"server ended namespace while waiting for {kinds}: "
+                        f"{frame.kind} payload={frame.payload}")
                 if service_frames and frame.kind == "event":
                     await self._dispatch(frame)
                     continue

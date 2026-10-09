@@ -30,7 +30,7 @@ Capture repo: `https://github.com/rajuvbygyuiythh/wbbbbbbbbbbsck`
 1. **কোনো `socketio` pip package নয়** — wire protocol সরাসরি `aiohttp` WS-এ implement করা (already done)
 2. **Capture-এ নেই এমন কিছু guess করা যাবে না** — unknowns লিস্টেড আছে manifest-এর `unknowns_DO_NOT_GUESS`-এ
 3. **Session/credential কখনো git-এ commit করা যাবে না** (`configs/session.json` gitignored)
-4. প্রতিটা protocol behavior change-এর পর **`python -m ops.tools.socket_smoke_test` 15/15 PASS** করতে হবে
+4. প্রতিটা protocol behavior change-এর পর **`python -m ops.tools.socket_smoke_test` 24/24 PASS** করতে হবে
 
 ---
 
@@ -50,25 +50,37 @@ Capture repo: `https://github.com/rajuvbygyuiythh/wbbbbbbbbbbsck`
 | Protocol docs | `docs/CHITCHAT_PROTOCOL.md` + manifest | ✅ |
 | Debug skill | `ops/skills/ws-debug.md` | ✅ |
 
-**Test evidence:**
+**Test evidence (deep-audit pass 2 — 10 bugs fixed):**
 ```
-RESULT: 15/15 checks passed
-  [PASS] WS connected + namespace handshake
-  [PASS] client sent 40{"release":...} namespace CONNECT (captured)
-  [PASS] client emitted 42["presenceSync"] after connect (captured)
-  [PASS] server ping '2' answered with pong '3' (captured)
-  [PASS] POST /match -> matchUpdate -> match opened (captured)
-  [PASS] conversation id parsed from matchUpdate
-  [PASS] partner resolved (participants != self)
-  [PASS] message POST carries content + nonce fields
-  [PASS] message POST content-type = multipart/form-data (captured ct)
-  [PASS] nonce is a valid UUID v4 (captured pattern)
-  [PASS] typing POST before first reply (captured flow)
-  [PASS] partner chatMessage triggered auto-reply (captured event)
-  [PASS] own-message WS echo ignored (capture-proven behavior)
-  [PASS] matchUpdate closed=true detected (captured)
-  [PASS] auto requeue: POST /match called again after partner skip (captured 1.6s pattern)
+RESULT: 24/24 checks passed (2 scenarios)
+  Scenario 1 — partner-chat flow:
+  [PASS] WS handshake + 40{"release":...} connect (captured bytes)
+  [PASS] presenceSync on connect, ping '2' -> pong '3' (captured)
+  [PASS] POST /match (EMPTY 0-byte body) -> matchUpdate -> match opened
+  [PASS] partner resolved from participants (id != self)
+  [PASS] message POST multipart content+nonce UUID (captured ct)
+  [PASS] typing POST before reply; partner chatMessage -> auto-reply
+  [PASS] own-message WS echo ignored (capture-proven)
+  [PASS] matchUpdate closed=true -> detected -> auto requeue
+  [PASS] skip stats: closedBy=partner vs closedBy=self correct
+
+  Scenario 2 — our-skip flow:
+  [PASS] idle timeout -> exactly ONE disconnect POST (no duplicates)
+  [PASS] closedBy==self NOT counted as partner skip
+  [PASS] match state + reply-engine stage cleaned (no leak)
 ```
+
+**Deep-audit-এ যে ১০টা bug fix হয়েছে (সব verify করা):**
+1. match/typing/disconnect-এ `json={}` পাঠাত — capture বলে **0-byte empty body** → fixed
+2. নিজের skip-ও partner_skips-এ গোনা হতো → fixed (closedBy guard)
+3. `auto_next=false` হলে infinite hot-loop → fixed
+4. queue timeout-এ blind re-POST (server-এ already inQueue থাকলে conflict) → fixed (GET /match/active poll)
+5. send_message বারবার fail করলে ৯০ সেকেন্ড চুপচাপ বসে থাকত → fixed (3 fail = skip)
+6. Windows Ctrl+C-তে cleanup skip হতো → fixed (KeyboardInterrupt path + finally)
+7. reply-engine per-partner state leak → fixed (`forget()`)
+8. নিজের skip-এর পর conversation_id থেকে যেত → duplicate disconnect → fixed (`_end_match()`)
+9. handshake wait-এ server `41`/`44` এলে timeout পর্যন্ত hang → fixed
+10. **নিজের typing echo**-তে bot চিরতরে "partner typing" ভাবত → idle-skip কখনো কাজ করত না → fixed (self-echo guard + 6s expiry)
 
 ---
 
@@ -81,7 +93,7 @@ python -m ops.tools.extract_session
 #    → 'token' আর '__Secure-text-session' paste করো
 
 # 2. আগে offline verify (optional but recommended):
-python -m ops.tools.socket_smoke_test          # 15/15 আসতে হবে
+python -m ops.tools.socket_smoke_test          # 24/24 আসতে হবে
 
 # 3. LIVE run (debug দিয়ে):
 python -m eva.transport.ws_bot --debug
