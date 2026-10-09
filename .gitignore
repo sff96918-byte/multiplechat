@@ -15,3 +15,4 @@ venv/
 captures/*.jsonl
 data/bot_data.db
 Unselected files/
+evabot-zip-*.zip
