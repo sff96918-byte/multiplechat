@@ -1,0 +1,270 @@
+{
+  "site": "https://iframe.coomeet.com/",
+  "timestamp": "20261003_135956",
+  "nickname_used": "Guest5gzvq6",
+  "api_calls": [
+    {
+      "time": "14:00:00.722",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://iframe.coomeet.com/cdn-cgi/challenge-platform/h/b/jsd/oneshot/d76008a69eab/0.7583863765300594:1791011128:31La4BFkK6TXxb0xKRVYZT3-r8Zwxhrf_fKGCcRNUI8/a44a67d7384c9aaf",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "content-type": "text/plain;charset=UTF-8",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": "kPZ-jtMHIwdyPbb86rqPENrM-1EN-3UDS9Q88J5fs$QEj1RQYUhHsFpOM3X-pgzBBk87yLTAdvqHekoGZkULS-PDyVSiBiLxsmUfoPiYvWiUpgE1n3$g6PE+ndj-otm61+73WqUXM6vkqQV5wbhIVEZDd-nih-5409z6gKY33STZYFlTef2Uk2ZhBDvxPS32FXebAR-X+gCm9bXb3+IQjEv-JD4pzn6XSL35wdwrJXTfNmxxHlgVmipPKoxI-xDiznheIE6uhilECvZX6mZXgZr$vo$I7iPBM8ovPtC3O+crPes4dK$WpSjqPt$XUpHLL98CSDS9vh+Y6U9MT$xdr$7MVf4P+013Uk6xkrfGF2z$vfD6E3P7Z-hkNCbPR4t8WJJ$k1ED1Dmv2bMzrdEStQbI-6Ve-cJTunJ-rfcl6MibB0gKWkx9S010lP+3XQRj4nYbH-5suv5yADz0FXibgVzM4gFPlACJHFwsFL+Y$emsQVvH36iAqfiE-PQd8kVGEf38irZu97FwGfCRPn8gVPGtRJTvN5vgALh8z8hzdb4Q3NC85Em5APROf3NF89E0hoIW7JPUx-CoVnCjL39gZRNieMyIHq01N-YQL7oswfdx6XQTkmPYpfSDqUnXgrEXOojYlX9JgqKoAXMwZscI6PSefOJmcH0y5MJNRi1Czz1WdRogXrBFzJQNh8COsSzP3bvpb4IqUtGsuob2dK9gxpr1XcvC7OjhCZgzXlHSkL+5rEKtBZLztnQbN3dmHn1KXzkmLbMYPGV+gxymAiMKUvtUxzLMmxPBiNS9Ik9gzC-ZRMDu3eW-cLoAfxM+XZ-Y4bF3q7cI6ETsktDIX9bO1Ptf78DYQNHHHKSsU+lRpTEJdlWWqZp27f+UgI5RRrkFLu+u$UAPSFGtCXyO$ccxy5ADs41K9hrKnE5KomSCWYeCpxv1LfPL4Wxd-PmujTCtSpTFcUVQC8uCf7Uj80jZgMedwHuNd9U6kDWwkhOj",
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": ""
+      }
+    },
+    {
+      "time": "14:00:01.234",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/messages-end.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "import{o as a,a as c,e}from\"./index.js\";const n={xmlns:\"http://www.w3.org/2000/svg\",width:\"46\",height:\"46\",fill:\"none\",viewBox:\"0 0 46 46\"};function o(t,l){return a(),c(\"svg\",n,l[0]||(l[0]=[e(\"path\",{fill:\"#fff\",d:\"M24.256 32.66c0-6.118-4.81-11.039-10.697-11.039S2.862 26.542 2.862 32.661c0 1.23.195 2.41.553 3.512.15.461.258.79.297 1.037.036.23.044.385.03.618-.014.248-.075.516-.154.876l-1.07 4.855 5.306-.729c.323-.044.565-.08.786-.078.21.002.343.015.548.056.219.044.51.15.922.296 1.09.387 2.26.597 3.479.597 5.887 0 10.697-4.922 10.697-11.04ZM43.7 18.709C43.7 9.648 36.345 2.3 27.27 2.3c-9.074 0-16.428 7.347-16.428 16.407 0 .565.028 1.122.084 1.672a11.965 11.965 0 0 1 2.633-.292c6.776 0 12.23 5.65 12.23 12.573 0 6.922-5.454 12.573-12.23 12.573-1.396 0-2.74-.24-3.991-.685-.478-.17-.63-.221-.71-"
+      }
+    },
+    {
+      "time": "14:00:01.240",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/user-and-close-size-60.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "14:00:01.241",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/LoginRegistration.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "14:00:01.241",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/MessagesEnded.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/assets-fdf64c27/index.js",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "import{d as D,l as A,c as d,u as p,r as y,a as _,e,t as r,B as i,F as N,b as R,A as T,Z as x,z as S,$ as O,K as s,P as t,a0 as V,ag as F,ad as m,bz as z,L as C,v as $,p as f,o as g,am as U,Y as H,bA as I,V as q,m as K}from\"./index.js\";const Q={class:\"messages-ended\"},W={class:\"top-block\"},X={class:\"top-block__title\"},Y=[\"innerHTML\"],Z={class:\"bottom-block\"},j={class:\"bottom-block__title\"},J={class:\"gifts-list\"},ee=[\"onClick\"],se={class:\"gift-text\"},te={class:\"gift-sended-text\"},oe={class:\"or-separator\"},ae={class:\"or-separator__text\"},le=D({__name:\"MessagesEnded\",props:{data:{}},setup(P){const{t:l}=A(),M=P,c=d(()=>M.data),u=p.user,E=d(()=>I.slice(0,3)),v=y([]),b=d(()=>{var a;return!((a=c.value)!=null&&a.online)||C.videoDialogState.value===q.Connected}),k=a=>{if(p.user.value.isGuest){s.show"
+      }
+    },
+    {
+      "time": "14:00:01.245",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/SendGift.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/assets-fdf64c27/index.js",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "import{d as z,l as L,r as P,c as h,a as C,e as t,am as x,t as i,B as o,D as S,Z as r,$ as u,f as D,F as w,b as M,A as y,G as U,L as p,K as l,P as _,u as R,H as q,ax as O,ad as H,p as W,o as c,Y as v,z as K,bA as X,a0 as Y,m as Z,bF as j}from\"./index.js\";const J={class:\"send-gift-overlay\"},Q={class:\"send-gift\"},ee={class:\"send-gift__username\"},se={class:\"send-gift__friend-button\"},te={class:\"send-gift__description\"},ae={class:\"gifts-list\"},ie=[\"onClick\"],oe={class:\"gift-item__image\"},ne=[\"src\"],de={class:\"gift-item__cost\"},le={class:\"gift-item__cost--value\"},ce={class:\"gift-item__sended\"},re={class:\"send-gift__actions\"},ve=z({__name:\"SendGift\",props:{data:{}},setup(N){const A=N,{t:n}=L(),V=U(),e=A.data,F=P(X.slice(0,3)),g=P([]),k=h(()=>Y.assetsUrl),I=h(()=>{var d,a,s,f;return(d=e==null?void"
+      }
+    },
+    {
+      "time": "14:00:01.252",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/UserAccessDenied.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "14:00:01.252",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/UserNotes.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/assets-fdf64c27/index.js",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "14:00:01.298",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/ChatHeader.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "var Oe=Object.defineProperty,De=Object.defineProperties;var Ue=Object.getOwnPropertyDescriptors;var fe=Object.getOwnPropertySymbols;var He=Object.prototype.hasOwnProperty,ze=Object.prototype.propertyIsEnumerable;var de=(d,s,l)=>s in d?Oe(d,s,{enumerable:!0,configurable:!0,writable:!0,value:l}):d[s]=l,ge=(d,s)=>{for(var l in s||(s={}))He.call(s,l)&&de(d,l,s[l]);if(fe)for(var l of fe(s))ze.call(s,l)&&de(d,l,s[l]);return d},we=(d,s)=>De(d,Ue(s));var ee=(d,s,l)=>(de(d,typeof s!=\"symbol\"?s+\"\":s,l),l);import{W as ve,o as i,a as r,e,d as J,l as ce,m as Q,c as w,j as Ne,I as We,p as I,w as j,h as ie,q as xe,x as me,y as he,z as g,A as p,B as t,t as v,f as h,D as y,E as Ze,G as Re,u as B,H as Ce,J as Ge,K as x,P as R,L as K,V as ne,M as Fe,N as Ye,U as ue,O as Me,Q as qe,R as Ke,S as Qe,n as be,T a"
+      }
+    },
+    {
+      "time": "14:00:01.298",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/UserPermanentBan.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/assets-fdf64c27/index.js",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "14:00:01.299",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/ChatArea.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "var Ut=Object.defineProperty,Ht=Object.defineProperties;var zt=Object.getOwnPropertyDescriptors;var Mt=Object.getOwnPropertySymbols;var Gt=Object.prototype.hasOwnProperty,Wt=Object.prototype.propertyIsEnumerable;var St=(n,e,l)=>e in n?Ut(n,e,{enumerable:!0,configurable:!0,writable:!0,value:l}):n[e]=l,Ct=(n,e)=>{for(var l in e||(e={}))Gt.call(e,l)&&St(n,l,e[l]);if(Mt)for(var l of Mt(e))Wt.call(e,l)&&St(n,l,e[l]);return n},bt=(n,e)=>Ht(n,zt(e));var Tt=(n,e,l)=>new Promise((_,v)=>{var o=C=>{try{g(l.next(C))}catch(S){v(S)}},h=C=>{try{g(l.throw(C))}catch(S){v(S)}},g=C=>C.done?_(C.value):Promise.resolve(C.value).then(o,h);g((l=l.apply(n,e)).next())});import{o as i,a as s,e as t,d as X,l as te,G as Ve,r as N,c as w,x as De,y as We,A,B as a,t as x,F as ce,b as Fe,D as F,aK as ze,z as O,H as r,J as"
+      }
+    },
+    {
+      "time": "14:00:01.299",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/UserProfile.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "14:00:01.457",
+      "type": "xhr",
+      "method": "GET",
+      "url": "https://ap1.coomeet.com/v20/i18n/web/en",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "{\"status\":\"OK\",\"i18n\":{\"5\":\"min\",\"A_FRIEND_ADD\":\"Add to contacts\",\"C_PAYOUT_QIWI_TITLE\":\"Your Qiwi wallet:\",\"C_INVOICE_MINUTES\":\"Minutes\",\"C_PROFILE_SELF\":\"View profile\",\"A_CHAT_NEXT\":\"Next\",\"C_PROFILE_LINK_COPY\":\"Copy profile link\",\"C_SEARCH_CONFIG_SAFE\":\"Safe search\",\"C_MSNGR_FIND_USER\":\"Search\",\"C_SEARCH_CONFIG_SAFE_TEXT\":\"When this feature is enabled, searches will only include verified users.\",\"C_HEADER_BONUS_HELP\":\"Invite friends and {C_HEADER_BONUS_EARN}\",\"A_WRITE\":\"Start chat\",\"C_PROFILE_LINK\":\"Profile link\",\"C_REFER_NOTE\":\"Don't use mass messaging on social media. Your account may be blocked.\",\"C_REFER_NO_BONUS\":\"No bonuses yet\",\"C_PAYOUT_CARD\":\"New card\",\"C_PAYOUT_BALL\":\"You have {ball}\",\"C_PAYOUT_TO\":\"Withdraw to\",\"C_PAYOUT_YOU_GET\":\"You’ll receive:\",\"C_PAYOUT_YANDEX_TITLE\":\"You"
+      }
+    }
+  ],
+  "websocket_frames": [],
+  "console_logs": [
+    {
+      "time": "14:00:01",
+      "type": "log",
+      "text": "Coomeet application."
+    },
+    {
+      "time": "14:00:01",
+      "type": "log",
+      "text": "version: 2.0.0(15818)"
+    },
+    {
+      "time": "14:00:01",
+      "type": "log",
+      "text": "hash: fdf64c27"
+    }
+  ],
+  "page_html_preview": "<!DOCTYPE html><html lang=\"en\" dir=\"\" style=\"--documentHeight: 800px; --viewportHeight: 800px;\"><head>\n    <script type=\"module\" crossorigin=\"\" src=\"/assets-fdf64c27/polyfills.js\"></script>\n\n    <meta charset=\"UTF-8\">\n    <link rel=\"manifest\" href=\"/manifest.json\">\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon/favicon.ico\">\n    <meta content=\"width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1, maximum-scale=1.0 width=device-width, height=device-height, minimal-ui, interactive-widget=resizes-content\" name=\"viewport\">\n    <title>Coomeet</title>\n    <style>body.--load #preload {animation: fade-coo 0.3s ease forwards;} #preload { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 9; overflow: hidden; background: #fff; pointer-events: none;} #preload.--load { animation: fade-coo 0.3s ease forwards; } .preloader-text { font-family: \"Arial\"; font-style: normal; font-size: 24px; line-height: 28px; color: #182337; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); } .preloader-text:after { content: \"...\"; font-family: \"Arial\"; font-style: normal; font-size: 24px; line-height: 28px; position: absolute; overflow: hidden; display: inline-block; vertical-align: bottom; animation: dots steps(4, end) 1.5s infinite; width: 0; } @keyframes dots { from { width: 0; } to { width: 28px; } } @keyframes fade-coo { from { opacity: 1; visibility: visible; } to { opacity: 0; visibility: hidden; } }</style>\n    <meta property=\"og:title\" content=\"Coomeet\">\n    <meta property=\"og:site_name\" content=\"Видеочат с девушками №1\">\n    <meta property=\"og:url\" content=\"https://coomeet.com/\">\n    <meta property=\"og:description\" content=\"Видеочат с девушками №1\">\n    <meta property=\"og:type\" content=\"website\">\n    <meta property=\"og:image\" content=\"https://chat.syscoo.com/favicon/ms-icon-310x310.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"57x57\" href=\"/favicon/apple-icon-57x57.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"60x60\" href=\"/favicon/apple-icon-60x60.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"72x72\" href=\"/favicon/apple-icon-72x72.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"76x76\" href=\"/favicon/apple-icon-76x76.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"114x114\" href=\"/favicon/apple-icon-114x114.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"120x120\" href=\"/favicon/apple-icon-120x120.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"144x144\" href=\"/favicon/apple-icon-144x144.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"152x152\" href=\"/favicon/apple-icon-152x152.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/favicon/apple-icon-180x180.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/favicon/android-icon-192x192.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicon/favicon-32x32.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"96x96\" href=\"/favicon/favicon-96x96.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/favicon/favicon-16x16.png\">\n    <link id=\"manifest\" rel=\"manifest\" href=\"/favicon/manifest.json\">\n    <meta name=\"msapplication-TileColor\" content=\"#ffffff\">\n    <meta name=\"msapplication-TileImage\" content=\"/favicon/ms-icon-144x144.png\">\n    <meta name=\"theme-color\" content=\"#ffffff\">\n    <meta name=\"robots\" content=\"noindex, nofollow\">\n    \n    \n  <style>#old-browser { position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: rgba(0, 0, 0, 0.8); display: none; z-index: 9999; pointer-events: none;} #old-browser.--show { display: block; } .not-supported { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: 'Arial'; width: 95%; max-width: 520px; background: #fff; padding: 40px; box-sizing: border-box; color: #182337; } .not-supported__title { font-size: 22px; line-height: 25px; text-align: center; } .not-supported__description { font-size: 14px; line-height: 16px; margin-top: 15px; text-align: center; } .not-supported__list { margin-top: 25px; display: flex; flex-direction: row; justify-content: space-between; width: 100%; } @media screen and (max-width: 699px) { .not-supported__list { flex-direction: column; align-items: center; justify-content: center; } } .old-browser #app {pointer-events: none;}</style><style>.error-loader {position: absolute; top: 0; bottom: 0; left: 0; right: 0; inset-inline-start: 0; width: 100vw; height: 100%; z-index: 9999; background: rgba(0, 0, 0, 0.8);} #error-loader {display: none;} .error-page #error-loader {display: block;} .error-loader__over { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex ; flex-direction: column; align-items: center; max-width: 520px; max-height: 500px; width: 95%; box-sizing: border-box; padding: 30px; border-radius: 12px; background-color: #fff; z-index: 5; } .error-loader__title { font-family: Arial; font-style: normal; font-weight: 400; font-size: 22px; line-height: 25px; margin-top: 20px; color: #182337; text-align: center; } .error-loader_",
+  "summary": {
+    "total_api": 13,
+    "total_ws": 0,
+    "ws_urls": [],
+    "api_urls": [
+      "https://iframe.coomeet.com/assets-fdf64c27/LoginRegistration.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/user-and-close-size-60.js",
+      "https://iframe.coomeet.com/cdn-cgi/challenge-platform/h/b/jsd/oneshot/d76008a69eab/0.7583863765300594:1791011128:31La4BFkK6TXxb0xKRVYZT3-r8Zwxhrf_fKGCcRNUI8/a44a67d7384c9aaf",
+      "https://iframe.coomeet.com/assets-fdf64c27/MessagesEnded.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/SendGift.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/ChatArea.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/UserNotes.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/UserPermanentBan.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/messages-end.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/UserAccessDenied.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/UserProfile.js",
+      "https://ap1.coomeet.com/v20/i18n/web/en",
+      "https://iframe.coomeet.com/assets-fdf64c27/ChatHeader.js"
+    ]
+  }
+}

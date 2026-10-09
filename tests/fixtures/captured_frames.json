@@ -1,0 +1,118 @@
+{
+  "_meta": {
+    "desc": "Real frames captured from chitchat.gg live traffic (repo: rajuvguyithh/wbbbbbbbbbbsck). Used by ops/tools/socket_smoke_test.py to verify the client against EXACT captured structures.",
+    "source_files": ["15_websocket_all.json", "05_incoming_messages.json", "07_match_updates.json", "16_http_all.json"]
+  },
+  "handshake": "0{\"sid\":\"9Z_Qg1JCiaoEsGlaAE8v\",\"upgrades\":[],\"pingInterval\":25000,\"pingTimeout\":20000,\"maxPayload\":1000000}",
+  "connect_ack": "40{\"sid\":\"x7Yq2mR8tLp0aQ1cAAAB\",\"pid\":\"mNb3vK9w\"}",
+  "self_user": {
+    "id": "6a9257898ac97f8d3c432262",
+    "username": "rheumatic rifleman",
+    "avatar": "6a9257898ac97f8d3c432262",
+    "badges": [],
+    "createdAt": "2026-08-29T03:52:42.000Z",
+    "preferences": { "showInterests": "FRIENDS", "showPremiumBadge": "PUBLIC", "allowFriendRequests": true },
+    "interests": [],
+    "gender": "F",
+    "verified": false,
+    "hasPassword": true,
+    "ageVerified": false,
+    "matchPreferences": { "withInterests": true, "interestTimeout": 10 }
+  },
+  "partner_user": {
+    "id": "685150d89c39b50899dbbfc6",
+    "username": "Michael",
+    "avatar": "685150d89c39b50899dbbfc6",
+    "badges": [],
+    "createdAt": "2025-06-17T11:26:16.443Z",
+    "preferences": { "showInterests": "PRIVATE", "showPremiumBadge": "PRIVATE", "allowFriendRequests": true },
+    "premium": "plus",
+    "decorations": { "bannerGradientTop": "#0693E3" }
+  },
+  "conversation_id": "6ac827040ef3c7f41f12c9c7",
+  "match_open": {
+    "match": {
+      "conversation": {
+        "id": "6ac827040ef3c7f41f12c9c7",
+        "participants": [
+          { "profile": { "_ref": "partner_user" } },
+          { "profile": { "_ref": "self_user" } }
+        ],
+        "mediaAllowedBy": [],
+        "category": "ENCOUNTER",
+        "createdAt": "2026-10-08T23:28:04.042Z",
+        "updatedAt": "2026-10-08T23:28:04.042Z"
+      },
+      "users": [
+        { "userId": "685150d89c39b50899dbbfc6", "inactive": false },
+        { "userId": "6a9257898ac97f8d3c432262", "inactive": false }
+      ],
+      "closure": { "closed": false },
+      "paused": false
+    },
+    "inQueue": false
+  },
+  "match_closed_by_partner": {
+    "match": {
+      "conversation": {
+        "id": "6ac827040ef3c7f41f12c9c7",
+        "participants": [
+          { "profile": { "_ref": "partner_user" } },
+          { "profile": { "_ref": "self_user" } }
+        ],
+        "mediaAllowedBy": [],
+        "category": "ENCOUNTER",
+        "createdAt": "2026-10-08T23:28:04.042Z",
+        "updatedAt": "2026-10-08T23:28:18.256Z"
+      },
+      "users": [
+        { "userId": "685150d89c39b50899dbbfc6", "inactive": false },
+        { "userId": "6a9257898ac97f8d3c432262", "inactive": false }
+      ],
+      "closure": { "closed": true, "closeReason": "INTENTIONAL", "closedAt": "2026-10-08T23:28:18.256Z", "closedBy": "685150d89c39b50899dbbfc6" },
+      "paused": false
+    },
+    "inQueue": false
+  },
+  "chat_message_from_partner": {
+    "message": {
+      "id": "6ac827062de06be461a36e32",
+      "conversationId": "6ac827040ef3c7f41f12c9c7",
+      "author": { "_ref": "partner_user" },
+      "content": "Hey m24",
+      "type": "TEXT",
+      "attachments": [],
+      "createdAt": "2026-10-08T23:28:06.905Z",
+      "status": "SENT",
+      "flags": 0,
+      "reactions": []
+    }
+  },
+  "own_message_echo": {
+    "message": {
+      "id": "6ac8270d5add6498ea46d250",
+      "conversationId": "6ac827040ef3c7f41f12c9c7",
+      "author": { "_ref": "self_user" },
+      "content": "hi",
+      "type": "TEXT",
+      "attachments": [],
+      "createdAt": "2026-10-08T23:28:13.807Z",
+      "status": "SENT",
+      "nonce": "2ad1a75e-9d2b-4431-b152-ca6c81683828",
+      "reactions": []
+    }
+  },
+  "typing_event": { "userId": "685150d89c39b50899dbbfc6", "conversationId": "6ac827040ef3c7f41f12c9c7" },
+  "message_post_response": {
+    "id": "6ac8270d5add6498ea46d250",
+    "conversationId": "6ac827040ef3c7f41f12c9c7",
+    "author": { "_ref": "self_user" },
+    "content": "SENT_TEXT_PLACEHOLDER",
+    "type": "TEXT",
+    "attachments": [],
+    "createdAt": "2026-10-08T23:28:13.807Z",
+    "status": "SENT",
+    "nonce": "NONCE_ECHO",
+    "reactions": []
+  }
+}

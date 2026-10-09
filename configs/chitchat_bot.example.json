@@ -1,0 +1,33 @@
+{
+  "_comment": "Copy to configs/chitchat_bot.json and tune. Persona = what the bot claims in chat.",
+  "persona": {
+    "name": "Alex",
+    "age": 24,
+    "gender": "m",
+    "country": "Germany",
+    "interests": ["music", "games", "movies"]
+  },
+  "replies": {
+    "greetings": ["hey {name} :)", "hi! how's it going?", "hey there", "hii"],
+    "gender_answers": ["{gender}", "{gender} u?", "{gender}, you?"],
+    "age_answers": ["{age}", "{age} u?", "{age}, you?"],
+    "smalltalk": [
+      "nice :) what's up?", "haha true", "oh cool, tell me more",
+      "same here tbh", "what do you do for fun?", "sounds fun",
+      "hbu?", "lol yeah", "interesting.. go on"
+    ],
+    "interest_questions": ["so what are you into?", "any hobbies?", "music taste? :)"],
+    "bye": ["nice talking! take care", "cya :)"]
+  },
+  "loop": {
+    "auto_next": true,
+    "next_delay_s": [2, 5],
+    "skip_idle_s": 90,
+    "skip_after_msgs": 25,
+    "min_reply_delay_s": 1.0,
+    "typing_indicator": true,
+    "opener_delay_s": [1, 3],
+    "queue_timeout_s": 120
+  },
+  "message_body_format": "multipart"
+}

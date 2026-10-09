@@ -1,0 +1,60 @@
+{
+  "site": "https://chitchat.gg",
+  "timestamp": "20261003_132644",
+  "api_calls": [
+    {
+      "time": "13:26:45.530",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://chitchat.gg/cdn-cgi/rum?",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chitchat.gg/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "content-type": "application/json",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": "{\"startTime\":1791012405013,\"pageloadId\":\"fedea0b8-aa5e-46b0-9db3-4f15c01ebf0a\",\"eventType\":1,\"nt\":\"navigate\",\"location\":\"https://chitchat.gg/\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.9.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"131\",\"bv\":\"131\",\"ov\":\"10\"},\"memory\":{\"totalJSHeapSize\":10000000,\"usedJSHeapSize\":10000000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":380,\"firstContentfulPaint\":380,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":1,\"domainLookupEnd\":71,\"connectStart\":71,\"connectEnd\":204,\"secureConnectionStart\":132,\"requestStart\":204,\"responseStart\":274,\"responseEnd\":275,\"domInteractive\":372,\"domComplete\":515,\"loadEventStart\":515,\"loadEventEnd\":515,\"finalResponseHeadersStart\":274,\"firstInterimResponseStart\":0,\"transferSize\":2129,\"decodedBodySize\":4907},\"siteToken\":\"57fbba8fb6724e939c26c04a3ac27074\",\"st\":2}",
+      "is_api": true,
+      "response": {
+        "status": 204,
+        "body": ""
+      }
+    }
+  ],
+  "websocket_frames": [],
+  "all_requests": [
+    {
+      "time": "13:26:45.013",
+      "type": "document",
+      "method": "GET",
+      "url": "https://chitchat.gg/"
+    },
+    {
+      "time": "13:26:45.291",
+      "type": "script",
+      "method": "GET",
+      "url": "https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495"
+    },
+    {
+      "time": "13:26:45.530",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://chitchat.gg/cdn-cgi/rum?"
+    }
+  ],
+  "console_logs": [
+    {
+      "time": "13:26:45",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 ()"
+    }
+  ],
+  "summary": {
+    "total_requests": 3,
+    "api_requests": 1,
+    "ws_frames": 0,
+    "ws_urls": []
+  }
+}

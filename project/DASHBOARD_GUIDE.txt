@@ -1,0 +1,174 @@
+DASHBOARD GUIDE — Multi-Site Bot
+================================
+
+KIVABE DASHBOARD WORK KORE:
+
+prothome run.bat click korle dashboard open hobe. dashboard er vitore 7 ta tab ache.
+niche ta ki ki kore ta step by step bola holo.
+
+
+=== TAB 1: OVERVIEW ===
+ekhane live stats dekha jay:
+- Leads: koyjon ke snap username share kora hoyeche
+- Sent: koyta message pathano hoyeche
+- Recv: koyta message aseche
+- Convos: koyta conversation start hoyeche
+- Users: koyjon user er sathe kotha hoyeche
+- Proxy: koyta proxy available / total koyta
+
+niche per-site card:
+  joingy  STOPPED/RUNNING
+  Sent: 0 | Recv: 0 | Leads: 0 | Convos: 0 | Users: 0 | Errors: 0 | Sessions: 0/20
+  
+  isexychat  STOPPED/RUNNING
+  Sent: 0 | Recv: 0 | Leads: 0 | Convos: 0 | Users: 0 | Errors: 0 | Sessions: 0/5
+
+niche Recent Leads table (ke ke snap niyeche) + Recent Messages table (k ki message pathiyeche/paise)
+everything auto-refresh hobe every 2 seconds.
+
+
+=== TAB 2: CONTROL ===
+ekhane bot start/stop kora jay:
+
+START ALL button: shob bot eksathe start hobe
+STOP ALL button: shob bot eksathe stop hobe
+
+Autostart toggle: ON korle dashboard launch holei auto bot start hoye jabe
+
+per-site control:
+  joingy:
+    START button: joingy bot start hobe, session create hobe, chat start hobe
+    STOP button: shob joingy session stop hobe
+    RESTART button: stop + abar start
+  
+  isexychat:
+    START button: isexychat browser launch hobe, KiwiIRC a join korbe
+    STOP button: browser close hobe
+    RESTART button: stop + abar start
+
+niche "Sessions: 3/20" dekhale bujben 3 ta session active, max 20 permit.
+"Last Error: ..." dekhale bujben last ki error hoyeche.
+
+
+=== TAB 3: SETTINGS ===
+ekhane config change kora jay LIVE (save korlei apply hobe):
+
+Global Settings:
+  Data Dir: input/output template txt file jekhane ache tar path
+  Proxy File: proxy.txt file tar path (default: proxy.txt)
+  Reply Delay Min (s): message reply dite minimum koto second wait korbe (default: 2)
+  Reply Delay Max (s): max koto second wait (default: 6)
+  Snap After N Msgs: koyta message er por snap username share korbe (default: 3)
+  Use Proxy: ON/OFF toggle - proxy use korbe kina
+  Autostart: ON/OFF - dashboard launch holei auto start hobe kina
+
+  Save Global button: uporer shob global setting save + live apply hobe
+
+Per-Site Settings (joingy + isexychat er jonno alada):
+  Max Sessions: ek site a maximum koyta session chalaite parbe
+  Delay Min/Max: site-specific reply delay
+  Snap After N: site-specific snap trigger count
+  Headless: isexychat er jonno - ON=background a browser run, OFF=browser window dekha jabe
+  
+  Save joingy / Save isexychat button: per-site setting save + live apply
+
+Save Config to Disk button: shob setting config.json file a likhe rakhe (restart safe)
+
+
+=== TAB 4: LOGS ===
+ekhane live message dekhajay:
+
+Site filter: All / joingy / isexychat select korte parben
+Clear button: log clear korbe
+
+log format:
+  12:34:56 joingy       <  stranger_123  hi how are you
+  12:34:58 joingy       >                hey there
+  12:35:00 isexychat    <  Guest123      hello
+  
+  < = incoming message (green)
+  > = outgoing message (orange)
+
+"125 logs" dekhale bujben 125 ta log entry ache
+
+
+=== TAB 5: FIXED SMS ===
+ekhane fixed SMS mode manage kora jay (template engine er bodole txt file theke line-by-line reply):
+
+Fixed SMS Mode toggle: ON korle template engine OFF, txt file theke reply asbe
+Apply button: toggle ta save korbe
+
+Script Folder:
+  Folder Path: je folder a txt script file gulo ache tar path (e.g. D:\chat_scripts)
+  Browse button: Windows folder picker khulbe
+  Set Folder button: folder scan korbe + shob txt file load korbe
+  niche dekhabe koyta file + koto lines:
+    chat1.txt (5 lines)
+    chat2.txt (5 lines)
+
+Snap Username File:
+  File Path: snap username jekhane store ache tar txt file path
+  Browse button: Windows file picker
+  Load Snap File button: file theke snap username load korbe
+  Snapshot show korbe: "Snap: your_snap_username" or "Snap not loaded"
+
+Active Assignments table: konta session konta file theke reply dicche
+  joingy    sess1    chat3.txt    2
+  = joingy er session1 chat3.txt file er line 2 te ache
+
+
+=== TAB 6: DEBUG ===
+ekhane troubleshooting er jonno info dekha jay:
+
+Session States table: 
+  konta session alive, ki state a ache (starting/connected/chatting/end)
+  koyta message send/recv hoyeche
+
+Recent Crashes table:
+  ki crash hoyeche, konta site, konta session, ki error
+
+Proxy Health: koyta proxy available, koyta dead, koyta crash, koyta dead session
+
+Trace Errors table:
+  kon HTTP call fail hoyeche, konta endpoint, ki error code, ki error message
+
+Health Check button: dead/stale session clean korbe
+Force GC button: Python garbage collector run korbe (memory free)
+
+
+=== TAB 7: LEADS ===
+ekhane snap lead er full list + per-site breakdown:
+
+All Leads table: ke konta site a snap niyeche, koto message exchange er por
+
+Per-Site Breakdown table:
+  joingy    5 leads    120 msgs    80 users    45 convos    5 snaps
+  isexychat 2 leads    45 msgs     30 users    15 convos    2 snaps
+
+
+=== SHORTCUT KEYS ===
+Q = dashboard quit (close)
+R = manual refresh
+
+
+=== KI KORE START KORTE HOBE ===
+1. tools\install.bat run korun (first time setup)
+2. tools\run.bat run korun (dashboard open hobe)
+3. Control tab a jeye START ALL click korun
+4. Overview tab a live stats dekhte thakun
+5. Logs tab a live message dekhte thakun
+
+debug mode: cd src && python main.py --debug
+
+
+=== PROXY SETUP ===
+proxy.txt file root folder a rakhte hobe, format:
+  socks5://user:pass@ip:port
+  http://user:pass@ip:port
+  socks5://ip:port       (no auth)
+
+per line ekta proxy. example:
+  socks5://proxy1:1080
+  http://user123:pass456@proxy2:8080
+
+Settings tab a Use Proxy toggle ON korte hobe.

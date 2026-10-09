@@ -1,0 +1,69 @@
+{
+  "snap_username": "your_snap_username",
+  "data_dir": "../New folder (2)/papipapi-2.2/data",
+  "template_dir": "../chitchat/chitchat/all_txt_opening_50_50",
+  "no_greeting": true,
+  "max_context_per_user": 15,
+  "reply_delay_min_sec": 2.0,
+  "reply_delay_max_sec": 6.0,
+  "snap_share_after_n_messages": 3,
+  "proxy_file": "proxy.txt",
+  "use_proxy": true,
+  "dashboard_host": "127.0.0.1",
+  "dashboard_port": 8765,
+  "db_path": "bot_data.db",
+  "autostart": false,
+  "reply_mode": "template",
+  "mood": "normal",
+  "db_detect": {
+    "enabled": false,
+    "db_path": "data/reply_bank.db",
+    "match_by": ["mood", "stage", "trigger"],
+    "fallback_mode": "template"
+  },
+  "fixed_sms": {
+    "enabled": false,
+    "folder": "C:/Users/papi/Desktop/New folder",
+    "loop": true,
+    "pick_mode": "least_used_random",
+    "recursive": false,
+    "snap_username_file": "C:/Users/papi/Desktop/c t f/sc.txt"
+  },
+  "sites": {
+    "joingy": {
+      "enabled": true,
+      "method": "http_api",
+      "api_base": "https://back.joingy.com",
+      "max_sessions": 20,
+      "poll_interval_sec": 1,
+      "auto_reconnect": true,
+      "reply_mode_override": null,
+      "mood_override": null,
+      "snap_username_list": [],
+      "proxy_group": "default"
+    },
+    "isexychat": {
+      "enabled": true,
+      "method": "playwright",
+      "url": "https://chat.isexychat.com/",
+      "max_sessions": 5,
+      "channel": "#ifap",
+      "headless": true,
+      "reply_mode_override": null,
+      "mood_override": null,
+      "snap_username_list": [],
+      "proxy_group": "default"
+    },
+    "chatrandom": {
+      "enabled": false,
+      "method": "playwright",
+      "url": "https://www.chatrandom.com",
+      "max_sessions": 5,
+      "headless": true,
+      "reply_mode_override": null,
+      "mood_override": null,
+      "snap_username_list": [],
+      "proxy_group": "default"
+    }
+  }
+}

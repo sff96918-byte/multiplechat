@@ -1,0 +1,621 @@
+{
+  "site": "https://chatib.net",
+  "timestamp": "20261003_133856",
+  "nickname_used": "Guestuz69t4",
+  "api_calls": [
+    {
+      "time": "13:38:57.744",
+      "type": "document",
+      "method": "GET",
+      "url": "https://chatib.net/",
+      "headers": {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Windows\""
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "<!DOCTYPE html>\n<html lang=\"en-US\">\n\n<head>\n\t\n\t<meta charset=\"UTF-8\">\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1\">\n\t<link rel=\"profile\" href=\"https://gmpg.org/xfn/11\">\n\t\t\t<link rel=\"pingback\" href=\"https://chatib.net/xmlrpc.php\">\n\t\t<!-- Manifest added by SuperPWA - Progressive Web Apps Plugin For WordPress -->\n<link rel=\"manifest\" href=\"/superpwa-manifest.json\">\n<link rel=\"prefetch\" href=\"/superpwa-manifest.json\">\n<meta name=\"theme-color\" content=\"#ffffff\">\n<meta name=\"mobile-web-app-capable\" content=\"yes\">\n<meta name=\"apple-touch-fullscreen\" content=\"yes\">\n<meta name=\"apple-mobile-web-app-title\" content=\"Chatib\">\n<meta name=\"application-name\" content=\"Chatib\">\n<meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n<meta name=\"apple-mobile-web-ap"
+      }
+    },
+    {
+      "time": "13:38:58.170",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "/*! jQuery v3.7.1 | (c) OpenJS Foundation and other contributors | jquery.org/license */\n!function(e,t){\"use strict\";\"object\"==typeof module&&\"object\"==typeof module.exports?module.exports=e.document?t(e,!0):function(e){if(!e.document)throw new Error(\"jQuery requires a window with a document\");return t(e)}:t(e)}(\"undefined\"!=typeof window?window:this,function(ie,e){\"use strict\";var oe=[],r=Object.getPrototypeOf,ae=oe.slice,g=oe.flat?function(e){return oe.flat.call(e)}:function(e){return oe.concat.apply([],e)},s=oe.push,se=oe.indexOf,n={},i=n.toString,ue=n.hasOwnProperty,o=ue.toString,a=o.call(Object),le={},v=function(e){return\"function\"==typeof e&&\"number\"!=typeof e.nodeType&&\"function\"!=typeof e.item},y=function(e){return null!=e&&e===e.window},C=ie.document,u={type:!0,src:!0,nonce:!0,noM"
+      }
+    },
+    {
+      "time": "13:38:58.171",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "/*! jQuery Migrate v3.4.1 | (c) OpenJS Foundation and other contributors | jquery.org/license */\n\"undefined\"==typeof jQuery.migrateMute&&(jQuery.migrateMute=!0),function(t){\"use strict\";\"function\"==typeof define&&define.amd?define([\"jquery\"],function(e){return t(e,window)}):\"object\"==typeof module&&module.exports?module.exports=t(require(\"jquery\"),window):t(jQuery,window)}(function(s,n){\"use strict\";function e(e){return 0<=function(e,t){for(var r=/^(\\d+)\\.(\\d+)\\.(\\d+)/,n=r.exec(e)||[],o=r.exec(t)||[],a=1;a<=3;a++){if(+o[a]<+n[a])return 1;if(+n[a]<+o[a])return-1}return 0}(s.fn.jquery,e)}s.migrateVersion=\"3.4.1\";var t=Object.create(null);s.migrateDisablePatches=function(){for(var e=0;e<arguments.length;e++)t[arguments[e]]=!0},s.migrateEnablePatches=function(){for(var e=0;e<arguments.length;e"
+      }
+    },
+    {
+      "time": "13:38:58.171",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-content/plugins/translatepress-developer/add-ons-pro/automatic-language-detection/assets/js/trp-language-cookie.js?ver=1.1.1",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "/**\n * Sets proper language cookie\n *\n * Sends ajax request to get browser and IP language.\n * Sets cookie with current language.\n * Changes cookie when clicking a link pointed to another language.\n *\n */\nfunction TRP_IN_Determine_Language(){\n    var _this = this;\n    var trpCookie = null;\n    var trpHelper = null;\n\n    this.get_lang_from_url = function ( url ) {\n        // Check domain mappings first if Multiple Domains is active\n        if ( trp_language_cookie_data['domain_language_map'] ) {\n            var domainLang = _this.get_lang_from_domain( url );\n            if ( domainLang ) {\n                return domainLang;\n            }\n        }\n\n        // Fall back to path-based detection\n        // we remove http or https\n        // if the user links to a http link but the abs_home_url"
+      }
+    },
+    {
+      "time": "13:38:58.190",
+      "type": "other",
+      "method": "GET",
+      "url": "https://chatib.net/superpwa-manifest.json",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-purpose": "prefetch",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": ""
+      }
+    },
+    {
+      "time": "13:38:58.191",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-content/plugins/super-progressive-web-apps/public/js/register-sw.js?ver=2.2.44",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "if ('serviceWorker' in navigator) {\r\n\twindow.addEventListener('load', function() {\r\n\t  navigator.serviceWorker.register(superpwa_sw.url)\r\n\t  .then(function(registration) { if (typeof superpwa_sw !== 'undefined' && superpwa_sw.script_debug) { console.log('SuperPWA service worker ready'); } \r\n\t\t  if(registration.active)\r\n\t\t  {\r\n\t\t\t  registration.update(); \r\n\t\t  }\r\n\t\t  if(typeof firebase !='undefined' && typeof pushnotification_load_messaging =='function'){\r\n\t\t\t  const messaging = firebase.messaging();\r\n\t\t\t  messaging.useServiceWorker(registration);\r\n\t\t\t  pushnotification_load_messaging();\r\n\t\t  }\r\n\t\t  subOnlineOfflineIndicator();\r\n\t  })\r\n\t  .catch(function(error) { if (typeof superpwa_sw !== 'undefined' && superpwa_sw.script_debug) { console.log('Registration failed with ' + error); } });\r\n  "
+      }
+    },
+    {
+      "time": "13:38:58.191",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-content/plugins/super-progressive-web-apps/admin/js/superpwa-ptr-lib.min.js?ver=2.2.44",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "/*!\r\n * superpwa_pulltorefreshjs v0.1.19\r\n */\r\n!function(e,t){\"object\"==typeof exports&&\"undefined\"!=typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define(t):(e=e||self).PullToRefresh=t()}(this,function(){\"use strict\";var e={pullStartY:null,pullMoveY:null,handlers:[],styleEl:null,events:null,dist:0,state:\"pending\",timeout:null,distResisted:0,supportsPassive:!1,supportsPointerEvents:!!window.PointerEvent};try{window.addEventListener(\"test\",null,{get passive(){e.supportsPassive=!0}})}catch(e){}var t,n={setupDOM:function(t){if(!t.ptrElement){var n=document.createElement(\"div\");t.mainElement!==document.body?t.mainElement.parentNode.insertBefore(n,t.mainElement):document.body.insertBefore(n,document.body.firstChild),n.classList.add(t.classPrefix+\"ptr\"),n.innerHTML=t.getM"
+      }
+    },
+    {
+      "time": "13:38:58.191",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-content/themes/neve/assets/js/build/modern/frontend.js?ver=4.2.3",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "!function(){\"use strict\";const e=(e,t,n)=>{(e instanceof NodeList?e:[e]).forEach(e=>e.addEventListener(t,t=>n(t,e)))},t=(e,t)=>{r(e,t,\"toggle\")},n=(e,t)=>{r(e,t,\"add\")},o=(e,t)=>{r(e,t,\"remove\")},r=(e,t,n)=>{const o=t.split(\" \");(e instanceof NodeList?e:[e]).forEach(e=>e.classList[n].apply(e.classList,o))};let i=null,c=2;const s=()=>{const{masonryStatus:e,masonryColumns:t,blogLayout:n}=NeveProperties;\"enabled\"!==e||t<2||(i=document.querySelector(\".nv-index-posts .posts-wrapper\"),null!==i&&imagesLoaded(i,()=>{const e=\"article.layout-\".concat(n);window.nvMasonry=new Masonry(i,{itemSelector:e,columnWidth:e,percentPosition:!0})}))},a=()=>{\"enabled\"===NeveProperties.infScroll&&null!==document.querySelector(\".nv-index-posts .posts-wrapper\")&&((e,t,n=.5)=>{if(!e)return;new IntersectionObserver(o="
+      }
+    },
+    {
+      "time": "13:38:58.191",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-content/themes/neve/assets/js/build/modern/scroll-to-top.js?ver=4.2.3",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "!function(){\"use strict\";function t(){\"scrollBehavior\"in document.documentElement.style?window.scrollTo({top:0,behavior:\"smooth\"}):function(t){let e=window.scrollY;t=parseInt(t);const o=setInterval((function(){e-=e<t+20?1:e<t+40?6:e<t+80?16:e<t+160?36:e<t+200?48:e<t+300?80:120,window.scroll(0,e),e<=t&&clearInterval(o)}),15)}(0);const t=document.getElementById(\"content\"),e=document.getElementById(\"scroll-to-top\");t&&(e.blur(),t.focus())}window.addEventListener(\"load\",(function(){!function(){const e=document.getElementById(\"scroll-to-top\");if(!e)return!1;e.addEventListener(\"click\",(function(){t()})),e.addEventListener(\"keydown\",(function(e){\"Enter\"===e.key&&t()})),window.addEventListener(\"scroll\",(function(){const t=window.scrollY,o=neveScrollOffset.offset;t>o&&(e.style.visibility=\"visible\","
+      }
+    },
+    {
+      "time": "13:38:58.191",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-content/plugins/neve-pro-addon/includes/modules/header_footer_grid/assets/js/build/front-end.js?ver=3.2.4",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "(()=>{function e(){const e=document.querySelectorAll(\".header--row.hide-on-mobile.is_sticky\"),o=document.querySelectorAll(\".header--row.hide-on-desktop.is_sticky\");(e.length>0||o.length>0)&&(!function(e=!1,t=!1){let o=document.querySelector(\".sticky-header-placeholder\");const s=document.querySelector(\".hfg_header\"),r=document.querySelector(\".neve-transparent-header\");null===o&&null===r&&(o=document.createElement(\"div\"),o.classList.add(\"sticky-header-placeholder\"),s.parentNode.insertBefore(o,s.nextSibling)),!e&&o&&o.classList.add(\"hide-on-mobile\",\"hide-on-tablet\"),!t&&o&&o.classList.add(\"hide-on-desktop\"),e&&s.classList.add(\"has-sticky-rows--mobile\"),t&&s.classList.add(\"has-sticky-rows--desktop\"),null!==o&&(o.style.height=s.offsetHeight+\"px\")}(o.length>0,e.length>0),t(document.querySelector"
+      }
+    },
+    {
+      "time": "13:38:58.191",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-content/plugins/super-progressive-web-apps-pro/assets/js/superpwa-frontend-cta.js?ver=1.57",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "(function() {\r\n\tfunction superpwaGetIOSVersionFromUA(uaString) {\r\n\t\tif (!uaString || typeof uaString !== 'string') return null;\r\n\r\n\t\t// iOS/iPadOS usually contains: \"OS 16_4\" or \"OS 16_4_1\"\r\n\t\t// Example: CPU iPhone OS 16_4 like Mac OS X\r\n\t\tvar match = uaString.match(/OS (\\d+)[._](\\d+)(?:[._](\\d+))?/i);\r\n\t\tif (!match) return null;\r\n\r\n\t\tvar major = parseInt(match[1], 10);\r\n\t\tvar minor = parseInt(match[2], 10);\r\n\t\tvar patch = match[3] ? parseInt(match[3], 10) : 0;\r\n\r\n\t\tif (isNaN(major) || isNaN(minor) || isNaN(patch)) return null;\r\n\t\treturn { major: major, minor: minor, patch: patch };\r\n\t}\r\n\r\n\tfunction superpwaIsIOSVersionAtLeast(versionObj, major, minor) {\r\n\t\tif (!versionObj) return false;\r\n\t\tif (versionObj.major > major) return true;\r\n\t\tif (versionObj.major < major) return false;\r\n\t\treturn"
+      }
+    },
+    {
+      "time": "13:38:58.191",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-content/plugins/rocket-lazy-load/assets/js/16.1/lazyload.min.js",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "!function(t,n){\"object\"==typeof exports&&\"undefined\"!=typeof module?module.exports=n():\"function\"==typeof define&&define.amd?define(n):(t=t||self).LazyLoad=n()}(this,(function(){\"use strict\";function t(){return(t=Object.assign||function(t){for(var n=1;n<arguments.length;n++){var e=arguments[n];for(var i in e)Object.prototype.hasOwnProperty.call(e,i)&&(t[i]=e[i])}return t}).apply(this,arguments)}var n=\"undefined\"!=typeof window,e=n&&!(\"onscroll\"in window)||\"undefined\"!=typeof navigator&&/(gle|ing|ro)bot|crawl|spider/i.test(navigator.userAgent),i=n&&\"IntersectionObserver\"in window,a=n&&\"classList\"in document.createElement(\"p\"),o=n&&window.devicePixelRatio>1,r={elements_selector:\"IMG\",container:e||n?document:null,threshold:300,thresholds:null,data_src:\"src\",data_srcset:\"srcset\",data_sizes:\"si"
+      }
+    },
+    {
+      "time": "13:38:58.641",
+      "type": "script",
+      "method": "GET",
+      "url": "blob:https://chatib.net/e90092b7-fc8b-4c4d-8165-bc3611e007db",
+      "headers": {
+        "accept": "*/*",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "postMessage(function f(e,t,n,r){let a;const s=(a=\"undefined\"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement(\"canvas\")).getContext(\"2d\",{willReadFrequently:!0}),o=(s.textBaseline=\"top\",s.font=\"600 32px Arial\",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}([\"flag\",\"emoji\"],function u(e,t,n,r){switch(t){case\"flag\":return n(e,\"\\ud83c\\udff3\\ufe0f\\u200d\\u26a7\\ufe0f\",\"\\ud83c\\udff3\\ufe0f\\u200b\\u26a7\\ufe0f\")?!1:!n(e,\"\\ud83c\\udde8\\ud83c\\uddf6\",\"\\ud83c\\udde8\\u200b\\ud83c\\uddf6\")&&!n(e,\"\\ud83c\\udff4\\udb40\\udc67\\udb40\\udc62\\udb40\\udc65\\udb40\\udc6e\\udb40\\udc67\\udb40\\udc7f\",\"\\ud83c\\udff4\\u200b\\udb40\\udc67\\u200b\\udb40\\udc62\\u200b\\udb40\\udc65\\u200b\\udb40\\udc6e\\u200b\\udb40\\udc67\\u200b\\udb40\\udc7f\");case\"emoji\":return!r(e,\"\\ud83e\\u1fac8\")}return"
+      }
+    },
+    {
+      "time": "13:38:58.668",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://chatib.net/wp-content/plugins/translatepress-developer/add-ons-pro/automatic-language-detection/includes/trp-ald-ajax.php",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "accept": "application/json, text/javascript, */*; q=0.01",
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+      },
+      "post_data": "action=trp_ald_get_needed_language&detection_method=browser-ip&popup_option=popup&popup_textarea=We've+detected+you+might+be+speaking+a+different+language.+Do+you+want+to+change+to%3A&popup_type=normal_popup&popup_textarea_change_button=Change+Language&popup_textarea_close_button=Close+and+do+not+switch+language&publish_languages%5B%5D=en_US&publish_languages%5B%5D=ru_RU&publish_languages%5B%5D=id_ID&publish_languages%5B%5D=de_DE&publish_languages%5B%5D=ar&publish_languages%5B%5D=pl_PL&publish_languages%5B%5D=el&publish_languages%5B%5D=ro_RO&publish_languages%5B%5D=he_IL&publish_languages%5B%5D=sv_SE&publish_languages%5B%5D=tl&publish_languages%5B%5D=bg_BG&publish_languages%5B%5D=da_DK&publish_languages%5B%5D=it_IT&publish_languages%5B%5D=pt_BR&publish_languages%5B%5D=nl_NL&publish_languages%5B%5D=vi&publish_languages%5B%5D=tr_TR&publish_languages%5B%5D=hu_HU&publish_languages%5B%5D=cs_CZ&publish_languages%5B%5D=fr_FR&publish_languages%5B%5D=fi&publish_languages%5B%5D=sk_SK&publish_lan",
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "null"
+      }
+    },
+    {
+      "time": "13:38:58.740",
+      "type": "script",
+      "method": "GET",
+      "url": "https://chatib.net/wp-includes/js/wp-emoji-release.min.js?ver=6.9.7",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "/*! This file is auto-generated */\n// Source: wp-includes/js/twemoji.min.js\nvar twemoji=function(){\"use strict\";var h={base:\"https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.1/assets/\",ext:\".png\",size:\"72x72\",className:\"emoji\",convert:{fromCodePoint:function(d){d=\"string\"==typeof d?parseInt(d,16):d;if(d<65536)return e(d);return e(55296+((d-=65536)>>10),56320+(1023&d))},toCodePoint:o},onerror:function(){this.parentNode&&this.parentNode.replaceChild(x(this.alt,!1),this)},parse:function(d,u){u&&\"function\"!=typeof u||(u={callback:u});return h.doNotParse=u.doNotParse,(\"string\"==typeof d?function(d,a){return n(d,function(d){var u,f,c=d,e=N(d),b=a.callback(e,a);if(e&&b){for(f in c=\"<img \".concat('class=\"',a.className,'\" ','draggable=\"false\" ','alt=\"',d,'\"',' src=\"',b,'\"'),u=a.attributes(d,e))u.ha"
+      }
+    },
+    {
+      "time": "13:38:58.802",
+      "type": "fetch",
+      "method": "GET",
+      "url": "https://ap1.coomeet.com/v20/service/blacklist.site",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "{\"status\":\"OK\",\"blacklist\":[\"18fu.com\",\"vibragame.org\",\"emeraldchat.app\",\"emeraldchat.online\",\"emeraldchat.chat\",\"emeraldchat.me\"],\"blacklistUrl\":[\"camgly.com\\/coomeet-live\",\"chatib.net\\/emeraldchat\",\"echat.live\\/emeraldchat\",\"monkeyapp.org\\/emerald-chat\",\"omegle.cc\\/emeraldchat\",\"omegle.life\\/emeraldchat\",\"omegle.to\\/emerald-chat\",\"plexstorm.org\\/emeraldchat\",\"tinychat.com\\/emerald-chat\",\"vline.com\\/emerald-chat\"],\"request_id\":\"bc7d11f5-e392-4525-ade6-baf6eb17d7be\",\"time_request\":0.002}"
+      }
+    },
+    {
+      "time": "13:38:59.121",
+      "type": "fetch",
+      "method": "POST",
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-FPY8TH6T2Z&gtm=45je69u2v9108624740za20oxf1&_p=1791013138451&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=EAAI&are=1&cid=1577773660.1791013139&frm=0&ir=1&ngs=1&pscdl=noapi&rcb=16&sr=1280x800&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.96%7CHeadlessChrome%3B148.0.7778.96%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=10.0&uaw=0&ul=en-us&_s=1&tag_exp=115616986~115938466~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121280971&sid=1791013139&sct=1&seg=0&dl=https%3A%2F%2Fchatib.net%2F&dt=Chatib%3A%20Free%20Online%20Chat%20Rooms%20With%20No%20Registration&en=page_view&_fv=1&_nsi=1&_ss=1&tfd=1381",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 204,
+        "body": "(binary)"
+      }
+    },
+    {
+      "time": "13:38:59.238",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://chatib.net/cdn-cgi/rum?",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://chatib.net/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "content-type": "application/json",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": "{\"startTime\":1791013137740,\"pageloadId\":\"bf4ee164-bf80-495e-a382-defeb9869cc8\",\"eventType\":1,\"nt\":\"navigate\",\"location\":\"https://chatib.net/\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.9.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"131\",\"bv\":\"131\",\"ov\":\"10\"},\"memory\":{\"totalJSHeapSize\":12700000,\"usedJSHeapSize\":10000000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":844,\"firstContentfulPaint\":844,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":19,\"domainLookupEnd\":91,\"connectStart\":91,\"connectEnd\":248,\"secureConnectionStart\":156,\"requestStart\":250,\"responseStart\":342,\"responseEnd\":420,\"domInteractive\":893,\"domComplete\":1491,\"loadEventStart\":1491,\"loadEventEnd\":1494,\"finalResponseHeadersStart\":342,\"firstInterimResponseStart\":0,\"transferSize\":28492,\"decodedBodySize\":224053},\"siteToken\":\"e0313cfeec704c1da14d65961caf9a6a\",\"st\":2}",
+      "is_api": true,
+      "response": {
+        "status": 204,
+        "body": ""
+      }
+    },
+    {
+      "time": "13:38:59.472",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://iframe.coomeet.com/cdn-cgi/challenge-platform/h/b/jsd/oneshot/d76008a69eab/0.7583863765300594:1791011128:31La4BFkK6TXxb0xKRVYZT3-r8Zwxhrf_fKGCcRNUI8/a44a4913faf15f99",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "content-type": "text/plain;charset=UTF-8",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": "kPZ-jtMHIwdyPbb86rqPRMYk-1EN-3UDS9Q88J5fs$QEj1RQYUhHsFpOM3X-pgzBBk87yLTAdvqHekoGZkULS-PDyVSiBiLxsmUfoPiYvWiUpgE1n3$g6PE+ndj-otm61+73WqUXM6vkqQV5wbhIVEZDd-nih-5409z6gKY33STZYFlTef2Uk2ZhBDvxPS32FXebAR-X+gCm9bXb3+IQjEv-JD4pzn6XSL35wdwrJXTfNmxxHlgVmipPKoxI-xDiznheIE6uhilECvZX6mZXgZr$vo$I7iPBM8ovPtC3O+crPes4dK$WpSjqPt$XUpHLL98CSDS9vh+Y6U9MT$xdr$7MVf4P+013Uk6xkrfGF2z$vfD6E3P7Z-hkNCbPR4t8WJJ$k1ED1Dmv2bMzrdEStQbI-6Ve-cJTunJ-rfcl6MibB0gKWkx9S010lP+3XQRj4nYbH-5suv5yADz0FXibgVzM4gFPlACJHFwsFL+Y$emsQVvH36iAqfiE-PQd8kVGEf38irZu97FwGfCRPn8gVPGtRJTvN5vgALh8z8hzdb4Q3NC85Em5APROf3NF89E0hoIW7JPUx-CoVnCjL39gZRNieMyIHq01N-YQL7oswfdx6XQTkmPYpfSDqUnXgrEXOojYlX9JgqKoAXMwZscI6PSefOJmcH0y5MJNRi1Czz1WdRogXrBFzJQNh8COsSzP3bvpb4IqUtGsuob2dK9gxpr1XcvC7OjhCZgzXlHSkL+5rEKtBZLztnQbN3dmHn1KXzkmLbMYPGV+gxymAiMKUvtUxzLMmxPBiNS9Ik9gzC-ZRMDu3eW-cLoAfxM+XZ-Y4bF3q7cI6ETsktDIX9bO1Ptf78DYQNHHHKSsU+lRpTEJdlWWqZp27f+UgI5RRrkFLu+u$UAPSFGtCXyO$ccxy5ADs41K9hrKnE5KomSCWYeCpxv1LfPL4Wxd-PmujTCtSpTFcUVQC8uCf7Uj80jZgMedwHuNd9U6kDWwkhOj",
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": ""
+      }
+    },
+    {
+      "time": "13:38:59.766",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/messages-end.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "import{o as a,a as c,e}from\"./index.js\";const n={xmlns:\"http://www.w3.org/2000/svg\",width:\"46\",height:\"46\",fill:\"none\",viewBox:\"0 0 46 46\"};function o(t,l){return a(),c(\"svg\",n,l[0]||(l[0]=[e(\"path\",{fill:\"#fff\",d:\"M24.256 32.66c0-6.118-4.81-11.039-10.697-11.039S2.862 26.542 2.862 32.661c0 1.23.195 2.41.553 3.512.15.461.258.79.297 1.037.036.23.044.385.03.618-.014.248-.075.516-.154.876l-1.07 4.855 5.306-.729c.323-.044.565-.08.786-.078.21.002.343.015.548.056.219.044.51.15.922.296 1.09.387 2.26.597 3.479.597 5.887 0 10.697-4.922 10.697-11.04ZM43.7 18.709C43.7 9.648 36.345 2.3 27.27 2.3c-9.074 0-16.428 7.347-16.428 16.407 0 .565.028 1.122.084 1.672a11.965 11.965 0 0 1 2.633-.292c6.776 0 12.23 5.65 12.23 12.573 0 6.922-5.454 12.573-12.23 12.573-1.396 0-2.74-.24-3.991-.685-.478-.17-.63-.221-.71-"
+      }
+    },
+    {
+      "time": "13:38:59.770",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/user-and-close-size-60.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "13:38:59.771",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/LoginRegistration.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "13:38:59.771",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/MessagesEnded.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/assets-fdf64c27/index.js",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "import{d as D,l as A,c as d,u as p,r as y,a as _,e,t as r,B as i,F as N,b as R,A as T,Z as x,z as S,$ as O,K as s,P as t,a0 as V,ag as F,ad as m,bz as z,L as C,v as $,p as f,o as g,am as U,Y as H,bA as I,V as q,m as K}from\"./index.js\";const Q={class:\"messages-ended\"},W={class:\"top-block\"},X={class:\"top-block__title\"},Y=[\"innerHTML\"],Z={class:\"bottom-block\"},j={class:\"bottom-block__title\"},J={class:\"gifts-list\"},ee=[\"onClick\"],se={class:\"gift-text\"},te={class:\"gift-sended-text\"},oe={class:\"or-separator\"},ae={class:\"or-separator__text\"},le=D({__name:\"MessagesEnded\",props:{data:{}},setup(P){const{t:l}=A(),M=P,c=d(()=>M.data),u=p.user,E=d(()=>I.slice(0,3)),v=y([]),b=d(()=>{var a;return!((a=c.value)!=null&&a.online)||C.videoDialogState.value===q.Connected}),k=a=>{if(p.user.value.isGuest){s.show"
+      }
+    },
+    {
+      "time": "13:38:59.776",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/SendGift.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/assets-fdf64c27/index.js",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "import{d as z,l as L,r as P,c as h,a as C,e as t,am as x,t as i,B as o,D as S,Z as r,$ as u,f as D,F as w,b as M,A as y,G as U,L as p,K as l,P as _,u as R,H as q,ax as O,ad as H,p as W,o as c,Y as v,z as K,bA as X,a0 as Y,m as Z,bF as j}from\"./index.js\";const J={class:\"send-gift-overlay\"},Q={class:\"send-gift\"},ee={class:\"send-gift__username\"},se={class:\"send-gift__friend-button\"},te={class:\"send-gift__description\"},ae={class:\"gifts-list\"},ie=[\"onClick\"],oe={class:\"gift-item__image\"},ne=[\"src\"],de={class:\"gift-item__cost\"},le={class:\"gift-item__cost--value\"},ce={class:\"gift-item__sended\"},re={class:\"send-gift__actions\"},ve=z({__name:\"SendGift\",props:{data:{}},setup(N){const A=N,{t:n}=L(),V=U(),e=A.data,F=P(X.slice(0,3)),g=P([]),k=h(()=>Y.assetsUrl),I=h(()=>{var d,a,s,f;return(d=e==null?void"
+      }
+    },
+    {
+      "time": "13:38:59.779",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/UserAccessDenied.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "13:38:59.779",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/UserNotes.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/assets-fdf64c27/index.js",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "13:38:59.782",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/ChatHeader.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "var Oe=Object.defineProperty,De=Object.defineProperties;var Ue=Object.getOwnPropertyDescriptors;var fe=Object.getOwnPropertySymbols;var He=Object.prototype.hasOwnProperty,ze=Object.prototype.propertyIsEnumerable;var de=(d,s,l)=>s in d?Oe(d,s,{enumerable:!0,configurable:!0,writable:!0,value:l}):d[s]=l,ge=(d,s)=>{for(var l in s||(s={}))He.call(s,l)&&de(d,l,s[l]);if(fe)for(var l of fe(s))ze.call(s,l)&&de(d,l,s[l]);return d},we=(d,s)=>De(d,Ue(s));var ee=(d,s,l)=>(de(d,typeof s!=\"symbol\"?s+\"\":s,l),l);import{W as ve,o as i,a as r,e,d as J,l as ce,m as Q,c as w,j as Ne,I as We,p as I,w as j,h as ie,q as xe,x as me,y as he,z as g,A as p,B as t,t as v,f as h,D as y,E as Ze,G as Re,u as B,H as Ce,J as Ge,K as x,P as R,L as K,V as ne,M as Fe,N as Ye,U as ue,O as Me,Q as qe,R as Ke,S as Qe,n as be,T a"
+      }
+    },
+    {
+      "time": "13:38:59.782",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/UserPermanentBan.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/assets-fdf64c27/index.js",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "13:38:59.784",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/ChatArea.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "var Ut=Object.defineProperty,Ht=Object.defineProperties;var zt=Object.getOwnPropertyDescriptors;var Mt=Object.getOwnPropertySymbols;var Gt=Object.prototype.hasOwnProperty,Wt=Object.prototype.propertyIsEnumerable;var St=(n,e,l)=>e in n?Ut(n,e,{enumerable:!0,configurable:!0,writable:!0,value:l}):n[e]=l,Ct=(n,e)=>{for(var l in e||(e={}))Gt.call(e,l)&&St(n,l,e[l]);if(Mt)for(var l of Mt(e))Wt.call(e,l)&&St(n,l,e[l]);return n},bt=(n,e)=>Ht(n,zt(e));var Tt=(n,e,l)=>new Promise((_,v)=>{var o=C=>{try{g(l.next(C))}catch(S){v(S)}},h=C=>{try{g(l.throw(C))}catch(S){v(S)}},g=C=>C.done?_(C.value):Promise.resolve(C.value).then(o,h);g((l=l.apply(n,e)).next())});import{o as i,a as s,e as t,d as X,l as te,G as Ve,r as N,c as w,x as De,y as We,A,B as a,t as x,F as ce,b as Fe,D as F,aK as ze,z as O,H as r,J as"
+      }
+    },
+    {
+      "time": "13:38:59.784",
+      "type": "script",
+      "method": "GET",
+      "url": "https://iframe.coomeet.com/assets-fdf64c27/UserProfile.js",
+      "headers": {
+        "origin": "https://iframe.coomeet.com",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true
+    },
+    {
+      "time": "13:38:59.802",
+      "type": "xhr",
+      "method": "GET",
+      "url": "https://ap1.coomeet.com/v20/i18n/web/en",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://iframe.coomeet.com/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "{\"status\":\"OK\",\"i18n\":{\"5\":\"min\",\"A_FRIEND_ADD\":\"Add to contacts\",\"C_PAYOUT_QIWI_TITLE\":\"Your Qiwi wallet:\",\"C_INVOICE_MINUTES\":\"Minutes\",\"C_PROFILE_SELF\":\"View profile\",\"A_CHAT_NEXT\":\"Next\",\"C_PROFILE_LINK_COPY\":\"Copy profile link\",\"C_SEARCH_CONFIG_SAFE\":\"Safe search\",\"C_MSNGR_FIND_USER\":\"Search\",\"C_SEARCH_CONFIG_SAFE_TEXT\":\"When this feature is enabled, searches will only include verified users.\",\"C_HEADER_BONUS_HELP\":\"Invite friends and {C_HEADER_BONUS_EARN}\",\"A_WRITE\":\"Start chat\",\"C_PROFILE_LINK\":\"Profile link\",\"C_REFER_NOTE\":\"Don't use mass messaging on social media. Your account may be blocked.\",\"C_REFER_NO_BONUS\":\"No bonuses yet\",\"C_PAYOUT_CARD\":\"New card\",\"C_PAYOUT_BALL\":\"You have {ball}\",\"C_PAYOUT_TO\":\"Withdraw to\",\"C_PAYOUT_YOU_GET\":\"You’ll receive:\",\"C_PAYOUT_YANDEX_TITLE\":\"You"
+      }
+    }
+  ],
+  "websocket_frames": [],
+  "console_logs": [
+    {
+      "time": "13:38:58",
+      "type": "log",
+      "text": "JQMIGRATE: Migrate is installed, version 3.4.1"
+    },
+    {
+      "time": "13:38:59",
+      "type": "log",
+      "text": "Coomeet application."
+    },
+    {
+      "time": "13:38:59",
+      "type": "log",
+      "text": "version: 2.0.0(15818)"
+    },
+    {
+      "time": "13:38:59",
+      "type": "log",
+      "text": "hash: fdf64c27"
+    }
+  ],
+  "page_html_preview": "<!DOCTYPE html><html lang=\"en-US\"><head>\n\t\n\t<meta charset=\"UTF-8\">\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1\">\n\t<link rel=\"profile\" href=\"https://gmpg.org/xfn/11\">\n\t\t\t<link rel=\"pingback\" href=\"https://chatib.net/xmlrpc.php\">\n\t\t<!-- Manifest added by SuperPWA - Progressive Web Apps Plugin For WordPress -->\n<link rel=\"manifest\" href=\"/superpwa-manifest.json\">\n<link rel=\"prefetch\" href=\"/superpwa-manifest.json\">\n<meta name=\"theme-color\" content=\"#ffffff\">\n<meta name=\"mobile-web-app-capable\" content=\"yes\">\n<meta name=\"apple-touch-fullscreen\" content=\"yes\">\n<meta name=\"apple-mobile-web-app-title\" content=\"Chatib\">\n<meta name=\"application-name\" content=\"Chatib\">\n<meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n<meta name=\"apple-mobile-web-app-status-bar-style\" content=\"default\">\n<link rel=\"apple-touch-icon\" href=\"https://chatib.net/wp-content/uploads/2021/08/emoticon-chat.png\">\n<link rel=\"apple-touch-icon\" sizes=\"192x192\" href=\"https://chatib.net/wp-content/uploads/2021/08/emoticon-chat.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_1136x640.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_640x1136.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_2688x1242.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_1792x828.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_1125x2436.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_828x1792.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_2436x1125.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_1242x2208.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_2208x1242.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_1334x750.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_750x1334.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_2732x2048.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_2048x2732.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)\" href=\"https://chatib.net/wp-content/uploads/superpwa-splashIcons/super_splash_screens/icon_2388x1668.png\">\n<link rel=\"apple-touch-startup-image\" media=\"screen and (devi",
+  "summary": {
+    "total_api": 31,
+    "total_ws": 0,
+    "ws_urls": [],
+    "api_urls": [
+      "https://iframe.coomeet.com/cdn-cgi/challenge-platform/h/b/jsd/oneshot/d76008a69eab/0.7583863765300594:1791011128:31La4BFkK6TXxb0xKRVYZT3-r8Zwxhrf_fKGCcRNUI8/a44a4913faf15f99",
+      "https://chatib.net/wp-content/themes/neve/assets/js/build/modern/scroll-to-top.js?ver=4.2.3",
+      "https://iframe.coomeet.com/assets-fdf64c27/UserPermanentBan.js",
+      "blob:https://chatib.net/e90092b7-fc8b-4c4d-8165-bc3611e007db",
+      "https://chatib.net/wp-content/plugins/super-progressive-web-apps-pro/assets/js/superpwa-frontend-cta.js?ver=1.57",
+      "https://ap1.coomeet.com/v20/service/blacklist.site",
+      "https://chatib.net/",
+      "https://iframe.coomeet.com/assets-fdf64c27/MessagesEnded.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/UserNotes.js",
+      "https://ap1.coomeet.com/v20/i18n/web/en",
+      "https://iframe.coomeet.com/assets-fdf64c27/LoginRegistration.js",
+      "https://chatib.net/wp-content/themes/neve/assets/js/build/modern/frontend.js?ver=4.2.3",
+      "https://chatib.net/wp-includes/js/wp-emoji-release.min.js?ver=6.9.7",
+      "https://iframe.coomeet.com/assets-fdf64c27/user-and-close-size-60.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/UserProfile.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/ChatArea.js",
+      "https://chatib.net/wp-content/plugins/translatepress-developer/add-ons-pro/automatic-language-detection/includes/trp-ald-ajax.php",
+      "https://chatib.net/superpwa-manifest.json",
+      "https://iframe.coomeet.com/assets-fdf64c27/UserAccessDenied.js",
+      "https://chatib.net/wp-content/plugins/translatepress-developer/add-ons-pro/automatic-language-detection/assets/js/trp-language-cookie.js?ver=1.1.1",
+      "https://iframe.coomeet.com/assets-fdf64c27/messages-end.js",
+      "https://www.google-analytics.com/g/collect?v=2&tid=G-FPY8TH6T2Z&gtm=45je69u2v9108624740za20oxf1&_p=1791013138451&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=EAAI&are=1&cid=1577773660.1791013139&frm=0&ir=1&ngs=1&pscdl=noapi&rcb=16&sr=1280x800&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.96%7CHeadlessChrome%3B148.0.7778.96%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=10.0&uaw=0&ul=en-us&_s=1&tag_exp=115616986~115938466~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121280971&sid=1791013139&sct=1&seg=0&dl=https%3A%2F%2Fchatib.net%2F&dt=Chatib%3A%20Free%20Online%20Chat%20Rooms%20With%20No%20Registration&en=page_view&_fv=1&_nsi=1&_ss=1&tfd=1381",
+      "https://chatib.net/wp-content/plugins/super-progressive-web-apps/admin/js/superpwa-ptr-lib.min.js?ver=2.2.44",
+      "https://iframe.coomeet.com/assets-fdf64c27/ChatHeader.js",
+      "https://iframe.coomeet.com/assets-fdf64c27/SendGift.js",
+      "https://chatib.net/cdn-cgi/rum?",
+      "https://chatib.net/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+      "https://chatib.net/wp-content/plugins/rocket-lazy-load/assets/js/16.1/lazyload.min.js",
+      "https://chatib.net/wp-content/plugins/neve-pro-addon/includes/modules/header_footer_grid/assets/js/build/front-end.js?ver=3.2.4",
+      "https://chatib.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+      "https://chatib.net/wp-content/plugins/super-progressive-web-apps/public/js/register-sw.js?ver=2.2.44"
+    ]
+  }
+}

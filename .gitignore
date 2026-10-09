@@ -1,0 +1,17 @@
+# secrets — never commit
+configs/session.json
+configs/sessions/
+data/session/
+data/logs/
+*.log
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# big/local artifacts
+captures/*.jsonl
+data/bot_data.db
+Unselected files/

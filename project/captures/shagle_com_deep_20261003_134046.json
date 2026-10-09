@@ -1,0 +1,295 @@
+{
+  "site": "https://shagle.com",
+  "timestamp": "20261003_134046",
+  "nickname_used": "Guest9xekex",
+  "api_calls": [
+    {
+      "time": "13:40:47.692",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://shagle.com/cdn-cgi/challenge-platform/h/b/fo/602942155:1791011122:j7rCqQHbmOzshmn9mGFobvsbxB1GUejzXyR1Vc_Kxgk/a44a4bb7987355ec/z3eJmIuqs_Ur.WNHecMA.kUbSSigVdChxUd4FMt.S4c-1791013195-1.2.1.1-12MACV5lCiR3Pdv3BY_GEraLP4krPsgSXz9_TwgytyxEYQuayOMBzLTG.hndt63R",
+      "headers": {
+        "sec-ch-ua-full-version-list": "\"Chromium\";v=\"148.0.7778.96\", \"HeadlessChrome\";v=\"148.0.7778.96\", \"Not/A)Brand\";v=\"99.0.0.0\"",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://shagle.com/",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-bitness": "\"64\"",
+        "cf-chl-ra": "0",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-model": "\"\"",
+        "sec-ch-ua-arch": "\"x86\"",
+        "sec-ch-ua-full-version": "\"148.0.7778.96\"",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "content-type": "text/plain;charset=UTF-8",
+        "cf-chl": "z3eJmIuqs_Ur.WNHecMA.kUbSSigVdChxUd4FMt.S4c-1791013195-1.2.1.1-12MACV5lCiR3Pdv3BY_GEraLP4krPsgSXz9_TwgytyxEYQuayOMBzLTG.hndt63R",
+        "sec-ch-ua-platform-version": "\"10.0\""
+      },
+      "post_data": "dlrXWwooPwfTB+u9AM-j6ACPZf5+I3BZ1GNjy8jkVjeGlDY+tOET4$53u5WRfQo9h8I7qhhSfPP3T$loxQOZ+4dXN50-kGz6N$ryJnOjPctK7Y73$Sqq3g8ft12J24bAWBjscpta7Smr6yftRbdYXISz2tRVCjPqpnJ$8Cx7qJutJV$PlMEPy$blYdifqPNbAsA71hwF$aw6BOfJc5Aw8VCLX7lOuKD9tq861a2-kX2ngzX0P+GPKz1shpbMDslWxgCm+WjxCb+v6r7f7SRvFjGg$6sK8pGF2phdA+74SR$GzZILxQh1YLuP$sJnBWwIDj8A07euStlhuHK1Yi2PVRRROIB0eGpGAMr+lSq97CYDfigA7o8-rEq6iCDA60+ncv9AQ9WnzEJphTuz138ufxItcPKYSpfsjxZNaeNL5XvNEQohFFATQw6vJItbxVmzr8JYb0QoWOf6gSfrmLCkdwgGP-u2pX17jJqyxVtMTk3JatXJJy4y9XVahQZZMy7yGEfsQ9xxu86EnjLWlYMv2mzkEenrEGzPmeqk7-2V3pfcY-x63x5+BwVTb9HOeuGBaoZ-eiwENR7CKJ9cwkqglJHe5CblwwfMpRhQBChyBPgDn6br1hoYGsTVdAu1Z991yST1gy3MtWsRH9VXcs-TtduJQ7B4EaWw5ufrBeDW0Sgx178SEB5JFDexc2E2a-Zkrz5DsjswMbmD3fnSIJv-e0BmxYiRGvr4rpDCvipMo$YifPL5zJ8SqPdstsiCvOB7-Vju0$efJ6XaTi-LhPMw0xjN9KvA6v8nnFWRRKRbRTmDj2GNFnV8EWI-L0yEMDRThoVaZa36s4sLH7Tf6fpWGLKTMPeMEh8VcX7u63wN90tSDIfryI+Rb+jE7PQ9pg-omW8VHvqf+JTM4IW9A9$3QA3IoC$o+zMDT6I8EFQKyxDGNE9D97-EwlVR+RW-26xQK3Z8rd$7FQjseMm+lWmZKnPy7Z9DRX1$ALeIhoVI",
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "p5p8uJe3qLmfw8OdyZ3Fy7mYysSkvcu1v7bS1bGyz+fV47TM36O+58vEx8Df4r61zbnWxLm22LbW6/PbtgPy4eQI/f7U2+jn/fD87fUBB+roDAXzCuwJ/PcM8d8kJhj99Pfm5fgdBRzvAyAzAQUA8QU2HDHzMfAZDREY/RE1IT4WHEg5LkJGSTELREEPHhYvWidDV1EUFz9aYy44WWZbQWg8SSVeWV1LQlxoSVRTQHhqVHhVTzBfSoBtUn1DXEF8RTx7eXxoXotgbWhtYYF3mHlqco+UeXt1bIp3WmCHhYVbapd8nmlhmoacnmuSkpaGrZW3ubGRp6G8uJ+bo5+ylXublZ/Bro6ph7DEjZXMybmls6Sp19TSnaCYup+7sa+x0arq5KPKpebb3cjwtK+ywM33xuvz37rO7tbi0gHk9rr81MH3A+rH+/AA0hIAAPXQEdoJEx/d1Qvd4t7v9iQU9uIVKw7oDfkpCgkj8PEpBAYQBRMw9RIpFxkfQfozJiACHBgdAyVNIwkSHA0yElMrShUNTFgUVFw0IUJdYGYzM2BSHU1mKl5gaUxKQUNBM3hrZ3JuUUZXPHU6e2A/UE9YVYdndltWh2aCimmEg46YbWyWk1adWHyNgYB5hY+UY5mGfoONhH14sWOmi7VzgaqTl628ppKGvZqBnMCQj7yEnr+IiJ7Or8HQjsuywtCOxLK3mrDaspfSvOChz5/Z273H3arHzMe2xcTe09LSyufB0q/a3NrZtNTs27nMBNkC9PcA2AfVBNoF0MfE6wsK9xnPz/Ln6ecH6CDX"
+      }
+    },
+    {
+      "time": "13:40:48.370",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/fo/1159983875:1791011124:86kLaQDvkrTj71Z2fXv6RL76KnznsPVpD1B4U81wAQM/a44a4bbd0bc5fd84/di8M9biyNPWFLaSBPszbOHy3YOgrIVeDT8UpmWdDSz8-1791013196-1.2.1.1-XDxvEkCWYSg7C_1Ro_xN8_L7RSXpwoXN7A2.PMMRLpzLJOinRoCwwLtYt6nfMkEs",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/ccgvz/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "cf-chl-ra": "0",
+        "sec-ch-ua-mobile": "?0",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "content-type": "text/plain;charset=UTF-8",
+        "cf-chl": "di8M9biyNPWFLaSBPszbOHy3YOgrIVeDT8UpmWdDSz8-1791013196-1.2.1.1-XDxvEkCWYSg7C_1Ro_xN8_L7RSXpwoXN7A2.PMMRLpzLJOinRoCwwLtYt6nfMkEs"
+      },
+      "post_data": "VrMidjsPj50a4OTw$U3ILCiNMJXz5bXXciUPsOpZ$W-g$VDkQpgnLgUnWfjuAkEZI$pPx7sG6jQygOXH3rNbcHaorn$FH4v9rMz31AzOlgM1PHMZeKUUwtQkLwrSG$gw9Xd$pYa0ADbT6KFtiwYEena1GDStyNwZudgR5UftcKhN5l40JyWpf7CUrp8lBSJ9vSjFgcpnptOCZ+BM4aHE8lyGzm9XoMrSojdJ-OFXzNMNmP$O9iGxdEVJsouEZPiCZh3lvHVfzd9VHjazLpeCMF7NemdSEtrZ+W5d0xUp7JZlTtayfWQrnD0uz7juCSRAfrSU9eeQg3gC47IpkL-K0vfDi3gjmCjFnsExTItbgbT$EXVbeCIfwy8zr3SMteGDDC1Medcg8J7EsQQKeiudvK9hlX7w4ScbUml-UDImva+Yj+6sJ-B88$UcTEuWpzDBE1h0EVApP6LdQAkdbgtznaA0cM+7dx6DXsVwcoUGNkBwAex9-310X$6fm7yBZEATr33E6u9oFAsFowZjBIfwWhwlwvq+NtfgZB+XhH8yqlRs1huKNbFt5ifXVbhAwgHojHq13H197xp9nMsR-ZNWL+K7LiC7QfkBW0lfiho4QM0aicmLCiohP-7GHfIRrPv3d69mpD1huJqCwwQ7uzIggtWMbbsbJsmUHByIy546nvB7QCxsX+Jt4e1j-XFfB1GSws$XDS8ILVQ3-kemRalRN+GByj$VPjd5XQZ8iQQM3356ROJb+nMOpPyR0NRjqV9YrZOvVH$bX1T+zrdNU+5siSu5Orfu76AzTdE1dre-YAvtXGFQk9bDriebsfZ$1e1Dz9zx9b3bA3Kvzkjrl4q7aa-jGAP+kbxEs5vPJX+3MuylXgKa8I4PvkAMRuon-hcMFqAwSghhltC+1pdurZtspdDs8SPFfbZ89RJD90V$gp5ZkoejLsYF5shi45Ft-txCSHSvI71$tTJDaaX64yY3$a0oSqsXA5BD16XdSK5-",
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "iGJ8ZExOS2+Ob5hoY5JnfId3bHmKW3WEkH6TeKCfm52vjWeKjnyeq7Sqk6WWeXuLkoqqjqujo32akajAlIWrhZqcvcXAzMXB16yU0JmqyaWtmZ+/qr7d3+O8ssjgx6e7tuu/6vC/67Hg1+j39bf56tHW0s7Z47a++NzzyNL06/XI+trKD+YB9Anz8xYJHRr1/PXg+RngD+Qh/gAb5RoX6ykKHB0TDCUnFg8rCjvtJQj0LA78Oj889xg4JTcbPBlKIio/R0pLQyw1ERQ6WTgmV04bOkE3Ulg8YCUpUlZLQ1xlPGRmXVw/ZHBWZGNwOC9YeD16XYRtbUFEc0NZS3yCgEplgG9RdIBNV41VinaIfViWoJeeX3qXoXebfoWJmqGNZ2iAoIyBbIGotJKndpdzuai8ta61xLvBtqiHoJe4rcOj0cDDi8iOzp/Wr5fat5zQsLHU1qPFv8Lbwdu5wd3h4d2srKnw5cv10/C4rPfF9tTczgLW1f3NzwfeyMUDAegDy9gT7dMP8wfo4uHv49P28un4FO4kENv4EfMUE+HqJQDo6O4TIQUeAvAILwz5PAwzFfsTMyMePTpBMSs9QkBPLwo6JA5AIxY/NkwuSjYwVyccGFU7PEFcVT1HOmhpZV9bbGhoYUxmTHdDMG00dm86SltJOlJZQ3Y5g1x9S3Z/Y1pqhH+GimV/lXVlUWuPdYpeW5xga55XeJqWqqBrZJhrm4iSmp10jKKpoKSEmG66speswoCwf5W5u7u4icafw7qXv8OSstOxk5TUyJDXz92e0MGvs9DEur/S"
+      }
+    },
+    {
+      "time": "13:40:48.758",
+      "type": "fetch",
+      "method": "GET",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/pat/a44a4bbd0bc5fd84/1791013196733/7080795e204a91feb7e0f8316ad17ed80c36420120c31937797640965eec46b1/5Nvq28Z6t7htNQlkUMJv2yY0rj2nojPB2Nt5tAAhTQc-1791013196-1.3.1.1-LLXU2yI0Zweku37E1ktEp__WZGU5dFlqqwa_Ra6T_vCXXwKqY5KZAlydWooe8mR0pPA.Q_l_cdv0lASGF4YrB3ALELR_FSejoF2c1NsZobHS8S6FYx80UeT2.t9pCoBPe4nXW6ke.OHcQ8xVN_9ZURDEt__HEAMKsuSgKpjW6ag4_KlP4gQvCIrH6Be3P8KgZrZMF1AriSlro6p7xfsdJNUaa.3ba3gYAhIzpwvHUJPxNDOJ5Z95qaqI52I_nql2k4oLhoS0mlSL3EmMSoY6TzVDftwddUNbzcazAeYXNj3_.hgQH5orEj_06Qp9kYmlsY.H6afbjf1YS7ypUqPFODVOSnuS0kmDcQIRd5BASiahnYfF8wX8AUnmV1fJg6RZ9LkliXRPxPvfBh1kGyUH.WNP8dL1Vabz.TUL976XGJbL9A_wjg_GboZERoyFYh5gYzRoerrhCSH623iVaP3SvWd8WAgBmbSPfGMYic3Jh_NT.8PR21M3upt4cerwv2P7bGLbzPmh9WXpPK1OPCYiixF7_iwkPDI.VVetyhe9nG6jQNTGGjKgNK2nMvftcyw2GTzcgDTkAU71oZrvkz2XlwEn8_40BWtTFiyTrHdvaBwicrMeBJUZYJXXJNCbSYkBJV9sS.E8_6MYtyGVI1zq3vl45p49O_Bd5b.64aDgjv1nofSF_wOGnFP7766LumpXDXYkNLVgoL_aLeFOq_t7WT5DJsfvc_kchus3gjyAxrDD_GQbHdPYY4d2swJ0aUsBtuxrdx1W4XDHWh926WC5F3p6L_FnJ0rT8QZUyj_EfXt8TfCvpQqmF2waRVcTuUZB",
+      "headers": {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "referer": ""
+      },
+      "is_api": true,
+      "response": {
+        "status": 401,
+        "body": "J"
+      }
+    },
+    {
+      "time": "13:40:48.758",
+      "type": "fetch",
+      "method": "GET",
+      "url": "https://brunhild.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/i/a44a4bbd0bc5fd84/di8M9biyNPWFLaSBPszbOHy3YOgrIVeDT8UpmWdDSz8-1791013196-1.2.1.1-XDxvEkCWYSg7C_1Ro_xN8_L7RSXpwoXN7A2.PMMRLpzLJOinRoCwwLtYt6nfMkEs",
+      "headers": {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "referer": ""
+      },
+      "is_api": true
+    },
+    {
+      "time": "13:40:49.506",
+      "type": "xhr",
+      "method": "POST",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/fo/1159983875:1791011124:86kLaQDvkrTj71Z2fXv6RL76KnznsPVpD1B4U81wAQM/a44a4bbd0bc5fd84/di8M9biyNPWFLaSBPszbOHy3YOgrIVeDT8UpmWdDSz8-1791013196-1.2.1.1-XDxvEkCWYSg7C_1Ro_xN8_L7RSXpwoXN7A2.PMMRLpzLJOinRoCwwLtYt6nfMkEs",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/ccgvz/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "cf-chl-ra": "0",
+        "sec-ch-ua-mobile": "?0",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "content-type": "text/plain;charset=UTF-8",
+        "cf-chl": "di8M9biyNPWFLaSBPszbOHy3YOgrIVeDT8UpmWdDSz8-1791013196-1.2.1.1-XDxvEkCWYSg7C_1Ro_xN8_L7RSXpwoXN7A2.PMMRLpzLJOinRoCwwLtYt6nfMkEs"
+      },
+      "post_data": "VrMidjsPj50a4OTw$U3ILCiNMJXz5bXXciUPsOpZ$W-g$VDkQpgnLgUnWfjuAkEZI$pPx7sG6jQygOXH3rNbcHaorn$FH4v9rMz31AzOlgM1PHMZeKUUwtQkLwrSG$gw9Xd$pYa0ADbT6KFtiwYEena1GDStyNwZudgR5UftcKhxCwAT0sBSvNlwXdWxJr8b0ZqtCpXc-k+MIE9oj$gHPAnpPxE1kB08Z46YsXjsvxLEVqD6J6tFBJWTengew6rzWsj4+VfRyXVZebF9E8fVB0jC5hWWJTFH0JBaUmZxadHTlVfRm1Q6h-EXZD$7XfayFGYnygk8lIbP1uBi317KmvgBRDvL-jRMXQWaX05QhZsL8DhvcdSmBJ7qLepdLcQh-4ABbesEzkJ09pd+c30hUxqZBcZbAKC8BhF$cM+6J-fwWd0OI+M5p6D69$05x$uJGu5By615sio1dJWfTvqRfXRIDY7FUkg+pXAmCB8CxmCzZfVK$knty-I39eF0N+9iqoAfC7g5CKOnXZhbTGLTVhIufwGAWbo0Ddxov34ppJjVg8MGdKysjR++rB3LVyvRUjGrHYU1Ji5+6jP1qOf30FKaYAT4AUJ8SQlCci$Gg9CaH+EGJxoE7ebVAnQo-B7ebLL8YaHEE7gNVKzSSohaJBOY5uuQFicanIEfA8YHvkQGVyN0dyEi0gMQ8-ZIT06EhIwOQn6P4T7YlXGdF1woBlsGOeUmmq7zj7xu4rqGHVLVYdbipeDInXlxtlwQ4QSvH-4SepcSwZQstbUBtuXiPnqvEEUqrV+DXDl+Kyfe8+Ot38XdYn5e9TqMZ+hiXIkQzyh-U$oKpg5iKXQNVqwLsMOhsWQ83Jvc8NsNhADdjk6sE6o96N4XlF7dEXVXLEmeKjXAxispKYAdNvEAKagJJmNd5JDeosMLPi5G9k9X6x1R$Yx$Ga1nz$d8e-ueLn3j5rLnb9kPorenvWVTAkTyCe1xP6XcntOSaam64vt6",
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "iGJ8ZExOS2+Ob5hoY5JnfIeMX1l+lnGNgniTp2pimKd3rq6IgIyAkINztKqpm4mVi7+xlrqOnJuQhcKAx6esy6PNrcHOkcjHo6OosbeNxKbOp9Tanbqtn+SxtNfi6Z67pcDc4Mmr6fLU1s3v887Gt/Kx0LvT3ffR4NjT6PfT3f3O3tvvBOb80BLTBfLz8dno9N/pAuDb7hcW4QYYHPsnK/cxLvEM6+wlAQoOJOwULhH6NhT7HQ1AHwA9AD4cJQw+HyoMTSUmPTYiS1RPQz1PFkcbTS5AZTU3QmAbZ0kmSm9lQjpGVGlDZG1KM3tnMjg4cXgzenA6Pk5CflWGWotrV0t8XHJwgE5lgm96THuOV5J0XYuadqCAnXqCeoWHZKOvfp+nk26AjqGQb4awcbR3famsmK3DpZm+mqinoMy7nMKg0aWNs5S20c/Graajm7mUsKq11MThw8Laudvo09rq1+bQx96v8cHBwOrE6tTL8crn3dr89M79Bc/y5Ajh3u4Byw3p5srK/uMOCfEJ5vTy6vroFPPs9/0S+gIU5Pkq7S8g6zIJ7fM07Dck6zw8KfwYNzIuDSQ4/C8pMQM/LR8fOQkmC1NQJEVUNkxRNkRZNhFJXU00QDo5OGkmUyJbXGxqJjxmW0RBRnhyZzpMZ3ZPVVg4gFhdhnJChYJkR3lsX1poSIhxY4eIUldmc3BmbV1wgWuDk310mpiJZH5og5iNm6WjgJGpjJFxr4evk6+qt3uxe7x1fneQmanAqrifp4uevqGzqrGUs63U0tDPmtTI3MCau9PDnrHD"
+      }
+    }
+  ],
+  "websocket_frames": [],
+  "console_logs": [
+    {
+      "time": "13:40:47",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 ()"
+    },
+    {
+      "time": "13:40:47",
+      "type": "warning",
+      "text": "No available adapters."
+    },
+    {
+      "time": "13:40:48",
+      "type": "warning",
+      "text": "No available adapters."
+    },
+    {
+      "time": "13:40:49",
+      "type": "startGroupCollapsed",
+      "text": ""
+    },
+    {
+      "time": "13:40:49",
+      "type": "debug",
+      "text": "Error"
+    },
+    {
+      "time": "13:40:49",
+      "type": "log",
+      "text": "/.*.*=.*/"
+    },
+    {
+      "time": "13:40:49",
+      "type": "log",
+      "text": "/.*.*=.*/"
+    },
+    {
+      "time": "13:40:49",
+      "type": "log",
+      "text": "function () { [native code] }"
+    },
+    {
+      "time": "13:40:49",
+      "type": "log",
+      "text": "function () { [native code] }"
+    },
+    {
+      "time": "13:40:49",
+      "type": "log",
+      "text": "JSHandle@node"
+    },
+    {
+      "time": "13:40:49",
+      "type": "log",
+      "text": "JSHandle@node"
+    },
+    {
+      "time": "13:40:49",
+      "type": "count",
+      "text": "\u0000: 1"
+    },
+    {
+      "time": "13:40:49",
+      "type": "count",
+      "text": "\u0000: 1"
+    },
+    {
+      "time": "13:40:49",
+      "type": "debug",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "debug",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "dir",
+      "text": " Error"
+    },
+    {
+      "time": "13:40:49",
+      "type": "dir",
+      "text": " Error"
+    },
+    {
+      "time": "13:40:49",
+      "type": "dirxml",
+      "text": "%c%d font-size:0;color:transparent Error"
+    },
+    {
+      "time": "13:40:49",
+      "type": "dirxml",
+      "text": "%c%d font-size:0;color:transparent Error"
+    },
+    {
+      "time": "13:40:49",
+      "type": "error",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "error",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "info",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "info",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "log",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "log",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "table",
+      "text": "%c%d font-size:0;color:transparent Error"
+    },
+    {
+      "time": "13:40:49",
+      "type": "table",
+      "text": "%c%d font-size:0;color:transparent Error"
+    },
+    {
+      "time": "13:40:49",
+      "type": "trace",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "trace",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "warning",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "warning",
+      "text": "%c%d font-size:0;color:transparent NaN"
+    },
+    {
+      "time": "13:40:49",
+      "type": "endGroup",
+      "text": "console.groupEnd"
+    },
+    {
+      "time": "13:40:49",
+      "type": "warning",
+      "text": "OTS parsing error: Size of decompressed WOFF 2.0 is less than compressed size"
+    },
+    {
+      "time": "13:40:49",
+      "type": "warning",
+      "text": "[.WebGL-0x3e2c061e8000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "time": "13:40:49",
+      "type": "warning",
+      "text": "[.WebGL-0x3e2c061e8000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    }
+  ],
+  "page_html_preview": "<!DOCTYPE html><html lang=\"en-US\" dir=\"ltr\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src 'none'; script-src 'nonce-HEzkX7cddFUHFSwd8GN290' 'unsafe-eval' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'unsafe-inline'; img-src 'self' https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com blob:; child-src 'self' https://challenges.cloudflare.com blob:; worker-src blob:; form-action http: https:; base-uri 'self'\"><style>*{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"}body{display:flex;flex-direction:column;height:100vh;min-height:100vh}.main-content{margin:8rem auto;padding-left:1.5rem;max-width:60rem}@media (width <= 720px){.main-content{margin-top:4rem}}#challenge-error-text{background-image:url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0IyMEYwMyIgZD0iTTE2IDNhMTMgMTMgMCAxIDAgMTMgMTNBMTMuMDE1IDEzLjAxNSAwIDAgMCAxNiAzbTAgMjRhMTEgMTEgMCAxIDEgMTEtMTEgMTEuMDEgMTEuMDEgMCAwIDEtMTEgMTEiLz48cGF0aCBmaWxsPSIjQjIwRjAzIiBkPSJNMTcuMDM4IDE4LjYxNUgxNC44N0wxNC41NjMgOS41aDIuNzgzem0tMS4wODQgMS40MjdxLjY2IDAgMS4wNTcuMzg4LjQwNy4zODkuNDA3Ljk5NCAwIC41OTYtLjQwNy45ODQtLjM5Ny4zOS0xLjA1Ny4zODktLjY1IDAtMS4wNTYtLjM4OS0uMzk4LS4zODktLjM5OC0uOTg0IDAtLjU5Ny4zOTgtLjk4NS40MDYtLjM5NyAxLjA1Ni0uMzk3Ii8+PC9zdmc+\");background-repeat:no-repeat;background-size:contain;padding-left:34px}</style><meta http-equiv=\"refresh\" content=\"360\"><script src=\"/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a44a4bb7987355ec\"></script><style>@keyframes spin{100%{transform:rotate(360deg)}}@keyframes scale{0%, 100%{transform:none}50%{transform:scale3d(1, 1, 1)}}@keyframes stroke{100%{stroke-dashoffset:0}}@keyframes scale-up-center{0%{transform:scale(.01)}100%{transform:scale(1)}}@keyframes success-badge-orbit-in{0%{transform:rotate(-12deg) scale(.6);opacity:0}70%{transform:rotate(2deg) scale(1.06);opacity:1}100%{transform:rotate(0) scale(1);opacity:1}}@keyframes success-orbit-resolve{0%{transform:rotate(-80deg) scale(.6);opacity:0}20%{opacity:1}75%{opacity:.8}100%{transform:rotate(280deg) scale(.5);opacity:0}}@keyframes failure-orbit-break{0%{transform:rotate(-60deg) scale(.7);opacity:0}22%{opacity:1}68%{transform:rotate(190deg) scale(1);opacity:.8}100%{transform:rotate(225deg) scale(.48);opacity:0}}@keyframes failure-badge-settle{0%{transform:scale(.68);opacity:0}72%{transform:scale(1.04);opacity:1}100%{transform:scale(1);opacity:1}}@keyframes failure-mark-rise{0%{transform:translateY(2px);opacity:0}100%{transform:translateY(0);opacity:1}}@keyframes unspin{40%{stroke-width:1px;stroke-linecap:square;stroke-dashoffset:192}100%{stroke-width:0}}#UPeOD8{width:30px;height:30px;display:flex;border-radius:50%;box-shadow:inset 0 0 0 #228b49;stroke-width:1px;fill:#fff;stroke:#fff;stroke-miterlimit:10;grid-area:1/1;transform-origin:center;animation:success-badge-orbit-in .36s .26s cubic-bezier(.34, 1.56, .64, 1) both;stroke-width:6px}#UPeOD8 .XrGt4{animation:stroke .28s .41s cubic-bezier(.65, 0, .45, 1) forwards;box-shadow:inset 0 0 0 #228b49;stroke-dasharray:242;stroke-dashoffset:242}.GbsLV0{stroke-dashoffset:0;stroke-width:2;stroke-miterlimit:10;stroke:#228b49;fill:#228b49}#nsOc4{width:30px;height:30px;grid-area:1/1;overflow:visible}#nsOc4 g{transform-box:fill-box;transform-origin:center;animation:success-orbit-resolve .62s cubic-bezier(.2, .7, .2, 1) both}.VIMxA1{opacity:.3;fill:none;stroke:#228b49;stroke-width:1}.EwLCR3{fill:#228b49}.XkTn8{stroke-width:3px;stroke-linecap:round;stroke:#228b49;stroke-dasharray:0,100,0;stroke-dashoffset:200;stroke-miterlimit:1;stroke-linejoin:round}#jkbs3,#mYzdA4{width:30px;height:30px;display:flex;border-radius:50%;box-shadow:inset 0 0 0 #b20f03;stroke-width:1px;fill:#fff;stroke:#fff;stroke-miterlimit:10}.LIuW4{stroke-width:2;stroke:#b20f03;fill:#b20f03}.NDwI1{fill:#f2f2f2}.yLhm3{opacity:.28;fill:none;stroke:#b20f03;stroke-width:1}.rjglm9{fill:#b20f03}#jkbs3 .ccJAg8,#jkbs3 .fYqH1{transform-box:view-box;transform-origin:center}#jkbs3 .ccJAg8{animation:failure-orbit-break .52s cubic-bezier(.2, .7, .2, 1) both}#jkbs3 .fYqH1{animation:failure-badge-settle .34s .19s cubic-bezier(.22, 1, .36, 1) both}#jkbs3 .NDwI1{transform-box:fill-box;transform-origin:center;animation:failure-mark-rise .22s .31s ease-out both}#mYzdA4{width:12px;height:12px}#mYzdA4 .ccJAg8{display:none}#bUNP6,#MRXQN4{display:flex;a",
+  "summary": {
+    "total_api": 5,
+    "total_ws": 0,
+    "ws_urls": [],
+    "api_urls": [
+      "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/fo/1159983875:1791011124:86kLaQDvkrTj71Z2fXv6RL76KnznsPVpD1B4U81wAQM/a44a4bbd0bc5fd84/di8M9biyNPWFLaSBPszbOHy3YOgrIVeDT8UpmWdDSz8-1791013196-1.2.1.1-XDxvEkCWYSg7C_1Ro_xN8_L7RSXpwoXN7A2.PMMRLpzLJOinRoCwwLtYt6nfMkEs",
+      "https://brunhild.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/i/a44a4bbd0bc5fd84/di8M9biyNPWFLaSBPszbOHy3YOgrIVeDT8UpmWdDSz8-1791013196-1.2.1.1-XDxvEkCWYSg7C_1Ro_xN8_L7RSXpwoXN7A2.PMMRLpzLJOinRoCwwLtYt6nfMkEs",
+      "https://shagle.com/cdn-cgi/challenge-platform/h/b/fo/602942155:1791011122:j7rCqQHbmOzshmn9mGFobvsbxB1GUejzXyR1Vc_Kxgk/a44a4bb7987355ec/z3eJmIuqs_Ur.WNHecMA.kUbSSigVdChxUd4FMt.S4c-1791013195-1.2.1.1-12MACV5lCiR3Pdv3BY_GEraLP4krPsgSXz9_TwgytyxEYQuayOMBzLTG.hndt63R",
+      "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/pat/a44a4bbd0bc5fd84/1791013196733/7080795e204a91feb7e0f8316ad17ed80c36420120c31937797640965eec46b1/5Nvq28Z6t7htNQlkUMJv2yY0rj2nojPB2Nt5tAAhTQc-1791013196-1.3.1.1-LLXU2yI0Zweku37E1ktEp__WZGU5dFlqqwa_Ra6T_vCXXwKqY5KZAlydWooe8mR0pPA.Q_l_cdv0lASGF4YrB3ALELR_FSejoF2c1NsZobHS8S6FYx80UeT2.t9pCoBPe4nXW6ke.OHcQ8xVN_9ZURDEt__HEAMKsuSgKpjW6ag4_KlP4gQvCIrH6Be3P8KgZrZMF1AriSlro6p7xfsdJNUaa.3ba3gYAhIzpwvHUJPxNDOJ5Z95qaqI52I_nql2k4oLhoS0mlSL3EmMSoY6TzVDftwddUNbzcazAeYXNj3_.hgQH5orEj_06Qp9kYmlsY.H6afbjf1YS7ypUqPFODVOSnuS0kmDcQIRd5BASiahnYfF8wX8AUnmV1fJg6RZ9LkliXRPxPvfBh1kGyUH.WNP8dL1Vabz.TUL976XGJbL9A_wjg_GboZERoyFYh5gYzRoerrhCSH623iVaP3SvWd8WAgBmbSPfGMYic3Jh_NT.8PR21M3upt4cerwv2P7bGLbzPmh9WXpPK1OPCYiixF7_iwkPDI.VVetyhe9nG6jQNTGGjKgNK2nMvftcyw2GTzcgDTkAU71oZrvkz2XlwEn8_40BWtTFiyTrHdvaBwicrMeBJUZYJXXJNCbSYkBJV9sS.E8_6MYtyGVI1zq3vl45p49O_Bd5b.64aDgjv1nofSF_wOGnFP7766LumpXDXYkNLVgoL_aLeFOq_t7WT5DJsfvc_kchus3gjyAxrDD_GQbHdPYY4d2swJ0aUsBtuxrdx1W4XDHWh926WC5F3p6L_FnJ0rT8QZUyj_EfXt8TfCvpQqmF2waRVcTuUZB"
+    ]
+  }
+}

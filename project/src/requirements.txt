@@ -1,0 +1,7 @@
+aiohttp
+aiohttp-socks
+aiosqlite
+playwright
+PySocks
+websockets
+textual

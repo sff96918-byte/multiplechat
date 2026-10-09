@@ -1,0 +1,8 @@
+{
+  "_comment": "Copy to configs/session.json and fill with YOUR logged-in chitchat.gg session. Build it easily: python -m ops.tools.extract_session. NEVER commit this file.",
+  "cookies": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....paste.your.jwt....",
+    "__Secure-text-session": "paste-from-devtools-application-cookies"
+  },
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+}

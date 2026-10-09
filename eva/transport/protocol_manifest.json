@@ -1,0 +1,176 @@
+{
+  "_meta": {
+    "name": "chitchat.gg protocol manifest",
+    "source_captures": [
+      {
+        "repo": "https://github.com/rajuvbygyuiythh/wbbbbbbbbbbsck",
+        "files": [
+          "15_websocket_all.json (raw Socket.IO frames, 2026-10-09 05:28-05:32 local)",
+          "05_incoming_messages.json (chatMessage IN payloads)",
+          "07_match_updates.json (matchUpdate payloads)",
+          "16_http_all.json (REST + response bodies)",
+          "17_endpoints_summary.json (endpoint counts/status codes)",
+          "capture.jsonl (redacted CDP capture, body/param shapes)",
+          "01_send_messages.json (message REST traffic)",
+          "04_typing_outgoing.json (typing REST traffic)"
+        ]
+      }
+    ],
+    "rule": "Every fact below is evidence-backed. Anything not captured is listed in 'unknowns' and MUST NOT be guessed in code. Code may only implement what appears here.",
+    "generated": "2026-10-09"
+  },
+
+  "connection": {
+    "api_base": "https://api.chitchat.gg",
+    "websocket_url": "wss://api.chitchat.gg/socket.io/?EIO=4&transport=websocket",
+    "engine_io": 4,
+    "socket_io_protocol": 5,
+    "auth": {
+      "mechanism": "cookie-based (no auth payload in Socket.IO CONNECT)",
+      "evidence": "capture shows CONNECT payload is only {\"release\":\"<git sha>\"}; browser attaches cookies automatically on wss upgrade",
+      "cookies": [
+        { "name": "token", "desc": "JWT (eyJhbGciOiJIU...), set on login/signup, scopes the whole .chitchat.gg session" },
+        { "name": "__Secure-text-session", "desc": "session cookie, present after login" }
+      ],
+      "required_headers_ws": ["Cookie: token=<JWT>; __Secure-text-session=<val>", "Origin: https://app.chitchat.gg", "User-Agent: <normal browser UA>"]
+    },
+    "handshake_sequence": [
+      { "dir": "IN",  "frame": "0{\"sid\":\"...\",\"upgrades\":[],\"pingInterval\":25000,\"pingTimeout\":20000,\"maxPayload\":1000000}" },
+      { "dir": "OUT", "frame": "40{\"release\":\"b01c3724172e05407a2d46737b9c5fa0c857e0f2\"}", "note": "namespace connect; release = frontend git sha (telemetry, value from capture)" },
+      { "dir": "IN",  "frame": "40{\"sid\":\"...\",\"pid\":\"...\"}", "note": "server acknowledges namespace connect" },
+      { "dir": "OUT", "frame": "42[\"presenceSync\"]", "note": "client sends this right after connect" },
+      { "dir": "IN",  "frame": "42[\"onlineFriends\",[]]" }
+    ],
+    "heartbeat": {
+      "direction": "server pings, client pongs",
+      "evidence": "IN '2' every ~25s; OUT '3' replies at 05:29:44, 05:30:10, 05:30:35, 05:31:00, 05:31:25, 05:31:51 (25.3s apart = pingInterval 25000)",
+      "rule": "on inbound '2' reply '3' immediately"
+    },
+    "client_keepalive": {
+      "event": "presenceSync",
+      "interval_seconds": 30,
+      "evidence": "OUT 42[\"presenceSync\"] at 05:28:18, 05:29:20, 05:29:50, 05:30:20, 05:30:50, 05:31:20, 05:31:50",
+      "payload": "no args"
+    },
+    "disconnect_frame": { "dir": "IN", "frame": "41", "note": "server may close the socket (observed in redacted capture); client must reconnect with backoff" }
+  },
+
+  "server_events_in": {
+    "chatMessage": {
+      "payload": { "message": "Message (see message_object)" },
+      "evidence": "05_incoming_messages.json seq 1",
+      "note": "OWN messages are echoed back too (author == self). Bot must filter by author.id != self_id. Evidence: capture user 6a9257898ac97f8d3c432262 'rheumatic rifleman' messages 'hi','f','24','yes','hlw' appear in incoming feed while user typed them locally."
+    },
+    "matchUpdate": {
+      "payload": { "match": "Match (see match_object)", "inQueue": "bool" },
+      "states": [
+        { "meaning": "MATCH FOUND", "closure": { "closed": false }, "evidence": "07_match_updates.json: matchUpdate with closure.closed=false arrives immediately when POST /match returns {\"matched\":true}" },
+        { "meaning": "PARTNER SKIPPED / MATCH CLOSED", "closure": { "closed": true, "closeReason": "INTENTIONAL", "closedAt": "ISO8601", "closedBy": "userId" }, "paused": false }
+      ],
+      "observed_close_reasons": ["INTENTIONAL"]
+    },
+    "typing": {
+      "payload": { "userId": "string", "conversationId": "string" },
+      "evidence": "15_websocket_all.json IN"
+    },
+    "onlineFriends": { "payload": "[] (array of friend ids)", "evidence": "redacted capture seq 404" },
+    "updateRelationship": { "payload": { "relationship": { "id": "string", "status": "int", "user": "object", "since": "string" } }, "note": "friend request / relationship changes; bot can ignore" },
+    "messageEdited": { "payload": { "message": "Message" }, "note": "bot can ignore" }
+  },
+
+  "client_events_out": {
+    "presenceSync": { "frame": "42[\"presenceSync\"]", "interval": 30 }
+  },
+
+  "rest_api": {
+    "common_headers": {
+      "Cookie": "token=<JWT>; __Secure-text-session=<val>",
+      "Origin": "https://app.chitchat.gg",
+      "Referer": "https://app.chitchat.gg/",
+      "Content-Type": "application/json",
+      "User-Agent": "<normal browser UA>"
+    },
+    "endpoints": {
+      "GET /users/me": {
+        "response_200": { "id": "string", "username": "string", "avatar": "string", "badges": "[]", "createdAt": "string", "preferences": "object", "interests": "[]", "gender": "string(M/F/...)", "verified": "bool", "hasPassword": "bool", "ageVerified": "bool", "matchPreferences": "object" },
+        "evidence": "16_http_all.json response_body"
+      },
+      "GET /match/active": { "response_200": { "inQueue": "bool" }, "evidence": "response_body {\"inQueue\": false}" },
+      "POST /match": {
+        "desc": "join text-match queue (this is what the site's 'Next'/start does)",
+        "request_body": "empty JSON (captured ct=application/json, body_shape type=empty)",
+        "response_201": { "matched": "bool" },
+        "response_403": { "statusCode": 403, "path": "/match", "message": "Flagged", "error": "Forbidden" },
+        "latency_observed_ms": [627, 381, 369, 361, 355, 401],
+        "evidence": "response_body {\"matched\": true}; 403 'Flagged' captured too",
+        "behavior": "if matched=true, matchUpdate (closed=false) arrives over WS within ~40ms"
+      },
+      "PATCH /match/disconnect": {
+        "desc": "leave current match (skip) / stop matching",
+        "request_body": "empty (ct=application/json, captured body null, body_size 0)",
+        "count_in_capture": 18,
+        "effect": "partner receives matchUpdate closure.closed=true closeReason=INTENTIONAL closedBy=<our id>"
+      },
+      "POST /users/me/conversations/{conversationId}/typing": {
+        "request_body": "empty",
+        "effect": "partner receives WS event typing {userId, conversationId}"
+      },
+      "POST /users/me/conversations/{conversationId}/messages": {
+        "request": {
+          "content_type": "multipart/form-data",
+          "evidence": "captured ct=multipart/form-data twice; body content not captured by tool",
+          "fields_used_by_bot": { "content": "message text", "nonce": "client-generated UUID v4" },
+          "note": "field names inferred from response keys 'content' and 'nonce'; NOT directly captured. If server rejects, config message_body_format=json sends {\"content\":..., \"nonce\":...} instead."
+        },
+        "response_201": "Message object (see message_object) incl. server id and nonce echo",
+        "latency_observed_ms": "~650 (POST at 05:29:30.669, response object createdAt 23:28:13.807Z pattern)"
+      },
+      "PATCH /users/me/conversations/{conversationId}/read": { "request_body": "empty", "note": "mark conversation read; optional for bot" },
+      "GET /users/me/conversations/{conversationId}/messages?limit=50&offset=0": { "response_200": "array of Message", "note": "history fetch; bot uses it for reconnect recovery" },
+      "GET /moderation/standing": { "response_200": { "standing": "good", "limitedFeatures": "[]", "pendingWarnings": "[]", "activeViolations": "[]" } },
+      "GET /moderation/ban": { "response_404": { "statusCode": 404, "message": "No active ban found" }, "note": "404 = not banned" },
+      "POST /auth/login": { "note": "not needed for bot; bot uses existing session cookies" },
+      "POST /auth/signup": { "note": "not needed for bot" }
+    }
+  },
+
+  "message_object": {
+    "keys": ["id", "conversationId", "author", "content", "type", "attachments", "createdAt", "status", "flags", "reactions", "nonce"],
+    "author_keys": ["id", "username", "avatar", "badges", "createdAt", "preferences", "premium?", "decorations?"],
+    "type_values_observed": ["TEXT"],
+    "status_values_observed": ["SENT"],
+    "nonce": "client-generated UUID v4, echoed by server",
+    "evidence": "16_http_all.json POST /messages response bodies + 05_incoming_messages.json"
+  },
+
+  "match_object": {
+    "keys": ["conversation", "users", "closure", "paused"],
+    "conversation_keys": ["id", "participants", "mediaAllowedBy", "category", "createdAt", "updatedAt"],
+    "category_values_observed": ["ENCOUNTER"],
+    "participants[i].keys": ["profile"],
+    "users[i].keys": ["userId", "inactive"],
+    "closure_keys": ["closed", "closeReason?", "closedAt?", "closedBy?"],
+    "partner_resolution": "partner = the participant whose profile.id != self_id"
+  },
+
+  "flow_timeline_observed": {
+    "queue_to_match": "POST /match at 05:29:21.616 -> matchUpdate closed=false at 05:29:21.580 (same instant, matched instantly when partner waiting)",
+    "partner_skip_then_next": "matchUpdate closed=true 05:29:35.783 -> POST /match 05:29:37.369 (1.6s later) -> matchUpdate closed=false 05:29:37.353",
+    "human_reply_pattern": "typing POST 05:29:30.149 -> message POST 05:29:30.669 (~0.5s between typing and send)",
+    "ws_reconnect": "site opens new WS on page activity; server also sends 41 occasionally (duplicate-connection management). Client must auto-reconnect."
+  },
+
+  "rate_limits": {
+    "evidence": "login response headers x-ratelimit-remaining: 499, x-ratelimit-reset: 60",
+    "rule": "assume ~500 req/min per IP bucket; bot delays must keep well below"
+  },
+
+  "unknowns_DO_NOT_GUESS": [
+    "exact multipart field names of POST /messages (only ct=multipart/form-data + response keys content/nonce are captured; bot has json fallback config)",
+    "media/image upload field name (never captured; bot does not send media)",
+    "reactions API shape (12_reactions.json empty in capture)",
+    "friend events (09_friend_events.json empty)",
+    "match preference body for POST /match (captured body was empty; matchPreferences filtering via API body was never observed)",
+    "video chat signaling (out of scope: text-only bot)"
+  ]
+}

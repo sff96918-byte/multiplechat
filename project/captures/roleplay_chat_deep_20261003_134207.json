@@ -1,0 +1,74 @@
+{
+  "site": "https://roleplay.chat",
+  "timestamp": "20261003_134207",
+  "nickname_used": "Guesttbheju",
+  "api_calls": [
+    {
+      "time": "13:42:10.154",
+      "type": "fetch",
+      "method": "POST",
+      "url": "https://www.google.com/rmkt/collect/831104306/?random=1791013330133&cv=11&fst=1791013330133&fmt=8&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be69u2h1v9243449683za200zd9243449683xecxf1&gcd=13l3l3l3l1l1&dma=0&tag_exp=115616986~115938465~115938468~118012008~118897920~118897930~120213116~120385422~120469145~120469153~121046262~121046270~121280970&u_w=1280&u_h=800&url=https%3A%2F%2Froleplay.chat%2F&rcb=8&frm=0&tiba=ROLEPLAY%20CHAT%20-%20Online%20Roleplay%20Chatrooms&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=2102738735.1791013330&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.96%7CHeadlessChrome%3B148.0.7778.96%7CNot%252FA)Brand%3B99.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&data=event%3Dgtag.config&ept=68&gcp=5",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://roleplay.chat/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "(binary)"
+      }
+    },
+    {
+      "time": "13:42:10.154",
+      "type": "fetch",
+      "method": "POST",
+      "url": "https://www.google.com/ccm/collect?rcb=8&frm=0&apvc=1&auid=2102738735.1791013330&dt=ROLEPLAY%20CHAT%20-%20Online%20Roleplay%20Chatrooms&tid=AW-831104306&en=page_view&dl=https%3A%2F%2Froleplay.chat%2F&scrsrc=www.googletagmanager.com&rnd=2088674668.1791013330&navt=n&npa=0&gtm=45be69u2h1v9243449683za200zd9243449683xecxf1&gcd=13l3l3l3l1l1&dma=0&tag_exp=115616986~115938465~115938468~118012008~118897920~118897930~120213116~120385422~120469145~120469153~121046262~121046270~121280970&tft=1791013330152&tfd=2247&tids=AW-831104306&fmt=8",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://roleplay.chat/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 200,
+        "body": "(binary)"
+      }
+    },
+    {
+      "time": "13:42:10.154",
+      "type": "fetch",
+      "method": "POST",
+      "url": "https://ad.doubleclick.net/ccm/s/collect?auid=2102738735.1791013330&gtm=45be69u2h1v9243449683za200zd9243449683xecxf1&fmt=8",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://roleplay.chat/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"148\", \"HeadlessChrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "is_api": true,
+      "response": {
+        "status": 204,
+        "body": "(binary)"
+      }
+    }
+  ],
+  "websocket_frames": [],
+  "console_logs": [],
+  "page_html_preview": "<!DOCTYPE html><html lang=\"en\" translate=\"no\" dir=\"ltr\"><head>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"https://roleplay.chat/favicon.ico\">\n    <title>ROLEPLAY CHAT - Online Roleplay Chatrooms</title>\n    <meta charset=\"UTF-8\">\n    <meta name=\"robots\" content=\"index, follow\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"manifest\" href=\"manifest.json\">\n    <meta name=\"keywords\" content=\"anime chat,anime roleplay,chat,chatroom,chatrooms,forum,forums,free roleplay chat,roleplay,role play chat,roleplay chat,roleplay chat app,roleplay chat apps,roleplay chatroom,roleplay chat room,roleplay chatrooms,role play chat rooms,roleplayer,roleplayers,roleplay forum,roleplay forums,roleplaying,role playing chat,roleplay online chat,rp,rp chat,rp chatroom,rp chatrooms,rp forum,rp forums\">\n    <meta name=\"description\" content=\"Roleplay Chat is an online chatroom application for text roleplayers that boasts a large social community with an erotic RP majority.\">\n    <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">\n    <meta property=\"og:locale\" content=\"en_US\">\n    <meta property=\"og:type\" content=\"website\">\n    <meta property=\"og:title\" content=\"ROLEPLAY CHAT - Fantasy RP Online\">\n    <meta property=\"og:description\" content=\"Roleplay Chat is an online chat room application for text roleplayers that boasts a large social community with an erotic RP majority.\">\n    <meta property=\"og:url\" content=\"https://roleplay.chat/\">\n    <meta property=\"og:site_name\" content=\"ROLEPLAY CHAT - Fantasy RP Online\">\n    <meta property=\"og:image\" content=\"https://roleplay.chat/images/roleplay-chat-card.png\">\n    <meta name=\"twitter:card\" content=\"summary_large_image\">\n    <meta name=\"twitter:description\" content=\"Roleplay Chat is an online chat room application for text roleplayers that boasts a large social community with an erotic RP majority.\">\n    <meta name=\"twitter:title\" content=\"ROLEPLAY CHAT - Fantasy RP Online\">\n    <meta name=\"twitter:image\" content=\"https://roleplay.chat/images/roleplay-chat-card.png\">\n    <link href=\"https://roleplay.chat/beta.css?010505pm\" rel=\"stylesheet\" type=\"text/css\">\n    <link href=\"https://roleplay.chat/\" rel=\"canonical\">\n    <link href=\"https://roleplay.chat/\" rel=\"home\">\n    <!-- Chrome Mobile -->\n    <meta name=\"theme-color\" content=\"#000000\">\n    <!-- Windows Phone -->\n    <meta name=\"msapplication-navbutton-color\" content=\"#000000\">\n    <!-- iOS Safari -->\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\">\n    <!-- Apple Touch Icons -->\n    <link rel=\"apple-touch-icon\" href=\"https://roleplay.chat/images/icons/apple-touch-icon-iphone-60x60.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"60x60\" href=\"https://roleplay.chat/images/icons/apple-touch-icon-ipad-76x76.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"114x114\" href=\"https://roleplay.chat/images/icons/apple-touch-icon-iphone-retina-120x120.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"144x144\" href=\"https://roleplay.chat/images/icons/apple-touch-icon-ipad-retina-152x152.png\">\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');\n        :root {\n            --color-background: #0a0a0a;\n            --color-text: #a78613;\n            --color-primary: #d5aa16;\n            --color-secondary: #2CC;\n            --color-link: #08A;\n            --color-card-bg: rgba(21, 21, 21, 0.7);\n            --font-main: Menlo, Monaco, Consolas, 'Courier New', monospace;\n        }\n        body {\n            background-color: var(--color-background);\n            background-image: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"40\" height=\"40\" viewBox=\"0 0 40 40\"%3E%3Cg fill-rule=\"evenodd\"%3E%3Cg fill=\"%23111111\" fill-opacity=\"0.4\"%3E%3Cpath d=\"M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l2.83-2.83 1.41 1.41L21.41 20l2.83 2.83-1.41 1.41L20 21.41l-2.83 2.83-1.41-1.41L18.59 20l-2.83-2.83 1.41-1.41L20 18.59z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');\n            color: var(--color-text);\n            font-family: var(--font-main);\n            font-weight: bold;\n            margin: 0;\n            padding: 0;\n            overflow-x: hidden;\n            -webkit-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0);\n        }\n        .container {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 1rem;\n        }\n        .site-header {\n            background: rgba(0, 0, 0, 0.5);\n            border-bottom: 1px solid var(--color-secondary);\n        }\n        .site-header .container {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            flex-wrap: wrap;\n\t\t\tpadding-top: 4px;\n\t\t\tpadding-bot",
+  "summary": {
+    "total_api": 3,
+    "total_ws": 0,
+    "ws_urls": [],
+    "api_urls": [
+      "https://www.google.com/ccm/collect?rcb=8&frm=0&apvc=1&auid=2102738735.1791013330&dt=ROLEPLAY%20CHAT%20-%20Online%20Roleplay%20Chatrooms&tid=AW-831104306&en=page_view&dl=https%3A%2F%2Froleplay.chat%2F&scrsrc=www.googletagmanager.com&rnd=2088674668.1791013330&navt=n&npa=0&gtm=45be69u2h1v9243449683za200zd9243449683xecxf1&gcd=13l3l3l3l1l1&dma=0&tag_exp=115616986~115938465~115938468~118012008~118897920~118897930~120213116~120385422~120469145~120469153~121046262~121046270~121280970&tft=1791013330152&tfd=2247&tids=AW-831104306&fmt=8",
+      "https://www.google.com/rmkt/collect/831104306/?random=1791013330133&cv=11&fst=1791013330133&fmt=8&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be69u2h1v9243449683za200zd9243449683xecxf1&gcd=13l3l3l3l1l1&dma=0&tag_exp=115616986~115938465~115938468~118012008~118897920~118897930~120213116~120385422~120469145~120469153~121046262~121046270~121280970&u_w=1280&u_h=800&url=https%3A%2F%2Froleplay.chat%2F&rcb=8&frm=0&tiba=ROLEPLAY%20CHAT%20-%20Online%20Roleplay%20Chatrooms&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=2102738735.1791013330&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.96%7CHeadlessChrome%3B148.0.7778.96%7CNot%252FA)Brand%3B99.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&data=event%3Dgtag.config&ept=68&gcp=5",
+      "https://ad.doubleclick.net/ccm/s/collect?auid=2102738735.1791013330&gtm=45be69u2h1v9243449683za200zd9243449683xecxf1&fmt=8"
+    ]
+  }
+}
