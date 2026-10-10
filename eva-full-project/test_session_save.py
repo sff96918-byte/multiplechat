@@ -184,5 +184,39 @@ with contextlib.redirect_stdout(buf):
 ok("--import 401 returns 2 and writes nothing", rc == 2 and not sc.SESSION_FILE.exists(), f"rc={rc}")
 ok("--import 401 prints no token value", IMP_TOKEN not in buf.getvalue())
 
+# 6. browser-intercepted WebSocket URL + User-Agent (v31)
+sc.ChitchatApi = _FakeApiOK
+from core.ws_transport.chitchat_socket import ChitchatSocket as _RealSocket  # noqa: E402
+sc.ChitchatSocket = _RealSocket   # section 4 ছিল dummy — আসল class ফেরত
+GOOD_WS = "wss://api.chitchat.gg/socket.io/?EIO=4&transport=websocket"
+ok("valid_chitchat_ws_url accepts chitchat wss", sc.valid_chitchat_ws_url(GOOD_WS) == GOOD_WS)
+ok("valid_chitchat_ws_url rejects http", sc.valid_chitchat_ws_url("https://chitchat.gg/x") == "")
+ok("valid_chitchat_ws_url rejects other host", sc.valid_chitchat_ws_url("wss://evil.example.com/s") == "")
+ok("valid_chitchat_ws_url rejects lookalike host", sc.valid_chitchat_ws_url("wss://chitchat.gg.evil.com/s") == "")
+
+meta_path = cap_file.parent / "session_meta.LOCAL.json"
+meta_path.write_text(json.dumps({"ws_url": GOOD_WS, "user_agent": "UA-TEST/1.0"}), encoding="utf-8")
+write_cap([{"name": "token", "value": IMP_TOKEN, "domain": ".chitchat.gg"}])
+if sc.SESSION_FILE.exists():
+    sc.SESSION_FILE.unlink()
+with contextlib.redirect_stdout(io.StringIO()):
+    rc = sc._cli(["--import", str(cap_file)])
+saved = json.loads(sc.SESSION_FILE.read_text(encoding="utf-8")) if sc.SESSION_FILE.exists() else {}
+ok("--import stores browser ws_url", rc == 0 and saved.get("ws_url") == GOOD_WS, repr(saved.get("ws_url")))
+ok("--import stores browser user_agent", saved.get("user_agent") == "UA-TEST/1.0", repr(saved.get("user_agent")))
+ok("saved_ws_url reads it back", sc.saved_ws_url() == GOOD_WS)
+sock = sc._socket_for({"token": IMP_TOKEN}, "UA-TEST/1.0")
+ok("--run socket uses saved ws_url", sock._ws_url == GOOD_WS, repr(sock._ws_url))
+
+meta_path.write_text(json.dumps({"ws_url": "wss://evil.example.com/x", "user_agent": "UA"}), encoding="utf-8")
+sc.SESSION_FILE.unlink()
+with contextlib.redirect_stdout(io.StringIO()):
+    sc._cli(["--import", str(cap_file)])
+saved = json.loads(sc.SESSION_FILE.read_text(encoding="utf-8")) if sc.SESSION_FILE.exists() else {}
+ok("--import drops invalid ws_url", "ws_url" not in saved)
+sock = sc._socket_for({"token": IMP_TOKEN}, "UA")
+ok("socket falls back to captured URL when none saved", sock._ws_url == sc.CHITCHAT_WS_URL if hasattr(sc, "CHITCHAT_WS_URL") else sock._ws_url.startswith("wss://api.chitchat.gg/"), repr(sock._ws_url))
+meta_path.unlink()
+
 print(f"\nRESULT: {passed} passed, {failed} failed")
 sys.exit(1 if failed else 0)

@@ -297,6 +297,14 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
     d. Dead code (vulture ≥60%): e.g. `chat/rules.py` `_wait_step_reply`, `_first_sms_reply`, `_middle_reply`; `browser/*` helpers; `ws` diagnostics `mark_read`, `moderation_standing`. Not removed (no approval for removal of non-trivial code).
   - **Sandbox limits:** no GUI (libGL), no Windows, no live chitchat.gg, no Playwright browser. Session path verified with synthetic fakes and the real `ChatRuleBot` engine only.
   - Gate: 20/20 pass, 1 optional skip (gitleaks). Coverage of `chat/rules.py`: 57% (unchanged).
+- **v31 (Primary goal: Task 1 `--save` intercept + Task 2 browser-free `--run`):**
+  - `tools/chitchat_capture/capture_session.py`: browser-এর নিজের খোলা `wss://` WebSocket URL intercept (`page.on("websocket")`) করে এবং `navigator.userAgent` নেয়। শুধু chitchat.gg host গ্রহণ (অনুমান নয়)। `capture_out/session_<time>/session_meta.LOCAL.json` লেখে (0600, token নেই)।
+  - `core/session_chat.py`: `--import` meta ফাইল পড়ে `ws_url` ও `user_agent` `configs/session.json`-এ রাখে (অবৈধ URL বাদ)। `_socket_for()` সেভ করা URL ব্যবহার করে, না থাকলে protocol-এর captured URL।
+  - `--run` পথে browser module লোড হয় না (যাচাই: `playwright`/`camoufox` import নেই)।
+  - `test_session_save.py`: 31 check (আগের 21 + URL validation ও socket URL 10)। Gate 21/21।
+  - **Spec-এর সাথে পার্থক্য:** spec-এর উদাহরণ `wss://chitchat.gg/...`; এই project-এ captured ও ব্যবহৃত URL `wss://api.chitchat.gg/...` (capture-এ এটিই দেখা গেছে)। Spec-এর `connect.sid` কুকি এই site-এর capture-এ নেই; auth cookie হলো `token` ও `__Secure-text-session`।
+  - **Sandbox limit:** browser চালিয়ে আসল intercept এখানে হয়নি, live chitchat.gg-তে connect হয়নি।
+  - **Spec-এর `main.py` বা আলাদা `websocket_bot.py` বানানো হয়নি** — project-এ `core/session_chat.py` একই কাজ করে (নিয়ম 3: নতুন runner নয়)।
 - **v30 (browser → session bridge, user request "2"):**
   - `tools/chitchat_capture/capture_direct.py`: browser বন্ধ হওয়ার আগে chitchat.gg cookie export → `capture_out/<session>/session_cookies.LOCAL.json` (0600, শুধু cookie নাম/সংখ্যা print)। Selftest: 3 নতুন check, মোট 30 pass।
   - `core/session_chat.py --import <file>`: cookie file (Playwright storage_state বা cookie list) পড়ে chitchat cookie নেয়, `token` না থাকলে থামে, `/users/me` দিয়ে যাচাই করে সব chitchat cookie `configs/session.json`-এ লেখে (socket-এর জন্য `__Secure-text-session` সহ)। 401 বা নেটওয়ার্ক fail হলে কিছু লেখে না।

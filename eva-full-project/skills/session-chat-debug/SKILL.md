@@ -69,3 +69,8 @@ Token-সহ কোনো ফাইল/লাইন চাইবে না।
 3. `python -m core.session_chat --import <path>` — যাচাই হলে `configs/session.json` লেখে।
 4. এরপর `python -m core.session_chat --run` (browser ছাড়া)।
 401 মানে login মেয়াদোত্তীর্ণ — capture আবার চালাও।
+
+## v31: intercepted WebSocket URL
+- `capture_session.py` browser থেকে `wss://` URL নেয় (chitchat.gg host শুধু)। `session_meta.LOCAL.json` লেখে।
+- `--import` সেটি `configs/session.json`-এর `ws_url`-এ রাখে। `--run` সেই URL ব্যবহার করে।
+- URL পাওয়া না গেলে captured default ব্যবহার হয় (`wss://api.chitchat.gg/...`)।

@@ -63,3 +63,5 @@ QT_QPA_PLATFORM=offscreen python -c "import entry.main; print('gui import ok')" 
 **v29:** `test_session_save.py` (12 check): PyQt6 ছাড়া import, `--save` (valid → file, 401 → কিছু লেখে না), token print হয় না, run path-এ API session বন্ধ হয়। Live chitchat.gg-তে কিছু চালানো হয় না।
 
 **v30:** `test_session_save.py` 21 check (import সহ)। Capture tool selftest আলাদা: `python tools/chitchat_capture/capture_direct.py --selftest` (30 pass)। Gate এটা চালায় না।
+
+**v31:** `test_session_save.py` 31 check (WebSocket URL validation, meta import, `--run` socket URL)।

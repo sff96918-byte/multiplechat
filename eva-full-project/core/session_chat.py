@@ -302,7 +302,7 @@ class SessionChatWorker(QThread):
         self.session_signal.emit(SESSION_THREAD_ID, f"token-live ({who})")
 
         engine = _ChatRuleEngine()                   # প্রজেক্টের নিজের reply logic
-        socket = ChitchatSocket(self._cookies, user_agent=self._ua)
+        socket = _socket_for(self._cookies, self._ua)
         cfg = _session_loop_config()
         self._chat_loop = WsChatLoop(api, socket, engine, cfg)
 
@@ -371,9 +371,41 @@ def read_chitchat_cookies(path: Path) -> Dict[str, str]:
     return picked
 
 
+def valid_chitchat_ws_url(url: str) -> str:
+    """Browser-এ intercept করা WebSocket URL — শুধু wss:// এবং chitchat.gg host হলে গ্রহণ।
+    অন্য কিছু হলে "" (অজানা URL কখনো ব্যবহার হবে না)।"""
+    from urllib.parse import urlsplit
+    try:
+        u = urlsplit((url or "").strip())
+    except ValueError:
+        return ""
+    host = (u.hostname or "").lower()
+    if u.scheme != "wss" or not (host == "chitchat.gg" or host.endswith(".chitchat.gg")):
+        return ""
+    return (url or "").strip()
+
+
+def saved_ws_url() -> str:
+    """configs/session.json-এ সেভ করা ws_url (না থাকলে "")।"""
+    try:
+        data = json.loads(SESSION_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return ""
+    return valid_chitchat_ws_url(str(data.get("ws_url") or ""))
+
+
+def _socket_for(cookies: Dict[str, str], ua: str) -> ChitchatSocket:
+    """সেভ করা ws_url থাকলে সেটি, না থাকলে protocol-এর captured URL।"""
+    url = saved_ws_url()
+    if url:
+        return ChitchatSocket(cookies, user_agent=ua, ws_url=url)
+    return ChitchatSocket(cookies, user_agent=ua)
+
+
 def save_session_file(token: str, user_agent: str = "",
                       extra_cookies: Optional[Dict[str, str]] = None,
-                      saved_by: str = "core.session_chat --save") -> Path:
+                      saved_by: str = "core.session_chat --save",
+                      ws_url: str = "") -> Path:
     """session configs/session.json-এ লেখে (atomic, মান কোথাও print হয় না)।
 
     extra_cookies: browser capture থেকে আসা অন্য chitchat cookie (socket-এর জন্য)।
@@ -386,6 +418,8 @@ def save_session_file(token: str, user_agent: str = "",
         "user_agent": user_agent or FALLBACK_UA,
         "saved_by": saved_by,
     }
+    if valid_chitchat_ws_url(ws_url):
+        data["ws_url"] = valid_chitchat_ws_url(ws_url)
     tmp = SESSION_FILE.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     try:
@@ -437,8 +471,22 @@ def _cli(argv: Optional[List[str]] = None) -> int:
         except Exception as exc:  # noqa: BLE001
             print(f"[X] server যাচাই করা যায়নি ({type(exc).__name__}) — নেটওয়ার্ক দেখো")
             return 2
-        path = save_session_file(cookies["token"], extra_cookies=cookies,
-                                 saved_by=f"core.session_chat --import ({Path(args.import_file).name})")
+        meta: Dict[str, str] = {}
+        meta_path = Path(args.import_file).parent / "session_meta.LOCAL.json"
+        if meta_path.exists():
+            try:
+                meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                meta = {}
+        ws_url = valid_chitchat_ws_url(str(meta.get("ws_url") or ""))
+        ua = str(meta.get("user_agent") or "")
+        path = save_session_file(cookies["token"], user_agent=ua, extra_cookies=cookies,
+                                 saved_by=f"core.session_chat --import ({Path(args.import_file).name})",
+                                 ws_url=ws_url)
+        if ws_url:
+            print("[ok] WebSocket URL browser থেকে নেওয়া হয়েছে (chitchat.gg host যাচাই করা)")
+        else:
+            print("[i] session_meta.LOCAL.json নেই বা URL অবৈধ — protocol-এর captured URL ব্যবহার হবে")
         print(f"[ok] session valid — user: {me.get('username', '?')} (id={me.get('id', '?')})")
         print(f"[ok] {len(cookies)}টি chitchat cookie সেভ হয়েছে: {path}")
         if not args.run:
@@ -490,7 +538,7 @@ def _cli(argv: Optional[List[str]] = None) -> int:
         try:
             me = await api.me()
             print(f"[ok] logged in as {me.get('username')}")
-            loop = WsChatLoop(api, ChitchatSocket(cookies, user_agent=ua), engine,
+            loop = WsChatLoop(api, _socket_for(cookies, ua), engine,
                               _session_loop_config())
             await loop.start()   # v28: start() ও try-এর ভিতরে — ব্যর্থ হলেও API session বন্ধ হবে
             print("[ok] LIVE — Ctrl+C to stop")
