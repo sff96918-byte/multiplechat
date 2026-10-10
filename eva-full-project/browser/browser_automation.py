@@ -1283,7 +1283,7 @@ class ChitchatAutomation:
         try:
             loop = asyncio.get_event_loop()
             loop.set_exception_handler(handle_asyncio_exception)
-        except:
+        except Exception:
             pass
 
     def _humanize_pause(self, minimum=0.8, maximum=1.8):
@@ -1572,7 +1572,7 @@ class ChitchatAutomation:
                         time.sleep(3)
                         if page.url != self.PUBLIC_HOMEPAGE_URL:
                             return True
-                except:
+                except Exception:
                     pass
                 
                 # Last resort: direct navigation
@@ -1612,7 +1612,7 @@ class ChitchatAutomation:
                 page.goto(destination_url, timeout=30000, wait_until='domcontentloaded')
                 time.sleep(2)
                 return True
-            except:
+            except Exception:
                 self._log_login_page_diagnostics(page)
                 return False
 
@@ -2464,7 +2464,7 @@ class ChitchatAutomation:
                         screenshot_path = f"debug_no_start_chat_{int(time.time())}.png"
                         page.screenshot(path=screenshot_path)
                         self.log(f"[DEBUG] Screenshot saved: {screenshot_path}")
-                    except:
+                    except Exception:
                         pass
                     return False
                     

@@ -584,8 +584,21 @@ def save_config_sections(updates: dict, path=None) -> bool:
                 current = {}
                 config[section] = current
             for key, value in values.items():
+                # v26: refuse nan/inf before anything is written. The loader would
+                # silently replace them with defaults while the GUI said "saved".
                 try:
-                    current[key] = type(current.get(key, value))(float(value))
+                    if not math.isfinite(float(value)):
+                        return False
+                except (TypeError, ValueError):
+                    pass   # not a number: handled below as before
+                # v26: numbers are stored as float. The old code coerced to the type
+                # already on disk, so an integer 90 turned a new 120.5 into 120.
+                existing = current.get(key, value)
+                try:
+                    if isinstance(existing, (str, bool)):
+                        current[key] = type(existing)(float(value))
+                    else:
+                        current[key] = float(value)
                 except (TypeError, ValueError):
                     current[key] = value
         with config_path.open("w", encoding="utf-8") as f:

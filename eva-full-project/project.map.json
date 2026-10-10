@@ -29,7 +29,8 @@
         "test_ws_transport.py",
         "test_matcher.py",
         "test_fuzz.py",
-        "demo_chat.py"
+        "demo_chat.py",
+        "test_rules_characterization.py"
       ]
     },
     "RUN_AND_SETUP": {
@@ -48,7 +49,8 @@
         ".gitignore"
       ],
       "tests": [
-        "test_diagnostics.py"
+        "test_diagnostics.py",
+        "test_config_loader.py"
       ]
     },
     "DATA_MAPPING": {
@@ -148,6 +150,9 @@
     "data/.*.idx",
     "**/__pycache__/**",
     "**/*.pyc",
-    ".pytest_cache/**"
+    ".pytest_cache/**",
+    ".ruff_cache/**",
+    ".coverage",
+    ".mypy_cache/**"
   ]
 }

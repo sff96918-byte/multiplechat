@@ -299,13 +299,14 @@ class SessionChatWorker(QThread):
         socket = ChitchatSocket(self._cookies, user_agent=self._ua)
         cfg = _session_loop_config()
         self._chat_loop = WsChatLoop(api, socket, engine, cfg)
-        await self._chat_loop.start()
-        self.log_signal.emit("[session] [ok] SESSION CHAT LIVE — token দিয়ে chat চলছে "
-                             "(browser ছাড়া, engine = প্রজেক্টের flow funnel)")
 
         t0 = time.monotonic()
         last_partner: Optional[str] = None
         try:
+            # v26: start() inside try, so a failed start still closes the API session
+            await self._chat_loop.start()
+            self.log_signal.emit("[session] [ok] SESSION CHAT LIVE — token দিয়ে chat চলছে "
+                                 "(browser ছাড়া, engine = প্রজেক্টের flow funnel)")
             while self._chat_loop._running and not self._stop_requested:
                 await asyncio.sleep(5)
                 st = self._chat_loop.stats.snapshot()
@@ -320,6 +321,7 @@ class SessionChatWorker(QThread):
                     f"[session] [stat] state={self._chat_loop.state.value} "
                     f"partner={partner or '-'} matches={st['matches']} "
                     f"sent={st['messages_sent']} recv={st['messages_received']} "
+                    f"dropped={st['dropped_replies']} send_fail_streak={self._chat_loop._send_failures} "
                     f"up={int(time.monotonic() - t0)}s")
                 if self._max_matches and st["matches"] >= self._max_matches:
                     self.log_signal.emit(f"[session] [i] max-matches {self._max_matches} "

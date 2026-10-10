@@ -64,6 +64,7 @@ class LoopStats:
     partner_skips: int = 0
     our_skips: int = 0
     flagged_403: int = 0
+    dropped_replies: int = 0     # v26: reply not sent because the match changed during the delay
     started_at: float = field(default_factory=time.time)
 
     def snapshot(self) -> dict:
@@ -292,6 +293,9 @@ class WsChatLoop:
         self.history = []
         self._partner_typing_until = 0.0
         self._last_partner_msg_t = time.time()
+        # v26: the send-failure streak is per match. Without this reset, 3
+        # failures in one match made every later match skip at its first message.
+        self._send_failures = 0
         self.stats.matches += 1
         self.state = LoopState.CHATTING
         log.info("MATCHED #%d conv=%s partner=%s (%s)",
@@ -407,15 +411,22 @@ class WsChatLoop:
     async def _send(self, text: str) -> None:
         if not (self.conversation_id and text):
             return
+        # v26: pin the conversation for this reply. The match can end (or the next
+        # one start) during the human delay below; the reply must not follow it.
+        conv = self.conversation_id
         delay = max(self.cfg.min_reply_delay_s, self.engine.delay_for(text))
         if self.cfg.typing_indicator:
             try:
-                await self.api.send_typing(self.conversation_id)
+                await self.api.send_typing(conv)
             except Exception:  # noqa: BLE001
                 log.exception("typing POST failed (continuing)")
         await asyncio.sleep(delay)
+        if self.conversation_id != conv:
+            self.stats.dropped_replies += 1
+            log.info("match changed during reply delay — reply dropped (not sent to another partner)")
+            return
         try:
-            sent = await self.api.send_message(self.conversation_id, text)
+            sent = await self.api.send_message(conv, text)
         except Exception as exc:  # noqa: BLE001
             self._send_failures += 1
             log.error("send_message failed (%d in a row): %s", self._send_failures, exc)

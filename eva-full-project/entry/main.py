@@ -2118,7 +2118,7 @@ class ApplicationController:
             try:
                 self.main_window.cpu_label.value_label.setText(f"{psutil.cpu_percent()}%")
                 self.main_window.ram_label.value_label.setText(f"{psutil.virtual_memory().percent}%")
-            except:
+            except Exception:
                 pass
 
         self.stats_timer = QTimer()
@@ -2144,7 +2144,9 @@ def main():
             sys.stdout = _console_log
             sys.stderr = _console_log
         except Exception:
-            sys.stdout = open(os.devnull, 'w')
+            # v26: explicit encoding — with the Windows default (cp1252) any Bengali
+            # print() to this fallback stream would raise UnicodeEncodeError.
+            sys.stdout = open(os.devnull, 'w', encoding='utf-8', errors='replace')
             sys.stderr = sys.stdout
 
     # v21: every uncaught error (GUI + worker threads) -> data/logs/crash.log (redacted)

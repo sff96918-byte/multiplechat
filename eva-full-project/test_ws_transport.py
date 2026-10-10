@@ -180,12 +180,154 @@ def test_reply_timing() -> None:
     check("long engine delay -> engine value kept", asyncio.run(sleeps_for(7.0)) == 7.0)
 
 
+# ---------------------------------------------------------------- loop safety (v26)
+def test_loop_safety() -> None:
+    """v26 regression tests (written BEFORE the fix, must fail first):
+    (a) a send-failure streak must not follow the bot into the next match;
+    (b) a reply must never go to a conversation that changed during the delay."""
+    print("\n[loop safety]")
+    from core.ws_transport import ws_chat_loop as wcl
+    from core.ws_transport.chitchat_api import ChitchatApi
+
+    class _Api:
+        extract_partner = staticmethod(ChitchatApi.extract_partner)
+        def __init__(self):
+            self.sent = []
+            self.fail_next = 0
+        async def send_typing(self, cid): return None
+        async def leave_match(self): return None
+        async def send_message(self, cid, text):
+            if self.fail_next > 0:
+                self.fail_next -= 1
+                raise RuntimeError("simulated send failure")
+            self.sent.append((cid, text))
+            return {"nonce": "n"}
+
+    class _Eng:
+        def delay_for(self, text): return 0.0
+        def reply(self, partner, content): return "ok"
+        def opener(self, partner): return ""
+        def forget(self, pid): return None
+
+    async def no_sleep(d, *a, **k):
+        return None
+
+    real_sleep = wcl.asyncio.sleep
+    wcl.asyncio.sleep = no_sleep
+    try:
+        # (a) three failures, then a NEW match must still get replies
+        async def streak_then_new_match():
+            api = _Api()
+            cfg = wcl.LoopConfig(typing_indicator=False, opener_delay_s=(0, 0))
+            loop = wcl.WsChatLoop(api, None, _Eng(), cfg)
+            loop.self_id = "me"
+            loop.conversation_id = "c1"
+            loop.partner = wcl.Partner(id="p1", username="a")
+            api.fail_next = 3
+            for _ in range(3):
+                await loop._send("x")
+            streak = loop._send_failures
+            new_match = {"match": {"conversation": {"id": "c2", "participants": [
+                {"profile": {"id": "me"}}, {"profile": {"id": "p2", "username": "b"}}]}}}
+            await loop._enter_match_if_open(new_match)
+            await loop._handle_chat_message({"message": {"author": {"id": "p2"},
+                                                         "conversationId": "c2",
+                                                         "content": "hi"}})
+            return streak, api.sent
+        streak, sent = asyncio.run(streak_then_new_match())
+        check("setup: 3 consecutive failures recorded", streak == 3, str(streak))
+        check("v26: failure streak does not block the next match's reply",
+              ("c2", "ok") in sent, f"sent={sent}")
+
+        # (b) conversation ends during the reply delay -> nothing sent to it
+        async def conv_changes_during_delay(new_conv):
+            api = _Api()
+            loop = wcl.WsChatLoop(api, None, _Eng(), wcl.LoopConfig(typing_indicator=False))
+            loop.conversation_id = "c1"
+            loop.partner = wcl.Partner(id="p1", username="a")
+            async def moving_sleep(d, *a, **k):
+                loop.conversation_id = new_conv   # match ended / next match started
+            wcl.asyncio.sleep = moving_sleep
+            try:
+                await loop._send("hello")
+            finally:
+                wcl.asyncio.sleep = no_sleep
+            return api.sent, getattr(loop.stats, "dropped_replies", None)
+
+        sent_empty, dropped_empty = asyncio.run(conv_changes_during_delay(""))
+        check("v26: no send to an empty conversation after match end",
+              sent_empty == [], f"sent={sent_empty}")
+        sent_other, dropped_other = asyncio.run(conv_changes_during_delay("c9"))
+        check("v26: no send to a different partner's conversation",
+              all(cid != "c9" for cid, _ in sent_other), f"sent={sent_other}")
+        check("v26: dropped reply is counted in stats (visible in session stat line)",
+              dropped_empty == 1 and dropped_other == 1,
+              f"dropped={dropped_empty},{dropped_other}")
+    finally:
+        wcl.asyncio.sleep = real_sleep
+
+
+# ---------------------------------------------------------------- session worker cleanup (v26)
+def test_worker_cleanup() -> None:
+    """v26: if WsChatLoop.start() fails (e.g. self_id lookup), the API session
+    must still be closed. Written before the fix; must fail first."""
+    print("\n[session worker cleanup]")
+    from core import session_chat as sc
+
+    closed = {"api": False}
+
+    class _Api:
+        def __init__(self, cookies, user_agent=""):
+            pass
+        async def me(self):
+            return {"username": "tester", "id": "me"}
+        async def self_id(self):
+            raise RuntimeError("simulated self_id failure")
+        async def close(self):
+            closed["api"] = True
+
+    class _Socket:
+        def __init__(self, *a, **k):
+            pass
+        def set_event_handler(self, h):
+            pass
+        async def start(self):
+            return None
+        async def stop(self):
+            return None
+
+    class _Engine:
+        def __init__(self):
+            pass
+
+    orig = (sc.ChitchatApi, sc.ChitchatSocket, sc._ChatRuleEngine)
+    sc.ChitchatApi, sc.ChitchatSocket, sc._ChatRuleEngine = _Api, _Socket, _Engine
+    try:
+        w = sc.SessionChatWorker.__new__(sc.SessionChatWorker)
+        w._cookies, w._ua, w._label = {"token": "x"}, "ua", "t"
+        w._max_matches, w._stop_requested = 0, False
+        w._loop, w._chat_loop = None, None
+        w.log_signal = type("S", (), {"emit": lambda self, m: None})()
+        w.session_signal = type("S", (), {"emit": lambda self, *a: None})()
+        try:
+            asyncio.run(w._amain())
+            raised = False
+        except RuntimeError:
+            raised = True
+        check("setup: start failure propagates", raised)
+        check("v26: API session closed when loop start fails", closed["api"])
+    finally:
+        sc.ChitchatApi, sc.ChitchatSocket, sc._ChatRuleEngine = orig
+
+
 def main() -> int:
     test_codec()
     test_partner()
     test_find_by_nonce()
     test_send_message()
     test_reply_timing()
+    test_loop_safety()
+    test_worker_cleanup()
     failed = [n for n, ok in _results if not ok]
     print(f"\nRESULT: {len(_results) - len(failed)}/{len(_results)} passed")
     return 1 if failed else 0

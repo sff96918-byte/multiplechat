@@ -13,6 +13,8 @@ FAIL দেখালে কোন step ব্যর্থ তা নাম ধ�
 
 **v26 নতুন step:** `test_rules_characterization.py` (chat/rules.py contract, 33 check); `tools/secret_scan.py --selftest` + `tools/secret_scan.py` (secret pattern, মান প্রিন্ট হয় না); `pip-audit -r data/requirements.txt` (PyPI JSON, network লাগে)। Optional (SKIP হতে পারে): `gitleaks` (binary PATH-এ থাকলে), `pyflakes` (module থাকলে), `tools/rules_coverage.py --floor 50` (`coverage` package লাগে)।
 
+**v27:** `test_config_loader.py` (config save কখনো decimal কাটে না, nan/inf refuse) এবং `test_ws_transport.py` এখন 32 check (loop safety, worker cleanup)।
+
 **CRITICAL_CORE ফাইল বদলালে:** `python tools/critical_guard.py` — test_*.py পরিবর্তন ছাড়া CRITICAL ফাইল বদলালে FAIL। এটা gate-এ নেই (zip-এ git history নেই); commit-এর আগে হাতে চালাও। TDD-র ক্রম এটা যাচাই করে না।
 
 ## Tier 1 — সবসময় (ছোট পরিবর্তনও)
