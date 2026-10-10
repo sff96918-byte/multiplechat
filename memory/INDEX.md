@@ -21,6 +21,8 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `decision` | No reply cap; silence timeout is the only idle rule | Reason: skip before snap share was caused by Max Replies 8 (dashboard + engine), which counted greeting/age/co |
+| 2026-10-10 | `session` | v17: Max Replies cap removed + Silence timeout (90s) + dashboard auto fields removed | Approved plan: (A) silence timeout visible setting in Settings (chat_timing.silence_timeout_seconds default 90 |
 | 2026-10-10 | `question` | Silence rule and Max Replies policy | Need user decision before fixing: (1) silence after partner msg: keep waiting (recommended) vs skip after X se |
 | 2026-10-10 | `session` | v16 analysis: early skip before snap share (no code change) | User: dashboard New Chat Delay / Rest Every / Rest For auto fields remove; bot skips new user before snap shar |
 | 2026-10-10 | `bug` | Logs shown twice (sidebar page + dashboard box) | Symptom: same log output in Dashboard LIVE LOG box and sidebar Logs page. Cause: two separate QTextEdit widget |

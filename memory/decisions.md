@@ -2,6 +2,9 @@
 
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
 
+## 2026-10-10 | No reply cap; silence timeout is the only idle rule
+
+Reason: skip before snap share was caused by Max Replies 8 (dashboard + engine), which counted greeting/age/country replies. Chosen: cap off by default, chat until snap share; silence timeout 90s visible in Settings. Alternatives rejected: skip at 6-9s silence (kills slow-replying good chats), raise cap to 20 (still arbitrary). Safety: no hard ceiling now; EVA_MAX_REPLIES available if user wants one back.
 ## 2026-10-10 | AGENTS.md + skills live inside root project zip, not only in repo
 
 Reason: user runs the root project eva-full-project on Windows; agents working on the deliverable must see its rules. Repo eva/ is R&D workspace and only points to root project. Alternative considered: put skills only in repo - rejected because deliverable zip would lack them.
