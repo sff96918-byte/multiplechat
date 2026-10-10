@@ -102,6 +102,11 @@ run_chat.py                → interactive REPL: নিজে stranger হয়
 demo_chat.py / demo_flow.py → scripted stranger → END demo
 tools/live_chat.py         → interactive REPL (test.bat থেকে চলে)
 tools/coverage_check.py    → TXT matcher DB coverage checker
+tools/verify_gate.py       → §5 gate এক কমান্ডে (`python tools/verify_gate.py`), প্রতি step PASS/FAIL
+tools/project_map_check.py → project.map.json-এর সব ফাইল ক্লাসিফাই হয়েছে কি না যাচাই
+tools/build_zip.py         → clean release zip এক কমান্ডে (§6)
+tools/gui_import_check.py  → entry.main stubbed PyQt6/winsound-এ import হয় কি না (sandbox-এ GUI render নয়)
+project.map.json           → machine-readable file map: প্রতিটা ফাইলের risk class (CRITICAL_CORE/RUN_AND_SETUP/DATA_MAPPING/SUPPORT_MODULES/TOOLS_AND_TESTS/DOCS) ও কোন test চালাতে হবে
 test_*.py                  → test (নিচে §5)
 docs/                      → FLOW_SPEC.md (একমাত্র active spec),
 skills/                    → task-ভিত্তিক playbook (নিচে §3)
@@ -113,6 +118,19 @@ skills/                    → task-ভিত্তিক playbook (নিচে
 ---
 
 ## 3. SKILLS — কোন কাজে কোন skill পড়বে
+
+**Risk class অনুযায়ী routing** (ফাইল কোন class-এ, সেটা `project.map.json`-এ; নিয়ম ও test সেখান থেকে):
+
+| তুমি যা বদলাচ্ছ | Class | আগে কী | পরে কী |
+|---|---|---|---|
+| reply engine, session/WS, browser automation, GUI main | CRITICAL_CORE (HIGH) | TDD: আগে failing test; snap/greeting/middle-chat-এ অনুমোদন | `tools/verify_gate.py` PASS |
+| install/run/test .bat, config loader, requirements | RUN_AND_SETUP (MEDIUM) | script পড়ে যাচাই (sandbox-এ .bat চলে না) | gate + কারণ স্পষ্ট করে লেখা |
+| data pool (input/output/local_db), snap data | DATA_MAPPING (LOW) | snap ফাইল → অনুমোদন | `test_matcher.py`, `test_flow.py` |
+| helper/support module | SUPPORT_MODULES (LOW) | নাম/public API stable রাখো | সংশ্লিষ্ট test |
+| tools, tests, skills, docs | TOOLS_AND_TESTS / DOCS (NONE) | — | `tools/project_map_check.py` |
+
+নতুন ফাইল যোগ করলে `project.map.json`-এ class যোগ করো, না হলে `project_map_check` FAIL দেবে।
+
 
 | কাজ | পড়ো |
 |---|---|
@@ -176,6 +194,8 @@ python demo_chat.py         # scripted stranger → END
 python test_diagnostics.py  # crash log + redaction + doctor (13 checks)
 python test_ws_transport.py  # ws codec, matchUpdate partner, nonce duplicate guard (22 checks)
 ```
+**এক কমান্ডে সব (রেকমেন্ডেড):** `python tools/verify_gate.py` — উপরের সব step + project map + GUI stub import চালায় এবং শেষে `GATE: N/13 steps passed` দেখায়।
+
 Windows-এ একসাথে: `test.bat` (matcher + live + fuzz + demo)।
 
 Session chat বদলালে অতিরিক্ত:
@@ -196,6 +216,7 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
 - zip-এ **থাকবে:** সব source, `data/` (config/txt), `docs/`, `skills/`, `AGENTS.md`, `README.md`।
 - zip-এ **থাকবে না:** `account_sessions/` (login token), `configs/session.json`,
   `data/logs/`, `__pycache__/`, `*.pyc`, `build/`, `dist/`, `.venv/`, পুরনো `*.zip`।
+- **এক কমান্ডে zip (রেকমেন্ডেড):** `python tools/build_zip.py --out EVA_Bot_FINAL.zip` — runtime ফাইল মুছে, `project_map_check --release` (runtime/secret থাকলে থামে), zip (eva-full-project + capture_tool), testzip ও forbidden-path scan। শেষে `BUILD: OK` না দেখা পর্যন্ত ইউজারকে zip দেবে না।
 - zip বানানোর পর খুলে যাচাই করো: secret নেই, key file আছে, ফাইল সংখ্যা ও byte size লেখো।
 - ইউজারকে দেবে: zip ফাইলের নাম, byte size, এবং download link।
 
@@ -240,5 +261,6 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
 - **v19:** Picture sender সম্পূর্ণ সরানো হয়েছে — Dashboard-এর PICTURE SENDER group, Pictures page, Settings-এর picture config, browser/thread_manager-এর pic পরামিতি ও upload কোড। Chat engine (eva_flow / chat/*) অপরিবর্তিত; user-এর "send pic" কথার keyword detection engine-এ আছে, সেটা picture sender নয়।
 - **v20 (recheck):** (1) `entry/main.py` Settings-এর New Chat Delay min/max + Rest UI → একটাই "New Chat Delay (s)" (default 5); save-এ rest key পাঠানো হয় না (config অক্ষত)। (2) `data/config.json` + `core/config_loader.py` default new_chat_delay 5/5। (3) `core/ws_transport/chitchat_api.py` `List` import ও `ws_chat_loop.py` অচেনা `ReplyEngine` type-hint ঠিক (আগে pyflakes-এ undefined name ছিল; runtime-এ lazy annotation-এর কারণে crash হতো না)। (4) `entry/main.py` unused `sms_enabled`। (5) `docs/FLOW_SPEC.md` Max Replies section আপডেট (cap off, horny 5-cap কোডে নেই)। (6) Gate-এ `ws import ok` লাইন যোগ। (7) Project folder repo-র ভিতরে `eva-full-project/` হিসেবে এলো। (8) Browser rest বন্ধ (`_schedule_next_rest`/`_maybe_take_rest`), rest config key সরানো, CLI-এর "Chat Timeout 30s" hard-code → আসল silence timeout দেখায়। (9) `config/eva_config.json` (কোনো code পড়ত না) মুছে ফেলা হয়েছে।
 - **v22 (debug-pass cleanup):** dead module মুছে ফেলা: `_analyze.py`, `flow_reference.py`, `chat/chat_db.py`, `chat/content_filter.py`, `browser/device_signin.py`, `core/signin_window.py` (কোনো entry থেকে import নেই; `entry/main.py`-তে `signin_window` reference সরানো হয়েছে, আচরণ অপরিবর্তিত)। Junk মুছে: `browser/unique_sites.txt` (১০ লাখ লাইন, কোনো code পড়ে না — active list `data/unique_sites.txt`), `data/snapchat_fallback.txt`, `data/local_db/archive_flirty_questions.txt`, `data/local_db/keyword_db_*.zip` (কোনো reference নেই)। Installer/runner duplicate মুছে: `docs/INSTALL_SMOOTH.*`, `docs/RUN_SMOOTH.*`, `docs/start_bot.bat`, `test_matcher.bat` (test.bat-এ আছে)। Stale doc মুছে: `docs/Architecture.txt`, `docs/PROJECT_STATE.md`, `docs/TASKS.md`, `docs/readme.txt`, `docs/TG_REFERENCE/`। Runtime cache `data/.*.idx` নিজে থেকে আবার তৈরি হয় (round-robin position reset মাত্র)। Kept: `install.bat`, `forceinstall.bat`, `run.vbs`, `run_console.bat`, `test.bat`, `demo_flow.py`, `tools/coverage_check.py`, legacy engine-এর `data/local_db/stage_rules/`। Verify: gate সব PASS (§5), `tools/doctor` Qt widgets FAIL শুধু sandbox-এ libGL নেই বলে। 
+- **v25 (risk-class setup):** `project.map.json` (ফাইল → risk class, 137 ফাইল সব ক্লাসিফাইড), `tools/project_map_check.py` (unclassified/stale/never-ship/missing-test চেক; probe ফাইলে FAIL ও cleanup-এ OK যাচাই), `tools/verify_gate.py` (13 step; negative test: exit code পাস হয়), `tools/gui_import_check.py` (ad-hoc stub থেকে repo tool-এ)। AGENTS §3-এ risk routing টেবিল। External spec-এর TypeScript/Next/Prisma/K8s অংশ এই Python desktop project-এ প্রযোজ্য নয় — ইচ্ছাকৃতভাবে বাদ। GitHub auto skill-discovery ও স্বয়ংক্রিয় deploy বাদ (অযাচাইযোগ্য, sandbox-এ GitHub search/CI চালানো যায় না)।
 - **v23 (ws_transport hardening):** `chitchat_api.send_message` — ambiguous failure (timeout / socket drop / 5xx) হলে একই `nonce` দিয়ে `GET …/messages?limit=20` থেকে message আছে কিনা দেখা হয়; থাকলে re-send হয় না (duplicate বন্ধ)। 4xx (422 ইত্যাদি) ও 403 Flagged আগের মতো সরাসরি raise। নতুন `find_message_by_nonce()` helper + `test_ws_transport.py` (22 checks)। Timing ও snap logic অপরিবর্তিত। Sandbox-এ live WebSocket যাচাই সম্ভব নয় (chitchat.gg allowlist-এ নেই) — শুধু fixture/unit।
 - **v24 (approved, step-by-step):** (1) session reply floor `LoopConfig.min_reply_delay_s` 1.0 → 4.5 s (weebbsssc capture-এর human inbound→reply minimum, n=10, median 6.3 s, max 11.8 s); engine delay যদি বড় হয় তা রাখা হয়। `test_ws_transport.py` এখন 25 checks। (2) Root `tools/chitchat_capture/capture_direct.py`: multipart request body `post_data_buffer` থেকে পড়ে field নাম/ধরন বের করে (`parse_multipart`); text মান share-এ mask। selftest 28/28। README redaction সীমা সংশোধিত। **Unverified:** send-message body field নাম এখনো live capture-এ নিশ্চিত নয় — নতুন capture দরকার।

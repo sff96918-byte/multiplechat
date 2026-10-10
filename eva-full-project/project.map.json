@@ -1,0 +1,153 @@
+{
+  "_comment": "Machine-readable file map for AI agents. Source of truth for prose is AGENTS.md. Check with: python tools/project_map_check.py",
+  "project": "EVA Bot (eva-full-project)",
+  "stack": "Python 3 + PyQt6 desktop GUI, headless WebSocket/REST chat (session mode), Playwright browser mode",
+  "classes": {
+    "CRITICAL_CORE": {
+      "risk": "HIGH",
+      "rule": "Behaviour change only with a failing test first (TDD) and gate PASS. Snap/greeting/country/middle-chat logic needs explicit user approval.",
+      "backup_before_edit": true,
+      "patterns": [
+        "eva_flow.py",
+        "chat/rules.py",
+        "chat/rule_bot.py",
+        "chat/common_scan.py",
+        "core/session_chat.py",
+        "core/ws_transport/chitchat_api.py",
+        "core/ws_transport/chitchat_socket.py",
+        "core/ws_transport/ws_chat_loop.py",
+        "core/ws_transport/socketio_codec.py",
+        "core/ws_transport/protocol.py",
+        "browser/browser_automation.py",
+        "core/config_loader.py",
+        "entry/main.py",
+        "entry/thread_manager.py"
+      ],
+      "tests": [
+        "test_flow.py",
+        "test_live.py",
+        "test_ws_transport.py",
+        "test_matcher.py",
+        "test_fuzz.py",
+        "demo_chat.py"
+      ]
+    },
+    "RUN_AND_SETUP": {
+      "risk": "MEDIUM",
+      "rule": "Changes here affect a user's first install on Windows. Verify by reading the script; sandbox cannot run .bat.",
+      "patterns": [
+        "install.bat",
+        "forceinstall.bat",
+        "test.bat",
+        "run_console.bat",
+        "run.vbs",
+        "run_chat.py",
+        "entry/cli_runner.py",
+        "entry/paths.py",
+        "data/requirements.txt",
+        ".gitignore"
+      ],
+      "tests": [
+        "test_diagnostics.py"
+      ]
+    },
+    "DATA_MAPPING": {
+      "risk": "LOW",
+      "rule": "Text pools for replies. Snap files (snap_ids*, share_snap_backup, ask/share pools) need user approval before changing.",
+      "patterns": [
+        "data/input/**",
+        "data/output/**",
+        "data/local_db/**",
+        "data/countries.txt",
+        "data/urls.txt",
+        "data/ids.txt",
+        "data/config.json",
+        "data/unique_sites.txt"
+      ],
+      "approval_patterns": [
+        "data/snap_ids.txt",
+        "data/snap_ids_fallback.txt",
+        "data/share_snap_backup.txt",
+        "data/input/**snap**",
+        "data/output/**snap**"
+      ],
+      "tests": [
+        "test_matcher.py",
+        "test_flow.py"
+      ]
+    },
+    "SUPPORT_MODULES": {
+      "risk": "LOW",
+      "rule": "Safe to improve with tests. Keep public function names stable.",
+      "patterns": [
+        "chat/database/**",
+        "chat/geo_handler.py",
+        "chat/horny_flirty_db.py",
+        "chat/persona.py",
+        "chat/style_analyzer.py",
+        "chat/tg_brain.py",
+        "chat/__init__.py",
+        "browser/account_session_store.py",
+        "browser/browser_engine.py",
+        "browser/context_pool.py",
+        "browser/human_behavior.py",
+        "core/account_manager.py",
+        "core/diagnostics.py",
+        "core/engine_bridge.py",
+        "core/resource_governor.py",
+        "core/ws_transport/__init__.py",
+        "entry/__init__.py",
+        "core/__init__.py",
+        "browser/__init__.py",
+        "data/chitchat-bot.ico",
+        "demo_flow.py",
+        "core/ws_transport/protocol_manifest.json"
+      ],
+      "tests": [
+        "test_flow.py",
+        "test_diagnostics.py"
+      ]
+    },
+    "TOOLS_AND_TESTS": {
+      "risk": "NONE",
+      "rule": "Dev tools and tests. Add a test with every new check.",
+      "patterns": [
+        "tools/**",
+        "test_*.py",
+        "skills/**",
+        "demo_chat.py"
+      ],
+      "tests": []
+    },
+    "DOCS": {
+      "risk": "NONE",
+      "rule": "Keep AGENTS.md map and skills in sync with every code change (AGENTS §0 step 6).",
+      "patterns": [
+        "AGENTS.md",
+        "README.md",
+        "docs/**",
+        "project.map.json"
+      ],
+      "tests": []
+    }
+  },
+  "never_ship": [
+    "account_sessions/**",
+    "browser_profile/**",
+    "capture_out/**",
+    "data/logs/**",
+    "configs/session.json",
+    "**/__pycache__/**",
+    "**/*.pyc",
+    "data/.*.idx",
+    "**/storage_state.json",
+    "**/.env"
+  ],
+  "runtime_local": [
+    "data/logs/**",
+    "data/.*.idx",
+    "**/__pycache__/**",
+    "**/*.pyc",
+    ".pytest_cache/**"
+  ]
+}

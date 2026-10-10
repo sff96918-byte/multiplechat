@@ -5,6 +5,12 @@ description: যেকোনো কোড/config/content বদলের পর 
 
 # SKILL: Verify (done বলার আগে)
 
+## এক কমান্ড (সবসময় প্রথমে)
+```bash
+python tools/verify_gate.py     # project map + compile + import + সব test + GUI stub import; শেষে GATE: N/13
+```
+FAIL দেখালে কোন step ব্যর্থ তা নাম ধরে দেখায়; সেই step-এর পুরো output আলাদা করে দেখো।
+
 ## Tier 1 — সবসময় (ছোট পরিবর্তনও)
 ```bash
 python -m py_compile <বদলানো ফাইলগুলো>

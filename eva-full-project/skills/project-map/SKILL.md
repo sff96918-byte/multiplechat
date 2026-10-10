@@ -5,6 +5,9 @@ description: EVA Bot root project-এর A-to-Z ফোল্ডার ও ফা
 
 # SKILL: Project map (A–Z)
 
+## File class (machine-readable)
+`project.map.json` — প্রতিটা ফাইলের risk class (CRITICAL_CORE / RUN_AND_SETUP / DATA_MAPPING / SUPPORT_MODULES / TOOLS_AND_TESTS / DOCS) ও কোন test চালাতে হবে। নতুন ফাইল আনলে `python tools/project_map_check.py` চালাও।
+
 ## দুটো মূল flow
 1. **LIVE BROWSER** — `entry/main.py` → `entry/thread_manager.py` → `browser/browser_automation.py`
    (Camoufox দিয়ে chitchat.gg UI চালায়) → reply চায় `chat/rule_bot.py`-র `ChatRuleBot`-এর কাছে।
