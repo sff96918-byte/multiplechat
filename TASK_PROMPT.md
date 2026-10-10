@@ -25,6 +25,17 @@ Capture repo: `https://github.com/rajuvbygyuiythh/wbbbbbbbbbbsck`
 - `eva/transport/protocol_manifest.json` ← এটা read করো, source of truth
 - `docs/CHITCHAT_PROTOCOL.md` ← human-readable deep analysis
 
+## 🧠 AGENT MEMORY (প্রথমে এটা)
+
+তুমি (agent) নতুন — আগের সব কাজের নোট `memory/` ফোল্ডারে:
+```bash
+python -m ops.tools.memory recent 6      # শুরুতে চালাও
+python -m ops.tools.memory search <topic> # task-related
+# কাজ শেষে:
+python -m ops.tools.memory add session "..." --body "..."
+```
+বিস্তারিত নিয়ম: **AGENTS.md (root)** — ওটা আগে পড়ো।
+
 ## ⚠️ HARD RULES (ভাঙলে task fail)
 
 1. **কোনো `socketio` pip package নয়** — wire protocol সরাসরি `aiohttp` WS-এ implement করা (already done)

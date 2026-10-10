@@ -1,43 +1,131 @@
-# AGENTS.md — rules for AI agents working in this repo
+# AGENTS.md — এই ফাইল প্রতিটা agent session-এর শুরুতে পড়ো (এটা mandatory)
 
-Read `TASK_MAP.md` (multi-site legacy) and `TASK_PROMPT.md` (chitchat WS bot) first.
+তুমি এই repo-তে **নতুন করে** এসেছো। তোমার আগের agent-রা অনেক কাজ করে গেছে —
+তাদের জ্ঞান `memory/` ফোল্ডারে জমানো। নিচের ৬টা ধাপ মানো, তাহলেই তুমি
+আগের চেয়ে অনেক দ্রুত ও নির্ভুল কাজ করতে পারবে।
 
-## Non-negotiable rules
+---
 
-1. **No guessing protocol behavior.** chitchat.gg facts live in
-   `eva/transport/protocol_manifest.json` — every fact has a capture evidence note.
-   Anything in `unknowns_DO_NOT_GUESS` stays unimplemented until a new capture proves it.
-2. **No new WS/Socket.IO dependencies.** The wire protocol is implemented on
-   `aiohttp` in `eva/transport/socketio_codec.py` + `chitchat_socket.py`. Do not
-   add `python-socketio` or similar.
-3. **Secrets never committed.** `configs/session.json`, cookies, JWTs — gitignored.
-   If a user pastes a token in chat, do not write it into any tracked file.
-4. **Verification gate.** After ANY change under `eva/` run:
-   - `python -m unittest tests.test_protocol_units`
-   - `python -m ops.tools.socket_smoke_test` (must stay 24/24)
-   If you changed protocol behavior intentionally, update
-   `tests/fixtures/captured_frames.json` + the manifest together, and say why.
-5. **Rate discipline.** Keep request spacing >= 250ms in `ChitchatApi`
-   (`request_spacing_s`). Do not remove the 403-Flagged backoff.
+## 0) MEMORY PROTOCOL — সবচেয়ে গুরুত্বপূর্ণ নিয়ম
 
-## Verification commands
-
+### Task শুরুর আগে (১ মিনিট):
 ```bash
-python -m unittest tests.test_protocol_units -v
-python -m ops.tools.socket_smoke_test      # 24/24
-python -m ops.tools.session_smoke_test     # 7/7 (dashboard session flow)
+python -m ops.tools.memory recent 6        # সর্বশেষ কী ঘটেছে
+python -m ops.tools.memory search <topic>  # task-related কিছু আগে হয়েছে কিনা
 ```
+এরপর দরকারমতো পড়ো:
+- `memory/sessions.md` — শেষ ২-৩ session (কী হয়েছে, কোথায় আছি)
+- `memory/bugs_fixed.md` — debug করলে **অবশ্যই** (হয়তো bug-টা আগেই fix হয়েছে)
+- `memory/decisions.md` — architecture change করলে (ভাঙা decision ভাঙবে না)
+- `memory/protocol_facts.md` — chitchat.gg protocol নিয়ে কাজ হলে
+- `memory/open_questions.md` — কাজ শেষে / নতুন কাজ বাছতে
+- `memory/user_preferences.md` — প্রথমবার এলে (কীভাবে কথা বলতে হবে, কী deliver করতে হবে)
 
-## Dashboard
+### Task শেষে (বাধ্যতামূলক — না করলে ধরা যাবে):
+```bash
+python -m ops.tools.memory add session "v5: <যা করলে>" --body "<কী হলো, কোন ফাইল, কোন test result>"
+python -m ops.tools.memory add bug "title" --body "Symptom: ... Cause: ... Fix: <file> ... Verified: <test>"
+python -m ops.tools.memory add decision "title" --body "কী করলে কেন + কারণ + বিকল্প ছিল কী"
+python -m ops.tools.memory add question "title" --body "কী জানা নেই + কীভাবে resolve হবে"
+```
+**কমপক্ষে ১টা `session` entry প্রতিটা কার্যকর session-এ।** Bug পেলে/fix করলে `bug`,
+সিদ্ধান্ত নিলে `decision`, অমীমাংসিত বিষয় থাকলে `question` — বাদ দিও না।
 
-- `eva/dashboard/server.py` (web UI + bot control), `cdp_session.py` (browser
-  launch + cookie pull via CDP). Default bind 127.0.0.1 — do NOT change to
-  0.0.0.0 by default (dashboard controls the bot).
-- `configs/session.json` is written by the dashboard Save Session button.
+---
 
-## Where things are
+## 1) PROJECT IN 30 SECONDS
 
-- Protocol truth: `eva/transport/protocol_manifest.json`, `docs/CHITCHAT_PROTOCOL.md`
-- Bot runtime: `eva/transport/ws_bot.py` (CLI), `ws_chat_loop.py` (state machine)
-- Captured frames for tests: `tests/fixtures/captured_frames.json`
-- Legacy multi-site system: `project/` (see `project/TASK_MAP.md`)
+**কী আছে:** chitchat.gg-তে ইউজারের নিজের account-এর session দিয়ে live stranger-দের
+সাথে auto match → chat → reply → skip → next করা bot। **সব protocol fact
+capture-backed** — ইউজারের নিজের browser traffic capture থেকে; guess নিষিদ্ধ।
+
+**এক নজরে ফাইল মানচিত্র:**
+
+| Path | কী |
+|---|---|
+| `eva/transport/` | protocol: `socketio_codec` (EIO4/SIO5 frames), `chitchat_socket` (WS), `chitchat_api` (REST), `ws_chat_loop` (state machine), `ws_bot` (CLI) |
+| `eva/transport/protocol_manifest.json` | **protocol source of truth** — সব fact + evidence |
+| `eva/brain/` | ইউজারের legacy flow engine (`eva_flow.py`) + txt banks (`data/input|output`) + `flow_reply_engine` adapter |
+| `eva/gui/dashboard.py` | PyQt6 desktop dashboard (EXE-ready; ইউজারের প্রধান পছন্দ) |
+| `eva/dashboard/` | web dashboard + `cdp_session.py` (browser login → cookie pull) |
+| `ops/tools/` | `socket_smoke_test`, `session_smoke_test`, `extract_session`, `memory` |
+| `tests/fixtures/captured_frames.json` | আসল captured frames — smoke test-এর ভিত্তি |
+| `configs/` | `session.json` (SECRET, gitignored), `chitchat_bot.json` (engine/snap/persona/loop) |
+| `TASK_PROMPT.md` | বাংলায় সাজানো পুরো task spec (নতুন agent-কে দেওয়ার মতো) |
+| `project/` | legacy multi-site bot (অন্য সাইট; আলাদা, বেশি ধরবে না) |
+
+---
+
+## 2) TASK ROUTER (কোন কাজে কোথায়)
+
+| Task | পড়ো/ছোঁয়া |
+|---|---|
+| Bug fix | `memory/bugs_fixed.md` আগে → তারপর সংশ্লিষ্ট ফাইল → fix → test → `memory add bug` |
+| Protocol behavior change | `protocol_manifest.json` + `protocol_facts.md` → fixture update → codec/client → smoke test → `memory add decision` |
+| Reply/chat logic | `eva/brain/` (flow) বা `eva/replies.py` (simple) → `tests/test_flow_engine.py` |
+| Dashboard/GUI | `eva/gui/dashboard.py` (desktop) / `eva/dashboard/server.py` (web) |
+| New capture এলে | আগে পুরনো ফরম্যাট দেখো (`15_websocket_all.json` style) → facts বের করো → manifest+fixture update → tests চালাও |
+| Release/zip | নিচে RELEASE CHECKLIST |
+
+---
+
+## 3) HARD RULES (ভাঙলে task fail)
+
+1. **Guess নিষিদ্ধ** — chitchat.gg protocol-এর প্রতিটা behavior-এর capture evidence থাকতে হবে। নতুন behavior দরকার হলে ইউজারকে নতুন capture করতে বলো। Unknowns: `protocol_facts.md`।
+2. **No WS/socket.io dependency** — wire protocol নিজেরাই বলে (`socketio_codec.py`)। `python-socketio` install করবে না।
+3. **Secrets কখনো commit/zip হবে না** — `configs/session.json`, cookies, JWT।
+4. **Verification gate** — `eva/` বদলালে এই ৪টা test চালাও, সব PASS না হলে কাজ complete না:
+```bash
+python -m unittest discover -s tests         # unit + flow (19)
+python -m ops.tools.socket_smoke_test        # protocol (24/24)
+python -m ops.tools.session_smoke_test       # session flow (7/7)
+```
+5. **Rate discipline** — request spacing ≥ 250ms; 403-Flagged backoff remove করবে না।
+6. **Memory write** — কাজ শেষে `ops.tools.memory` দিয়ে লিখবেই।
+
+---
+
+## 4) কমন কাজের RECIPE
+
+### Bug পেলে
+1. `memory search <symptom-keyword>` — আগে fix হয়ে থাকতে পারে
+2. Reproduce করো (test/mock দিয়ে, live site-এ না)
+3. Fix + নতুন check smoke/unit test-এ add করো
+4. সব test PASS → `memory add bug ...`
+
+### নতুন feature
+1. `memory/decisions.md` — আগের related decision আছে কিনা
+2. বড় হলে ইউজারকে approach জিজ্ঞেস করো (ask_user)
+3. Implement + tests + docs update + `memory add decision/session`
+
+### Release zip (ইউজার প্রতিবার চায়)
+1. সব test PASS
+2. Zip content: ইউজার-facing সব + `project/` + docs, EXCLUDE: `__pycache__/`, `*.pyc`, `configs/session.json`, `dist/`, `build/`, পুরনো `*.zip`
+3. **Verify:** zip খুলে secret নেই কিনা + key files আছে কিনা + integrity
+4. Git commit+push → GitHub API দিয়ে size confirm → raw link + byte size দাও
+5. `memory add session`
+
+### ইউজার সমস্যা নিয়ে ফিরে এলে
+1. console output চাও যদি না দিয়ে থাকে
+2. `memory/bugs_fixed.md` symptom table → সম্ভাব্য cause বাংলায় ব্যাখ্যা
+3. Fix করে zip+link আবার দাও
+
+---
+
+## 5) COMMUNICATION
+
+- বাংলায় লেখো (technical শব্দ ইংরেজি)। ইউজার "ভাই" সম্বোধন পছন্দ করেন।
+- কাজ শেষে সবসময় সারাংশ টেবিল: bug/fix/test result।
+- বড় ambiguity হলে `ask_user` দিয়ে option জিজ্ঞেস করো — নিজে অনুমান করে বড় কাজ করবে না।
+- ইউজারের সময় মূল্যবান: কাজ করে তারপর জানাও; প্রতিটা ছোট ধাপে প্রশ্ন করে সময় নষ্ট করবে না।
+
+---
+
+## 6) CURRENT STATE SNAPSHOT (2026-10-10 অনুযায়ী — বিস্তারিত sessions.md)
+
+- v4 পর্যন্ত complete: transport + loop + web dashboard + PyQt6 EXE dashboard + flow engine merge
+- Tests: unit+flow 19, protocol smoke 24/24, session smoke 7/7 — সব সবুজ
+- **Live test এখনো হয়নি** (ইউজারের PC-তে হবে) — প্রথম live report এলে `open_questions.md`-র জিনিসগুলো verify করো
+- পরের সম্ভাব্য কাজ: live-debug, multi-account, proxy — ইউজার চাইলেই
+
+*শেষ কথা: তুমি একা নও — আগের সব agent-দের নোট এই ফোল্ডারে। পড়ো, কাজ করো, লিখে যাও।*

@@ -1,0 +1,36 @@
+# SESSIONS (নতুন আগে — newest first)
+
+## 2026-10-10 | v5: agent memory system + AGENTS.md v2
+
+- ইউজার চেয়েছিল: agents-দের জন্য memory + improved AGENTS.md
+- built: memory/ (INDEX, sessions, decisions, bugs_fixed, protocol_facts, user_preferences, open_questions) — পুরো প্রজেক্ট ইতিহাস backfilled
+- built: ops/tools/memory.py CLI (recent/search/add/stats) + tests/test_memory.py (5, temp-dir isolated)
+- rewrote AGENTS.md: memory protocol (read first/write last), task router, hard rules, recipes (bug/feature/release), communication rules
+- TASK_PROMPT.md: memory section added
+
+## 2026-10-10 | v4: EXE desktop dashboard + legacy flow engine merged
+- ইউজার তার পুরনো প্রজেক্ট (github.com/rajuvbygyuiythh/chatchat2222 → eva_bot_complete.zip) দেখিয়ে professional desktop dashboard চেয়েছিল।
+- Merged: `eva_flow.py` funnel engine + `data/input|output` txt banks + countries + local_db + icon → `eva/brain/`
+- Built `eva/gui/dashboard.py` (PyQt6, user's dark style: sidebar/CPU-RAM/START-STOP/session/engine/settings/match/stats/log)
+- Build system: `EVA_Dashboard.spec` + `build_exe.bat` + `dashboard_main.py` (PyInstaller onedir, windowed, icon)
+- Engine switch: flow (txt banks, DEFAULT) | simple (persona templates) — config `engine` key
+- Tests: flow 7/7 (new `tests/test_flow_engine.py`), unit 12/12, protocol 24/24, session 7/7
+- zip: eva-bot-v4-exe-dashboard.zip (1,499,348 bytes), pushed to branch
+
+## 2026-10-10 | v3: web dashboard + CDP browser login/session
+- ইউজার চেয়েছিল dashboard থেকেই browser চালিয়ে session save করা যাক।
+- `eva/dashboard/cdp_session.py`: launch Chrome/Edge (dedicated profile data/chrome-profile, port 9222), cookie pull via CDP `Storage.getCookies` (page-level `Network.getAllCookies` fallback), verify via GET /users/me, save configs/session.json
+- `eva/dashboard/server.py`: web dashboard (aiohttp, port 8800): session panel + bot start/stop + live stats/logs + config editor
+- `ops/tools/session_smoke_test.py`: fake Chrome CDP server → 7/7 checks (attach, filter, save format, verify, no-login error, no-browser error)
+- শিক্ষা: test-এ verify mock-এ route add করতে ভুল হয়েছিল — debug pattern: instrument verify() আলাদা করে চালিয়ে status দেখা
+
+## 2026-10-09 | v2: deep audit — 10 runtime bugs fixed
+- ইউজার চেয়েছিল "deeply fix, step by step"। Systematic code+capture audit → 10 bugs (বিস্তারিত bugs_fixed.md)।
+- সবচেয়ে গুরুত্বপূর্ণ: empty-body endpoints (capture ছিল body_size=0), own-typing-echo guard ছাড়া idle-skip আর কাজ করত না।
+- Smoke test scenario 2 (our-skip flow) add → 24/24 total.
+
+## 2026-10-09 | v1: capture analysis + full WS bot build
+- ইউজারের capture repo (rajuvbygyuiythh/wbbbbbbbbbbsck) deeply analyzed — RAW payloads পাওয়া গেছে (15_websocket_all.json raw frames, 16_http_all.json response bodies)।
+- KEY discovery: message SEND হয় REST দিয়ে (multipart content+nonce), WS শুধু receive+match lifecycle। Auth = cookies only।
+- Built: socketio_codec, chitchat_socket, chitchat_api, ws_chat_loop, ws_bot CLI, replies, extract_session, protocol_manifest.json, socket_smoke_test → 15/15।
+- পুরনো assumption ভাঙা: "README says do not guess" — এখন সব capture-backed।
