@@ -1,106 +1,45 @@
 ============================================================
-   EVA CHITCHAT BOT — শুরু করার সহজ নিয়ম (বাংলা)
+   EVA CHITCHAT BOT — শুরু করার সহজ নিয়ম (বাংলা)  — v11
 ============================================================
 
-এই zip-এ chitchat.gg live chat bot (eva/) + তোমার পুরনো multi-site
-project (project/) — দুটোই আছে। নিচের ধাপগুলো করো:
-
-────────────────────────────────────────────
 ধাপ ১ — Python চেক
-────────────────────────────────────────────
-Command Prompt খুলে লেখো:
-    python --version
-3.10 বা তার উপরে হলেই হবে। না থাকলে python.org থেকে install করো।
+─────────────────
+Command Prompt খুলে:  python --version
+3.10+ হলেই হবে। না থাকলে python.org থেকে install করো।
 
-────────────────────────────────────────────
-ধাপ ২ (সবচেয়ে সহজ) — DASHBOARD দিয়ে সব করো ✨
-────────────────────────────────────────────
+ধাপ ২ — DASHBOARD চালু (সবচেয়ে সহজ) ✨
+─────────────────
 double-click:  run_dashboard.bat
-→ browser-এ http://127.0.0.1:8800 খুলবে, সেখানে:
+(প্রথমবার PyQt6+PDF নিজে install হবে, net লাগবে)
+→ MOOD পেজ খুলবে — ২টা card:
 
-  ১. "🚀 Launch Browser" চাপো → একটা Chrome window খুলবে
-  ২. ওই window-তে chitchat.gg-তে LOGIN করো (একবারই)
-  ৩. ফিরে এসে "💾 Save Session" চাপো
-     → cookies নিজে টেনে এনে session.json বানাবে ✓
-  ৪. (চাইলে Config ট্যাবে persona ঠিক করে Save Config)
-  ৫. "▶ Start Bot" চাপো — live চলা শুরু! লগ নিচে দেখবে।
-  ৬. বন্ধ করতে "■ Stop"
+  🌐 LIVE BROWSER MOOD — ব্রাউজার চোখের সামনে চলবে,
+     বট লাইভ auto-reply করবে + session auto-save (প্রতি 60s)
+  🔑 SESSION CHAT MOOD — ২টা অপশন:
+     Option 1: লাইভ ব্রাউজার চালু করে session collect
+     Option 2: পুরনো saved session দিয়ে সরাসরি চ্যাট
 
-⚠️ Chrome না থাকলে Edge-ও চলবে; তাও না পেলে dashboard-এ
-   browser path লিখে Set Path চাপো।
+ধাপ ৩ — BOT SETUP (একবারই)
+─────────────────
+যেকোনো mood dashboard-এর ডান-উপরে  ⚙️ Bot Setup  চাপো:
+  • Engine: flow (funnel logic) বা fixed (line-by-line SMS)
+  • fixed হলে: configs/fixed_script.txt এডিট করো
+    (প্রতি লাইন = একটা reply, '#' = comment)
+  • flow হলে: Snap username দাও বা configs/snap.txt বানাও
+    (configs/snap.txt.example → copy করে নাম বদলাও)
+  • 💾 SAVE SETUP চাপো
 
-────────────────────────────────────────────
-ধাপ ২ (বিকল্প) — Session file হাতে বানানো
-────────────────────────────────────────────
-১. Chrome-এ chitchat.gg খোলো + LOGIN থাকো
-২. F12 চাপো → Application ট্যাব → Cookies → https://chitchat.gg
-৩. এই ২টা cookie-র value copy করো:
-      - token            (eyJhbGciOiJIU... দিয়ে শুরু)
-      - __Secure-text-session
-৪. cmd থেকে:
-      python -m ops.tools.extract_session
-   → token paste, session paste — ব্যস!
+ধাপ ৪ — চালাও
+─────────────────
+1. mood বাছাই করে ভিতরে যাও
+2. browser mood:  🚀 Browser খোলো → chitchat.gg-তে LOGIN
+   session mood:  Option 1 (session না থাকলে) বা Option 2
+3.  ▶ START  চাপো — LIVE LOG-এ সব দেখা যাবে
 
-────────────────────────────────────────────
-ধাপ ৩ — Offline test (live-এ না গিয়ে verify)
-────────────────────────────────────────────
-      python -m ops.tools.socket_smoke_test       → 24/24 আসতে হবে
-      python -m ops.tools.session_smoke_test      → 7/7 আসতে হবে
-(কোনোটাই live site-এ যায় না, নিজস্ব mock server-এ চলে)
+সমস্যা হলে
+─────────────────
+• নিচের  🐞 Export Debug Report  চাপো
+• logs/ ফোল্ডারে যে debug_report_*.txt বানাবে সেটাই শেয়ার করো
+  (এতে তোমার password/token থাকে না — safe)
 
-────────────────────────────────────────────
-ধাপ ৪ — LIVE চালাও 🚀
-────────────────────────────────────────────
-সবচেয়ে সহজ: dashboard থেকেই "Start Bot" (ধাপ ২ দেখো)
-
-অথবা cmd থেকে:
-      python -m eva.transport.ws_bot --debug --max-matches 1
-
- — Offline test (live-এ না গিয়ে verify)
-────────────────────────────────────────────
-      python -m ops.tools.socket_smoke_test
-শেষে দেখবে:  RESULT: 24/24 checks passed
-(এটা কোনো live site-এ যায় না, নিজস্ব mock server-এ চলে)
-
-────────────────────────────────────────────
-ধাপ ৪ — LIVE চালাও 🚀
-────────────────────────────────────────────
-সবচেয়ে সহজ:   run_chitchat_bot.bat   (double-click)
-
-অথবা cmd থেকে:
-      python -m eva.transport.ws_bot --debug --max-matches 1
-
-  --debug          প্রতিটা protocol frame console-এ দেখাবে
-  --max-matches 1  ১টা match শেষে auto stop (প্রথম test-এর জন্য ভালো)
-
-কনসোলে দেখবে:
-  [ok] session valid — logged in as <তোমার username>
-  [ok] bot running — WS live, queue joined
-  MATCHED #1 conv=... partner=...
-  PARTNER ...: 'hi'
-  US      : 'hey :)'
-
-────────────────────────────────────────────
-কোথাও সমস্যা হলে আমাকে যা পাঠাবে
-────────────────────────────────────────────
-১. Console-এর পুরো output (error লাইন সহ) — copy-paste
-২. configs/session.json কখনো পাঠিও না!! (ওটা তোমার password)
-৩. যে কমান্ড চালিয়েছিলে সেটা
-
-সাধারণ সমাধান: ops/skills/ws-debug.md ফাইলে symptom table আছে।
-
-────────────────────────────────────────────
-ফাইল কী কোথায়
-────────────────────────────────────────────
-  eva/                     chitchat bot (মূল নতুন code)
-  ops/tools/               session builder + smoke test
-  configs/                 session.json এখানে তৈরি হয় + config example
-  docs/CHITCHAT_PROTOCOL.md  protocol বিশ্লেষণ (capture-ভিত্তিক)
-  TASK_PROMPT.md           agent-দের জন্য পুরো কাজের summary
-  project/                 তোমার পুরনো multi-site bot (অপরিবর্তিত)
-
-⚠️  মনে রাখবে:
-  - একসাথে bot + browser-এ chitchat.gg খোলা রাখবে না (socket conflict)
-  - তোমার browser-এ login শেষ হয়ে গেলে (bot-এ 401/403 দেখালে) ধাপ ২ আবার করো
-  - configs/session.json কখনো কাউকে দিও না / commit করো না
-============================================================
+আরও বিস্তারিত: docs/DASHBOARD_OPTIONS_BN.md (A to Z গাইড)

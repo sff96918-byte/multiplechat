@@ -1,6 +1,6 @@
 # EVA DASHBOARD — A to Z Options Guide (বাংলা)
 **EXE/Desktop Dashboard:** `run_dashboard_exe.vbs` বা `dist\EVA Dashboard\EVA Dashboard.exe`
-**Web Dashboard (বিকল্প):** `run_dashboard.bat` → http://127.0.0.1:8800
+**GUI চালু:** `run_dashboard.bat` double-click (PyQt6 auto-install)
 
 ---
 
@@ -130,12 +130,6 @@ eva/brain/data/output/<category>.txt  = আমরা যা reply দেব
 ```
 Flow: `greeting` → `age_gender` → `country` → `flirty_questions` → `horny`/`middle_chat/*` → `ask_snap` → `share_snap` (%username%) → **END** (`closer.txt`, 8 reply cap)।
 নিজের নতুন category চাইলে: দুই ফোল্ডারেই একই নামে txt রাখুন — auto join হবে।
-
----
-
-## 🌐 WEB DASHBOARD (বিকল্প, run_dashboard.bat → :8800)
-
-একই কাজ web-এ: 🔑 Session panel (Launch Browser/Save Session/browser path) + 🤖 Bot control (Start/Stop, stats) + ⚙️ Config (engine, fixed file, skip idle, typing, auto next) + 📜 Live log (2.5s refresh)।
 
 ---
 

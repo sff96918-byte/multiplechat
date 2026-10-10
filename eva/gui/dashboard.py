@@ -410,7 +410,7 @@ def run_gui() -> int:
     from PyQt6.QtCore import Qt, QTimer
     from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                                  QHBoxLayout, QGridLayout, QPushButton, QTextEdit,
-                                 QLabel, QGroupBox, QCheckBox, QComboBox, QFrame,
+                                 QLabel, QGroupBox, QCheckBox, QComboBox,
                                  QLineEdit, QSpinBox, QMessageBox, QFileDialog,
                                  QStackedWidget)
 

@@ -53,12 +53,12 @@ python -m ops.tools.memory add session "..." --body "..."
 | WS client (handshake, pong, presenceSync, reconnect) | `eva/transport/chitchat_socket.py` | ✅ smoke-tested |
 | REST client (match, disconnect, typing, messages, me) | `eva/transport/chitchat_api.py` | ✅ smoke-tested |
 | Chat loop state machine (queue→match→chat→skip→next) | `eva/transport/ws_chat_loop.py` | ✅ smoke-tested |
-| Reply engine (persona templates, human delays) | `eva/replies.py` | ✅ |
+| Reply engines: flow (txt-bank funnel) + fixed (line-by-line SMS) | `eva/brain/flow_reply_engine.py` + `eva/brain/fixed_reply_engine.py` | ✅ |
 | CLI bot entry | `eva/transport/ws_bot.py` | ✅ |
 | Offline verification (mock server replays REAL captured frames) | `ops/tools/socket_smoke_test.py` | ✅ **15/15 PASS** |
 | Unit tests | `tests/test_protocol_units.py` | ✅ 12/12 PASS |
 | Session builder tool (manual) | `ops/tools/extract_session.py` | ✅ |
-| **Web dashboard (browser session setup + bot control)** | `eva/dashboard/server.py` + `cdp_session.py` | ✅ **7/7 session tests** |
+| **Desktop mood dashboard (browser/session moods + CDP session setup)** | `eva/gui/dashboard.py` + `eva/dashboard/cdp_session.py` | ✅ **7/7 session tests** |
 | Protocol docs | `docs/CHITCHAT_PROTOCOL.md` + manifest | ✅ |
 | Debug skill | `ops/skills/ws-debug.md` | ✅ |
 
@@ -94,7 +94,7 @@ RESULT: 24/24 checks passed (2 scenarios)
 9. handshake wait-এ server `41`/`44` এলে timeout পর্যন্ত hang → fixed
 10. **নিজের typing echo**-তে bot চিরতরে "partner typing" ভাবত → idle-skip কখনো কাজ করত না → fixed (self-echo guard + 6s expiry)
 
-**Dashboard (v3 addition):** `run_dashboard.bat` → browser-এ http://127.0.0.1:8800 →
+**Dashboard (v11):** `run_dashboard.bat` (বা `python -m eva.gui.dashboard`) → mood dashboard (browser/session) →
 Launch Browser (CDP) → chitchat.gg login → Save Session (auto cookie pull + verify) → Start Bot।
 Session flow verified offline: `python -m ops.tools.session_smoke_test` (7/7, fake Chrome CDP server)।
 

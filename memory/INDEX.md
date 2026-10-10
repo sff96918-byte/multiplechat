@@ -21,6 +21,8 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `bug` | smoke test imported deleted module | socket_smoke_test.py imported eva.replies.ReplyEngine; after v11 removal of eva/replies.py the smoke test cras |
+| 2026-10-10 | `session` | v11: dead/broken stuff removed (user: 'useless none-work remove') | REMOVED: eva/replies.py (persona engine, persona already cut from UI), eva/dashboard/server.py (web dashboard  |
 | 2026-10-10 | `decision` | v10: report share-safe rule | Debug report NEVER contains session.json content (only exists/has_token booleans + cookie NAMES) and WS frame  |
 | 2026-10-10 | `session` | v10: debug upgrade (file log, ring buffers, export report) | New eva/debugtools.py: setup_debug_logging (logs/eva.log RotatingFile 1MBx5 ALWAYS DEBUG; eva logger level DEB |
 | 2026-10-10 | `decision` | v9: settings ek jaygay (BOT SETUP) | Architecture answer: mood dashboards e shudhu mood-specific controls (browser/session/START); shared settings  |

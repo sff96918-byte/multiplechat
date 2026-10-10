@@ -8,15 +8,16 @@ no guessing (protocol evidence: `eva/transport/protocol_manifest.json`).
 ## Quick start (dashboard — recommended)
 
 ```bash
-pip install aiohttp                       # only dependency
-run_dashboard.bat                         # or: python -m eva.dashboard.server
+pip install aiohttp PyQt6                 # dependencies
+run_dashboard.bat                         # or: python -m eva.gui.dashboard
 ```
 
-Then in the browser dashboard (http://127.0.0.1:8800):
-1. **Launch Browser** → a real Chrome/Edge window opens (CDP, dedicated profile)
-2. **Log in to chitchat.gg** in that window (once — profile remembers you)
-3. **Save Session** → cookies pulled via CDP, verified, saved to configs/session.json
-4. **Start Bot** → live matching/chatting, stats + logs update live
+Then in the mood dashboard:
+1. **Pick a MOOD** — 🌐 Live Browser (visible browser + auto session save) or
+   🔑 Session Chat (collect a live session / reuse a saved one)
+2. **⚙️ Bot Setup** → pick engine (flow/fixed), snap.txt, fixed script → SAVE
+3. **START** → live matching/chatting, stats + logs update live
+4. Trouble? → **🐞 Export Debug Report** and share the generated txt (secrets masked)
 
 ## Quick start (CLI alternative)
 
@@ -57,7 +58,8 @@ python -m eva.transport.ws_bot --debug
 | Path | What |
 |---|---|
 | `eva/transport/` | capture-backed protocol implementation (see module docstrings) |
-| `eva/dashboard/` | web dashboard: CDP browser session setup + bot control |
+| `eva/dashboard/cdp_session.py` | CDP browser launch + cookie pull (session setup) |
+| `eva/debugtools.py` | file logging + one-click share-safe debug report |
 | `docs/CHITCHAT_PROTOCOL.md` | full protocol analysis with captured evidence |
 | `ops/tools/socket_smoke_test.py` | offline verification against exact captured frames |
 | `ops/skills/ws-debug.md` | troubleshooting guide |

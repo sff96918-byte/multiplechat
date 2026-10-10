@@ -43,7 +43,6 @@ from eva.transport.chitchat_api import ChitchatApi          # noqa: E402
 from eva.transport.chitchat_socket import ChitchatSocket    # noqa: E402
 from eva.transport import socketio_codec as codec           # noqa: E402
 from eva.transport.ws_chat_loop import LoopConfig, WsChatLoop  # noqa: E402
-from eva.replies import ReplyEngine                         # noqa: E402
 
 FIXTURES = json.loads((ROOT / "tests" / "fixtures" / "captured_frames.json").read_text(encoding="utf-8"))
 
@@ -87,6 +86,28 @@ class Results:
 
 
 # ============================================================ mock WS server
+
+class _StubEngine:
+    """Minimal offline engine (legacy ReplyEngine-এর জায়গায় — v11 cleanup)."""
+    name = "stub"
+
+    def __init__(self) -> None:
+        self._stage: dict = {}
+
+    def opener(self, partner: dict) -> str:
+        self._stage[(partner or {}).get("id")] = "greeting"
+        return "hey :)"
+
+    def reply(self, partner: dict, incoming: str, history=None) -> str:
+        self._stage[(partner or {}).get("id")] = "smalltalk"
+        return "nice"
+
+    def delay_for(self, incoming: str) -> float:
+        return 0.2
+
+    def forget(self, partner_id: str) -> None:
+        self._stage.pop(partner_id, None)
+
 
 class MockSocketIOServer:
     """Replays the captured server side of the socket.io connection."""
@@ -290,7 +311,7 @@ async def run_scenario(results: Results) -> None:
     api = ChitchatApi(cookies, base_url=rest.base_url, request_spacing_s=0.05)
     sock = ChitchatSocket(cookies, ws_url=f"ws://127.0.0.1:{ws_port}/socket.io/?EIO=4&transport=websocket")
 
-    engine = ReplyEngine(config={"greetings": ["hey :)"], "smalltalk": ["nice"]})
+    engine = _StubEngine()
     loop_cfg = LoopConfig(
         auto_next=True, next_delay_s=(0.2, 0.4), skip_idle_s=6.0,
         min_reply_delay_s=0.2, opener_delay_s=(0.2, 0.3), queue_timeout_s=10,
@@ -433,7 +454,7 @@ async def run_our_skip_scenario(results: Results) -> None:
     api = ChitchatApi(cookies, base_url=rest.base_url, request_spacing_s=0.05)
     sock = ChitchatSocket(cookies, ws_url=f"ws://127.0.0.1:{ws_port}/socket.io/?EIO=4&transport=websocket")
 
-    engine = ReplyEngine(config={"greetings": ["hey :)"], "smalltalk": ["nice"]})
+    engine = _StubEngine()
     loop_cfg = LoopConfig(
         auto_next=False, next_delay_s=(0.2, 0.4), skip_idle_s=1.5,
         min_reply_delay_s=0.2, opener_delay_s=(0.1, 0.2), queue_timeout_s=10,

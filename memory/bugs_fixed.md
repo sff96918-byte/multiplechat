@@ -1,5 +1,8 @@
 # BUGS FIXED (আর খুঁজতে হবে না — newest first)
 
+## 2026-10-10 | smoke test imported deleted module
+
+socket_smoke_test.py imported eva.replies.ReplyEngine; after v11 removal of eva/replies.py the smoke test crashed with ModuleNotFoundError. Lesson: before deleting a module, grep WHOLE repo including ops/ and project/ for importers (grep -rn 'module_name' --include='*.py'). Fixed with inline _StubEngine.
 ## 2026-10-10 | rebase --ours took wrong side, v4 wiring lost silently
 
 Symptom: grep-এ ws_bot/server-এ engine_name নেই যদিও v4 commit ছিল। Cause: AA conflict-এ git checkout --ours = ORIGIN side (v3), আমার v4 ফাইল হারায়। Lesson: rebase-এ --ours = base, --theirs = replaying commit; resolve-এর পরে সেই ফাইলের key symbols grep করে verify করতে হবে।

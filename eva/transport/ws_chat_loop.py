@@ -22,7 +22,6 @@ from typing import Callable, Dict, List, Optional
 
 from .chitchat_api import ChitchatApi, FlaggedError
 from .chitchat_socket import ChitchatSocket
-from ..replies import ReplyEngine
 
 log = logging.getLogger("eva.ws_chat_loop")
 
@@ -85,7 +84,7 @@ class WsChatLoop:
     ) -> None:
         self.api = api
         self.socket = socket
-        self.engine = reply_engine or ReplyEngine()
+        self.engine = reply_engine   # সব কলারই engine দেয় (flow/fixed) — dead fallback বাদ
         self.cfg = config or LoopConfig()
         self.on_event = on_event            # UI hook: (event, data)
 

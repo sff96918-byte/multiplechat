@@ -9,7 +9,6 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from eva.transport import socketio_codec as codec
-from eva.replies import Persona, ReplyEngine
 from eva.transport.chitchat_api import ChitchatApi
 
 FIXTURES = json.loads((ROOT / "tests" / "fixtures" / "captured_frames.json").read_text())
@@ -57,27 +56,6 @@ class TestCodec(unittest.TestCase):
         f = codec.decode(raw)
         self.assertEqual(f.event, "matchUpdate")
         self.assertFalse(f.args[0]["match"]["closure"]["closed"])
-
-
-class TestReplyEngine(unittest.TestCase):
-    def setUp(self):
-        self.eng = ReplyEngine(persona=Persona(name="Alex", age=24, gender="m"))
-        self.partner = {"id": "123", "username": "Michael"}
-
-    def test_m_or_f(self):
-        out = self.eng.reply(self.partner, "M or F")
-        self.assertIn("m", out)
-
-    def test_age(self):
-        out = self.eng.reply(self.partner, "age?")
-        self.assertIn("24", out)
-
-    def test_reply_never_empty(self):
-        for text in ("hi", "wanna talk?", "ok boomer", "", "🤔"):
-            self.assertTrue(self.eng.reply(self.partner, text))
-
-    def test_delay_scales_with_length(self):
-        self.assertLess(self.eng.delay_for("hi"), self.eng.delay_for("hello there how are you doing today"))
 
 
 class TestSessionExpiry(unittest.TestCase):
