@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v8: mood dashboards (browser/session)
+
+GUI rewrite: HOME page e 2 ta mood card (LIVE BROWSER / SESSION CHAT) -> QStackedWidget e totally different dashboard per mood. Browser mood: CDP live browser visible, bot start pulls cookies live via pull_and_save, in-bot auto-save task every 60s (cfg browser_autosave), pre-start GUI auto-save timer too. Session mood: option 1 = live browser -> Pull Session, option 2 = old saved session.json headless. Loop settings group per page, synced via apply_engine_all. Max-matches spin dropped (was dead code, LoopConfig has no max_matches). Static audit green, tests 33/33.
 ## 2026-10-10 | v7: persona removed, flow/fixed engine selector
 
 PERSONA puro bad (GUI group, ws_bot/server Persona branch, config example, docs)। Engine selector: flow (SMS detect -> input/output bank matching) | fixed (FixedReplyEngine, configs/fixed_script.txt, opener=line1, per-partner pointer, exhaust -> loop skips match via leave_match)। tests/test_fixed_engine.py 7 tests। Suite 33/33, protocol 24/24, session 7/7।

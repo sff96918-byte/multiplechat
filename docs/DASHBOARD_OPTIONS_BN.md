@@ -4,40 +4,65 @@
 
 ---
 
-## 🖥️ EXE DASHBOARD LAYOUT (উপরে থেকে নিচে)
+## 🏠 MOOD SYSTEM — HOME (v8)
 
-### 📌 SIDEBAR (বাম কলাম)
+EXE চালু করলে প্রথমে **HOME** পেজ — এখানে ২টা MOOD card। **যেটা select করবে, সেই mood-এর সম্পূর্ণ আলাদা dashboard খুলবে** (main dashboard-এর ভিতরেই ২টা mood dashboard)। উপরের `← Home` দিয়ে যেকোনো সময় ফেরা যায়।
 
-| # | Option | কী করে | Config-এ mapping |
-|---|--------|--------|------------------|
-| 1 | **SESSION status label** | ৩ রকম দেখায়: `✓ username` (সবুজ = session valid + verified) / `saved (unverified)` (হলুদ = save হয়েছে কিন্তু verify হয়নি) / `✗ নেই` (লাল = আগে Pull করতে হবে) | `configs/session.json` আছে কিনা + `GET /users/me` verify |
-| 2 | **🚀 Launch Browser & Login** | আসল Chrome/Edge window খোলে (dedicated profile: `data/chrome-profile`, debug port 9222) → chitchat.gg খুলবে → আপনি সেখানে LOGIN করবেন। একবার login থাকলে profile মনে রাখে। CDP already চালু থাকলে attach করে। | session.json লেখে না — শুধু browser চালু |
-| 3 | **💾 Pull Session** | চালু browser থেকে cookies টেনে আনে (CDP `Storage.getCookies` → fail হলে page-level `Network.getAllCookies`) → শুধু `token` + `__Secure-text-session` (chitchat.gg domain) নেয় → `GET /users/me` দিয়ে verify → `configs/session.json` লেখে (permission 0600) | **session.json তৈরি হয় এখানেই** |
-| 4 | **CPU / RAM labels** | আপনার PC-র লাইভ CPU/RAM (2.5s পর পর) | — |
-| 5 | **▶ START** | Bot চালু: আগে Settings auto-save → session.json check → thread-এ asyncio bot → preflight (`GET /users/me`, 401 হলে বাংলায় "SESSION মেয়াদ শেষ" guidance) → WS connect → queue join | — |
-| 6 | **■ STOP** | Bot বন্ধ + `PATCH /match/disconnect` (thik moto leave) + socket close + stats | — |
+| Mood | কী |
+|------|-----|
+| 🌐 **LIVE BROWSER MOOD** | ব্রাউজার চোখের সামনে চলবে — বট লাইভ auto-reply করবে (পুরনো মোডের মতো) + browser-এর **session auto-save** হবে |
+| 🔑 **SESSION CHAT MOOD** | Session পেজ — ২টা অপশন: লাইভ ব্রাউজার থেকে session collect, অথবা পুরনো saved session দিয়ে headless চ্যাট |
 
-### 📌 MAIN PANEL (ডান অংশ, উপরে থেকে)
+---
 
-| # | Group / Option | কী করে | Config key |
-|---|----------------|--------|------------|
-| 7 | **ENGINE combo** | `flow — SMS detect → input/output matching reply` = আপনার পুরনো funnel logic (greeting→age→country→flirty→snap) [DEFAULT] / `fixed — একটা fixed txt ফাইল, line-by-line reply` = পুরনো Fixed SMS মোড | `engine`: `"flow"` বা `"fixed"` |
-| 8 | **Snap** | Snap username (কমা দিয়ে একাধিক দিলে round-robin ঘুরবে)। Reply-র `%username%` placeholder এখান থেকে বসে। লেখা হয় `eva/brain/data/snap_ids.txt`। ⚠️ flow engine-এ এটা অবশ্যই লাগবে | `snap_usernames`: `["name1","name2"]` |
-| 9 | **FIXED SCRIPT** (file + Browse) | শুধু `fixed` engine-এ কাজ করে — txt ফাইলের প্রতি লাইন = একটা reply, ক্রম অনুযায়ী যাবে। opener = ১ম লাইন, প্রতিটা partner SMS-এ পরের লাইন। লাইন ফুরালে bot match skip করে next-এ যায়। `#` = comment | `fixed_file`: `"configs/fixed_script.txt"` |
-| 10 | **Skip idle (sec)** | Partner এত সেকেন্যু চুপ থাকলে আমরা skip করে next-এ যাব (typing করলে থামবে; আপনার নিজের typing echo গোনা হয় না) | `loop.skip_idle_s` (15–600, default 90) |
-| 11 | **Typing indicator** | ON হলে message পাঠানোর আগে `POST .../typing` যাবে (partner-এর screen-এ "typing..." দেখবে — realistic) | `loop.typing_indicator` (true/false) |
-| 12 | **Auto next match** | ON হলে এক match শেষ (partner skip/আমাদের skip) → 2–5s পর আবার queue। OFF হলে এক match শেষে থেমে থাকবে | `loop.auto_next` (true/false) |
-| 13 | **Max matches (0=∞)** | এই সংখ্যক match হলে auto-stop (প্রথম test-এ 1 দিন!) | CLI `--max-matches` এর GUI রূপ |
-| 14 | **💾 Save Settings** | উপরের সব দেখা UI value → `configs/chitchat_bot.json`-এ লেখে (START চাপলেও auto-save হয়) | — |
-| 15 | **CURRENT MATCH** | লাইভ দেখায়: `State` (QUEUING/CHATTING/IDLE/STOPPED/ERROR) + `Partner` (username) + `Flow` (funnel stage + কারণ, যেমন `MIDDLE · ask snap -> ask_snap.txt`) | — |
-| 16 | **STATS** | Matches / Sent / Recv / Skips T,U (তারা/আমরা) / WS in,out (frames) / Uptime — 1s refresh | — |
-| 17 | **LIVE LOG** | সব লগ লাইভ স্ট্রিম: WS handshake, matchUpdate, PARTNER message, US reply (nonce সহ), skip, error — debug-এর প্রধান জায়গা | — |
+## 🖥️ MOOD 1 — 🌐 LIVE BROWSER DASHBOARD
+
+| # | Option | কী করে | Config key |
+|---|--------|--------|------------|
+| 1 | **🚀 Browser খোলো (live)** | আসল Chrome/Edge window খোলে (dedicated profile `data/chrome-profile`, debug port 9222) → chitchat.gg খোলে। এই ব্রাউজারই চোখের সামনে থাকে — বট chat করলে তা ব্রাউজারেও লাইভ দেখা যায় | — |
+| 2 | **💾 Session Save now** | চালু browser থেকে cookies টেনে `configs/session.json`-এ সেভ (CDP `Storage.getCookies` → verify `/users/me`) | session.json |
+| 3 | **☑ Session auto-save (প্রতি 60s)** | ON থাকলে বট চলাকালীন প্রতি 60 সেকেন্ডে লাইভ browser থেকে session রি-সেভ হয় (token rotate হলেও ধরা পড়বে)। বিটি বন্ধ থাকলেও browser page-এ থাকলে 60s পর পর auto-save চেষ্টা হয় | `browser_autosave`: `true`/`false` |
+| 4 | **START (browser mood)** | চাপার সাথে সাথে লাইভ browser থেকে cookies নিয়ে session.json সেভ → বট চালু। **browser খোলা + login থাকতে হবে** | — |
+| 5 | **ENGINE & SNAP / FIXED SCRIPT / LOOP SETTINGS** | নিচে Common sections দেখো (দুই mood-এই একই রকম, sync হয়) | engine/snap_usernames/fixed_file/loop.* |
+
+---
+
+## 🖥️ MOOD 2 — 🔑 SESSION CHAT DASHBOARD (Session পেজে ২টা অপশন)
+
+| # | Option | কী করে | Config key |
+|---|--------|--------|------------|
+| 1 | **🆕 Option 1 — লাইভ ব্রাউজার চালু করে session collect** | `🚀 Browser খোলো` → window-এ chitchat.gg LOGIN করো → `💾 Pull Session` → cookies verify হয়ে সেভ। একবার হলেই profile login মনে রাখে | session.json **তৈরি হয় এখানেই** |
+| 2 | **💾 Option 2 — পুরনো saved session দিয়ে চ্যাট শুরু** | `configs/session.json` আগে থেকেই থাকলে (আগের দিনের/কোনো দিনের) — browser ছাড়াই headless চ্যাট। `🔄 চেক করো` দিয়ে দেখো কে saved আছে (`✓ user: …` সবুজ = verified) | session.json পড়ে |
+| 3 | **START (session mood)** | session.json check → preflight (`GET /users/me`, 401 হলে বাংলায় "SESSION মেয়াদ শেষ" guidance) → WS connect → queue join | — |
+| 4 | **ENGINE & SNAP / FIXED SCRIPT / LOOP SETTINGS** | নিচে Common sections দেখো | engine/snap_usernames/fixed_file/loop.* |
+
+---
+
+## 🧩 COMMON SECTIONS (দুই mood dashboard-এই একই)
+
+| Option | কী করে | Config key |
+|--------|--------|------------|
+| **ENGINE combo** | `flow — SMS detect → input/output matching reply` = funnel logic (greeting→age→country→flirty→snap) [DEFAULT] / `fixed — একটা fixed txt ফাইল, line-by-line reply` = পুরনো Fixed SMS মোড | `engine`: `"flow"` বা `"fixed"` |
+| **Snap** | Snap username (কমা দিলে rotate)। Reply-র `%username%` এখান থেকে বসে। ⚠️ flow engine-এ লাগবেই | `snap_usernames` |
+| **FIXED SCRIPT** | শুধু fixed engine-এ: প্রতি লাইন = একটা reply, opener = ১ম লাইন, প্রতি partner-এর pointer আলাদা, ফুরালে skip। `#` = comment, **Browse…** দিয়ে ফাইল বাছাই | `fixed_file` |
+| **LOOP SETTINGS — Skip idle (sec)** | Partner এত সেকেন্ড চুপ থাকলে skip (typing করলে থামবে) | `loop.skip_idle_s` (15–600, default 90) |
+| **LOOP SETTINGS — Typing indicator** | পাঠানোর আগে `POST .../typing` — partner-এর স্ক্রিনে "typing..." দেখবে | `loop.typing_indicator` |
+| **LOOP SETTINGS — Auto next match** | Match শেষে 2–5s পর আবার queue | `loop.auto_next` |
+| **STATS** | Matches / Sent / Recv / Skips / WS frames / Uptime — লাইভ (1s) | — |
+| **CURRENT MATCH** | এখন কার সাথে চ্যাট, flow engine হলে কোন stage-এ | — |
+| **LIVE LOG** | প্রতিটা কাজের লগ (মিনিট-বাই-মিনিট) | — |
+| **CPU / RAM** | লাইভ সিস্টেম মিটার | — |
+
+> 💡 **দুই mood-এর Settings sync হয়** — যেকোনো এক পেজে বদলালে (START চাপলে auto-save হয়) অন্য পেজেও সেটাই দেখাবে।
+
+---
 
 ### 📁 CONFIG FILE (`configs/chitchat_bot.json`) — GUI-র বাইরের সেটিংস
 
 | Key | মানে | Default |
 |-----|------|---------|
 | `engine` | flow বা fixed | `"flow"` |
+| `browser_autosave` | browser mood-এর session auto-save on/off | `true` |
 | `snap_usernames` | snap pool (rotate) | — |
 | `fixed_file` | fixed engine-এর script txt-এর path | `"configs/fixed_script.txt"` |
 | `loop.*` | উপরের 10–13 + `next_delay_s:[2,5]`, `min_reply_delay_s:1.0`, `opener_delay_s`, `queue_timeout_s:120`, `skip_after_msgs:25` | example অনুযায়ী |

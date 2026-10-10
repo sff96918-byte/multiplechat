@@ -2,6 +2,9 @@
 
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
 
+## 2026-10-10 | v8 mood architecture
+
+Mood = separate dashboard pages in one QStackedWidget (HOME + browser + session). Qt constraint: same widget cannot be in two layouts -> per-page engine/loop widget sets kept in sync via collect_engine/apply_engine_all. Browser mood bot still uses WS transport (captured protocol); visible browser shows chats live via site's own socket -- no new protocol guessing.
 ## 2026-10-10 | v7 engine model: flow|fixed only
 
 Reply engine options final: flow = legacy funnel (input/output txt banks, snap_usernames) ar fixed = fixed txt line-by-line (user-er purano Fixed SMS mode)। Persona/template engine UI+config theke sorano; eva/replies.py module rakha hoyeche shudhu test compat-er jonno।

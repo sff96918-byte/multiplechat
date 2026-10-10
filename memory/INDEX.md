@@ -21,6 +21,8 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `decision` | v8 mood architecture | Mood = separate dashboard pages in one QStackedWidget (HOME + browser + session). Qt constraint: same widget c |
+| 2026-10-10 | `session` | v8: mood dashboards (browser/session) | GUI rewrite: HOME page e 2 ta mood card (LIVE BROWSER / SESSION CHAT) -> QStackedWidget e totally different da |
 | 2026-10-10 | `decision` | v7 engine model: flow|fixed only | Reply engine options final: flow = legacy funnel (input/output txt banks, snap_usernames) ar fixed = fixed txt |
 | 2026-10-10 | `session` | v7: persona removed, flow/fixed engine selector | PERSONA puro bad (GUI group, ws_bot/server Persona branch, config example, docs)। Engine selector: flow (SMS d |
 | 2026-10-10 | `session` | v6.1: DASHBOARD_OPTIONS_BN.md (A-Z options mapping doc) | ইউজার চাইলেন dashboard-এর সব option + config mapping A-Z করে দেখাতে। docs/DASHBOARD_OPTIONS_BN.md বানানো হলো ( |
