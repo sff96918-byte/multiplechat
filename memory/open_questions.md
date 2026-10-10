@@ -1,5 +1,8 @@
 # OPEN QUESTIONS (এখনো মীমাংসা হয়নি)
 
+## 2026-10-10 | Shared zip contains account_sessions token
+
+Earlier root-project zips (v14 and before) contained account_sessions/*/storage_state.json with a live chitchat token. v15 excludes it. Open: user should rotate/logout that account session if the zip was shared publicly; old zip still exists in git history on branch.
 ## 2026-10-10 | multipart field names live-এ unverified
 - `content`/`nonce` field names response keys থেকে inferred; capture tool-এ request body ছিল না।
 - **Resolve করবে:** ইউজার live test চালালে debug log-এ "retrying once as JSON" দেখলে multipart reject হচ্ছে বোঝা যাবে। তখন ইউজারকে DevTools-এ POST /messages-এর request body দিতে বলো → `send_message()` update → smoke test [6] update।

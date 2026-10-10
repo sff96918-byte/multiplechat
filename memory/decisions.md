@@ -2,6 +2,9 @@
 
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
 
+## 2026-10-10 | AGENTS.md + skills live inside root project zip, not only in repo
+
+Reason: user runs the root project eva-full-project on Windows; agents working on the deliverable must see its rules. Repo eva/ is R&D workspace and only points to root project. Alternative considered: put skills only in repo - rejected because deliverable zip would lack them.
 ## 2026-10-10 | v10: report share-safe rule
 
 Debug report NEVER contains session.json content (only exists/has_token booleans + cookie NAMES) and WS frame previews scrub socket cookie values. mask_secrets masks any key containing token/cookie/password/authorization/secret. Regression test asserts secret value absent from report text.

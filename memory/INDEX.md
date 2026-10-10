@@ -21,6 +21,9 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `question` | Shared zip contains account_sessions token | Earlier root-project zips (v14 and before) contained account_sessions/*/storage_state.json with a live chitcha |
+| 2026-10-10 | `decision` | AGENTS.md + skills live inside root project zip, not only in repo | Reason: user runs the root project eva-full-project on Windows; agents working on the deliverable must see its |
+| 2026-10-10 | `session` | v15: root project AGENTS.md + skills/ added (A-Z guide for any agent) | Root project eva-full-project got rewritten AGENTS.md (Bangla, project map, hard rules, verify gate, delivery  |
 | 2026-10-10 | `session` | v14 FINAL: session chat deeply integrated into user's root project | Fresh updatec zip -> /tmp/orig/eva-full-project. Removed approach: run_session_bot.bat/session_mode/SESSION_MO |
 | 2026-10-10 | `session` | v13: session mode added to user's root project (updatec zip) | Downloaded raju vbygyuiythh/updatec picccccccfull-project.zip (9,653,190 B, sha 5a226beb...) via api.github.co |
 | 2026-10-10 | `session` | v12: EXE error fix (python314.dll) | User hit PyInstaller bootloader error running a stale broken exe from previous build on their PC (build/EVA_Da |
