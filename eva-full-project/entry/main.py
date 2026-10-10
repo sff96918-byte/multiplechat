@@ -2155,6 +2155,13 @@ def main():
             sys.stdout = open(os.devnull, 'w')
             sys.stderr = sys.stdout
 
+    # v21: every uncaught error (GUI + worker threads) -> data/logs/crash.log (redacted)
+    try:
+        from core.diagnostics import install_excepthooks
+        install_excepthooks()
+    except Exception:
+        pass
+
     parser = argparse.ArgumentParser(description='EVA Bot - Browser Automation Dashboard')
     parser.add_argument('-d', '--development', action='store_true',
                         help='Run in development mode (shows browser windows)')

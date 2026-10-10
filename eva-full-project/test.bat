@@ -41,6 +41,13 @@ if errorlevel 1 (
   exit /b 1
 )
 
+echo ---- diagnostics (crash log / redaction / doctor) ----
+"%PYTHONBIN%" test_diagnostics.py
+if errorlevel 1 (
+  echo [ERROR] diagnostics test failed.
+  pause
+  exit /b 1
+)
 echo.
 echo ALL AUTOMATED CHECKS PASSED.
 echo.

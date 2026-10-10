@@ -40,3 +40,8 @@ description: যেকোনো error, traceback, crash, EXE/DLL লোড ব�
 ## 5. Windows EXE/DLL সমস্যা — বিশেষ নোট
 - `python314.dll` ধরনের error = বর্তমান কোডের নয়, পুরনো build artefact বা ভুল Python।
 - সমাধান: পুরনো build folder মুছে নতুন করে build; অথবা (ইউজার যদি EXE না চায়) `run.vbs` (windowless) চালাতে বলো।
+
+## First step (v21)
+- ইউজারকে বলো: `python -m tools.doctor` চালাতে → `data/logs/doctor_report.txt` দেখো।
+- `data/logs/crash.log` — সব uncaught error (main + worker thread), token/email masked।
+- `FAIL` লাইন ধরে ঠিক করো; `libGL`/Qt ইস্যু sandbox-এ থাকে, ইউজারের Windows-এ `pip install --force-reinstall PyQt6`।

@@ -180,6 +180,7 @@ python test_live.py         # funnel state machine (44 checks)
 python test_fuzz.py         # random input, state valid (4 checks)
 python test_flow.py         # flow ও branch (126 checks)
 python demo_chat.py         # scripted stranger → END
+python test_diagnostics.py  # crash log + redaction + doctor (13 checks)
 ```
 Windows-এ একসাথে: `test.bat` (matcher + live + fuzz + demo)।
 
@@ -208,6 +209,8 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
 
 ## 7. ইউজারের সমস্যা এলে
 
+0. প্রথমে ইউজারকে চালাতে বলো: `python -m tools.doctor` (project folder থেকে) — report সেভ হয় `data/logs/doctor_report.txt`-এ।
+   আর `data/logs/crash.log` (সব uncaught error, GUI ও worker thread থেকে, token masked)।
 1. আগে `skills/fix-error/SKILL.md` অনুযায়ী log চাও (`data/logs/`, Dashboard-এর LIVE LOG panel,
    বা `[session]` লাইন)।
 2. সমস্যা কোন mood-এ — LIVE BROWSER নাকি SESSION CHAT — আগে নির্ধারণ করো।

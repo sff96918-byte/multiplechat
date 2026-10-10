@@ -1,5 +1,8 @@
 # OPEN QUESTIONS (এখনো মীমাংসা হয়নি)
 
+## 2026-10-10 | GUI runtime test
+
+sandbox-এ libGL.so.1 নেই, তাই QtWidgets/entry.main আসল চালানো যায়নি। ইউজারের Windows-এ python -m tools.doctor + run.vbs/run_console.bat দিয়ে যাচাই দরকার; crash.log দেখলে পাঠাতে বলো।
 ## 2026-10-10 | Browser rest
 
 RESOLVED v21: বন্ধ করা হয়েছে (ইউজার নির্দেশ).

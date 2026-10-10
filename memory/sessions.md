@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v22: debug pass — crash log, redaction, doctor, final zip
+
+core/diagnostics.py (crash.log + redact), entry/main.py main() installs excepthooks (main+thread), tools/doctor.py (env/import/config/engine/session/logs check, report data/logs/doctor_report.txt), test_diagnostics.py (13 PASS) + test.bat + AGENTS gate + fix-error skill. Real PyQt6 installed but GUI widgets blocked by missing libGL in sandbox (UNVERIFIED GUI). Gate all PASS. Zip picccccccfull-project-v22.zip (188 files, 0 forbidden).
 ## 2026-10-10 | v21: browser rest OFF + eva_config.json delete
 
 Browser rest বন্ধ: browser/browser_automation.py _schedule_next_rest -> _next_rest_at=None; _maybe_take_rest -> return is_running (wait নেই; test PASS). Rest config key সরানো: config_loader defaults/pairs, data/config.json. cli_runner: Rest line সরানো; 'Chat Timeout 30s' hard-code -> silence timeout. config/eva_config.json মুছে; README + project AGENTS mapping আপডেট. Tests: matcher, live 44/44, fuzz 4/4, flow 126/0, demo, settings stub test, pytest 38, socket 24/24, session 7/7, capture selftest — all PASS. Zip: picccccccfull-project-v21.zip (v20 zip রাখা হয়েছে).

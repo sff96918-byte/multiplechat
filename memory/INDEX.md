@@ -21,6 +21,8 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `question` | GUI runtime test | sandbox-এ libGL.so.1 নেই, তাই QtWidgets/entry.main আসল চালানো যায়নি। ইউজারের Windows-এ python -m tools.doctor |
+| 2026-10-10 | `session` | v22: debug pass — crash log, redaction, doctor, final zip | core/diagnostics.py (crash.log + redact), entry/main.py main() installs excepthooks (main+thread), tools/docto |
 | 2026-10-10 | `decision` | Autonomous engineer loop AGENTS.md-এ যোগ | ইউজার চেয়েছে: Analyze→Plan→TDD→Execute→Debug→Verify→Output loop প্রতিটা কাজে. System prompt agent নিজে বদলাতে |
 | 2026-10-10 | `question` | Browser rest | RESOLVED v21: বন্ধ করা হয়েছে (ইউজার নির্দেশ). |
 | 2026-10-10 | `question` | config/eva_config.json মুছে ফেলা হয়েছে | ইউজার নির্দেশে delete করা হয়েছে (কোনো code পড়ত না). |
