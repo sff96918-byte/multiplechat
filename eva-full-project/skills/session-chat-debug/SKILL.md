@@ -56,3 +56,9 @@ Live (chitchat.gg) পরীক্ষা শুধু ইউজারের PC-�
 ## ইউজারের কাছে কী চাইবে
 GUI-র **Logs** page বা `data/logs/gui_console.log` থেকে `[session]` লাইনগুলো (token ছাড়া)।
 Token-সহ কোনো ফাইল/লাইন চাইবে না।
+
+## Browserless flow (v29)
+1. Token সেভ: `python -m core.session_chat --save` — hidden prompt, `/users/me` দিয়ে যাচাই, তারপর `configs/session.json` (0600)। 401 হলে নতুন token নাও।
+2. Live chat (GUI ছাড়া): `python -m core.session_chat --run [--max-matches N]`। PyQt6 লাগে না।
+3. Token কোথাও print বা log করো না; শুধু user নাম দেখাও।
+4. Socket drop-এর পরে match recovery এখনো নেই — live test-এ দেখলে সেটা জানাও (capture লাগবে)।

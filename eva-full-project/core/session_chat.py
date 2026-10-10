@@ -23,7 +23,13 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from PyQt6.QtCore import QThread, pyqtSignal
+try:
+    from PyQt6.QtCore import QThread, pyqtSignal
+except ImportError:  # browserless CLI (--save / --run) works without the GUI library
+    QThread = object  # type: ignore[assignment,misc]
+
+    def pyqtSignal(*_args, **_kwargs):  # type: ignore[no-redef]
+        return None
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -343,26 +349,81 @@ class SessionChatWorker(QThread):
                                  f"recv={st.get('messages_received', 0)}")
 
 
-# ----------------------------------------------------------------- CLI (debug)
+# ----------------------------------------------------------------- CLI
+SESSION_FILE = ROOT / "configs" / "session.json"   # .gitignore-এ আছে, zip-এ যায় না
+
+
+def save_session_file(token: str, user_agent: str = "") -> Path:
+    """acc token configs/session.json-এ লেখে (atomic, মান কোথাও print হয় না)।"""
+    SESSION_FILE.parent.mkdir(parents=True, exist_ok=True)
+    data = {
+        "cookies": {"token": token.strip()},
+        "user_agent": user_agent or FALLBACK_UA,
+        "saved_by": "core.session_chat --save",
+    }
+    tmp = SESSION_FILE.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    try:
+        tmp.chmod(0o600)   # Windows-এ no-op, Linux/macOS-এ শুধু মালিক পড়তে পারবে
+    except OSError:
+        pass
+    tmp.replace(SESSION_FILE)
+    return SESSION_FILE
+
+
 def _cli(argv: Optional[List[str]] = None) -> int:
     import argparse
-    ap = argparse.ArgumentParser(description="Session chat debug runner (GUI-র বাইরে টেস্ট)")
-    ap.add_argument("--list", action="store_true")
-    ap.add_argument("--token", default="")
+    import getpass
+    ap = argparse.ArgumentParser(
+        description="Browserless session chat: token save + headless live chat (GUI-র বাইরে)")
+    ap.add_argument("--list", action="store_true", help="saved session source দেখাও")
+    ap.add_argument("--token", default="", help="acc token (না দিলে --save এ hidden prompt)")
+    ap.add_argument("--save", action="store_true",
+                    help="token যাচাই করে configs/session.json-এ সেভ করো")
+    ap.add_argument("--run", action="store_true",
+                    help="--save-এর পরেও live chat চালাও (ডিফল্ট: --save হলে থামে)")
     ap.add_argument("--max-matches", type=int, default=0)
     ap.add_argument("--debug", action="store_true")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO,
                         format="%(asctime)s %(levelname)-7s %(name)s: %(message)s",
                         datefmt="%H:%M:%S")
+
+    if args.save:
+        token = args.token or getpass.getpass("acc token পেস্ট করো (দেখাবে না): ")
+        if not token.strip():
+            print("[X] token খালি")
+            return 2
+
+        async def _check() -> dict:
+            api = ChitchatApi({"token": token.strip()}, user_agent=FALLBACK_UA)
+            try:
+                return await api.me()
+            finally:
+                await api.close()
+        try:
+            me = asyncio.run(_check())
+        except SessionExpiredError:
+            print("[X] token কাজ করছে না (401) — নতুন token নাও")
+            return 2
+        path = save_session_file(token)
+        print(f"[ok] token valid — user: {me.get('username', '?')} (id={me.get('id', '?')})")
+        print(f"[ok] সেভ হয়েছে: {path}")
+        if not args.run:
+            return 0
+
     sources = discover_session_sources()
     print(f"{len(sources)}ta session source:")
     for i, s in enumerate(sources, 1):
         print(f"  {i}. {s['label']}")
     if args.list:
         return 0
-    cookies, ua, label = resolve_session(token=args.token)
-    print(f"[i] session: {label} (token: …{cookies.get('token', '')[-6:]})")
+    try:
+        cookies, ua, label = resolve_session(token=args.token)
+    except RuntimeError as exc:
+        print(f"[X] {exc}")
+        return 2
+    print(f"[i] session: {label}")
 
     engine = _ChatRuleEngine()
     print("[i] engine check: opener =", repr(engine.opener({"id": "cli-test"}))[:80])
@@ -370,12 +431,14 @@ def _cli(argv: Optional[List[str]] = None) -> int:
 
     async def _go():
         api = ChitchatApi(cookies, user_agent=ua)
-        me = await api.me()
-        print(f"[ok] logged in as {me.get('username')}")
-        loop = WsChatLoop(api, ChitchatSocket(cookies, user_agent=ua), engine, _session_loop_config())
-        await loop.start()
-        print("[ok] LIVE — Ctrl+C to stop")
+        loop = None
         try:
+            me = await api.me()
+            print(f"[ok] logged in as {me.get('username')}")
+            loop = WsChatLoop(api, ChitchatSocket(cookies, user_agent=ua), engine,
+                              _session_loop_config())
+            await loop.start()   # v28: start() ও try-এর ভিতরে — ব্যর্থ হলেও API session বন্ধ হবে
+            print("[ok] LIVE — Ctrl+C to stop")
             while loop._running:
                 await asyncio.sleep(5)
                 st = loop.stats.snapshot()
@@ -384,13 +447,16 @@ def _cli(argv: Optional[List[str]] = None) -> int:
                 if args.max_matches and st["matches"] >= args.max_matches:
                     await loop.stop("max-matches")
         finally:
-            await loop.stop("exit")
+            if loop is not None:
+                await loop.stop("exit")
             await api.close()
     try:
         asyncio.run(_go())
     except SessionExpiredError:
-        print("[X] SESSION মেয়াদ শেষ (401) — browser mode-এ আবার login করো")
+        print("[X] SESSION মেয়াদ শেষ (401) — নতুন token দিয়ে --save করো")
         return 2
+    except KeyboardInterrupt:
+        print("\n[i] থামানো হয়েছে")
     return 0
 
 

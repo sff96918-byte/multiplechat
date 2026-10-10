@@ -208,6 +208,8 @@ Session chat বদলালে অতিরিক্ত:
 ```bash
 QT_QPA_PLATFORM=offscreen python -m core.session_chat --list   # source discovery
 QT_QPA_PLATFORM=offscreen python -m core.session_chat --help   # CLI ঠিক আছে কি
+python -m core.session_chat --save                    # token যাচাই (hidden prompt) → configs/session.json
+python -m core.session_chat --run --max-matches 3     # browserless live chat (GUI লাগে না)
 ```
 (network ছাড়া live connect ব্যর্থ হওয়া স্বাভাবিক — কিন্তু error পরিষ্কার হতে হবে, crash নয়।)
 
@@ -287,6 +289,13 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
     d. Dead code (vulture ≥60%): e.g. `chat/rules.py` `_wait_step_reply`, `_first_sms_reply`, `_middle_reply`; `browser/*` helpers; `ws` diagnostics `mark_read`, `moderation_standing`. Not removed (no approval for removal of non-trivial code).
   - **Sandbox limits:** no GUI (libGL), no Windows, no live chitchat.gg, no Playwright browser. Session path verified with synthetic fakes and the real `ChatRuleBot` engine only.
   - Gate: 20/20 pass, 1 optional skip (gitleaks). Coverage of `chat/rules.py`: 57% (unchanged).
+- **v29 (browserless session chat — goal: saved session → WebSocket chat, no browser):**
+  - `core/session_chat.py`: PyQt6 import optional → `--save` / `--run` CLI চলে GUI library ছাড়া (`test_session_save` PyQt6 block করে check করে)।
+  - `--save`: token `GET /users/me` দিয়ে যাচাই করে `configs/session.json` লেখে (atomic, mode 0600)। 401 হলে কিছু লেখে না। Token কোথাও print হয় না; আগে শেষ 6 অক্ষর দেখাত — বন্ধ।
+  - `--run`: `WsChatLoop.start()` এখন try-এর ভিতরে (আগে ব্যর্থ হলে API session বন্ধ হতো না)।
+  - Gate: `test_session_save` (12 check) যোগ। `project.map.json` tests-এ যোগ।
+  - **Known limit (not changed):** socket reconnect হলে chat loop জানে না; match server-side বন্ধ হয়ে গেলে bot silence timeout (90 s) পর্যন্ত অপেক্ষা করে। `GET /match/active`-এ match-এর তথ্য আছে কি না capture-এ নিশ্চিত নয় — তাই recovery যোগ করা হয়নি।
+  - **Sandbox limit:** chitchat.gg-তে live connect হয় না; server response fake দিয়ে test করা হয়েছে।
 - **v28 (thread_manager review, browser-mode orchestration, lines 1–1302 read):**
   - **FIXED:** `entry/thread_manager.py::stop_all_threads` built the "still closing" list by iterating the live `self.workers` dict on the shutdown thread, while the GUI thread removes finished workers. A concurrent removal could raise "dictionary changed size during iteration" and skip the force-cleanup block. Now iterates a `list(...)` snapshot. Reproduced the failure mode with a dict-mutation probe; the live thread path itself needs PyQt6 and was not run here.
   - **Lint only:** unused args/loop vars renamed (`cli_runner` signal handler, `test_ws_transport` stub, `thread_manager` loop).

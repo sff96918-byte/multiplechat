@@ -38,6 +38,7 @@ STEPS = [
     ("test_ws_transport", [PY, "test_ws_transport.py"]),
     ("test_rules_characterization", [PY, "test_rules_characterization.py"]),
     ("test_config_loader", [PY, "test_config_loader.py"]),
+    ("test_session_save", [PY, "test_session_save.py"]),
     ("session_chat --list", [PY, "-m", "core.session_chat", "--list"]),
     ("gui import (stubbed)", [PY, "tools/gui_import_check.py"]),
     ("secret scan selftest", [PY, "tools/secret_scan.py", "--selftest"]),
