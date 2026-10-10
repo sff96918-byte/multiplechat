@@ -107,8 +107,8 @@ class BotManager:
             engine = FixedReplyEngine(script_path=cfg.get("fixed_file"),
                                       timing=cfg.get("timing"))
         else:
-            from ..brain.flow_reply_engine import FlowReplyEngine
-            engine = FlowReplyEngine(snap_usernames=cfg.get("snap_usernames"),
+            from ..brain.flow_reply_engine import FlowReplyEngine, resolve_snap_usernames
+            engine = FlowReplyEngine(snap_usernames=resolve_snap_usernames(cfg),
                                      timing=cfg.get("timing"))
         loop_cfg = LoopConfig(**{k: tuple(v) if isinstance(v, list) else v
                                  for k, v in (cfg.get("loop") or {}).items()})

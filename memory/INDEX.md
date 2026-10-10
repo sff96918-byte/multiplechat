@@ -21,6 +21,8 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `decision` | v9: settings ek jaygay (BOT SETUP) | Architecture answer: mood dashboards e shudhu mood-specific controls (browser/session/START); shared settings  |
+| 2026-10-10 | `session` | v9: shared BOT SETUP page + snap.txt support | User asked: engine/fixed-sms-txt/snap settings main dashboard e na ki each mood e? Answer implemented: ekta sh |
 | 2026-10-10 | `decision` | v8 mood architecture | Mood = separate dashboard pages in one QStackedWidget (HOME + browser + session). Qt constraint: same widget c |
 | 2026-10-10 | `session` | v8: mood dashboards (browser/session) | GUI rewrite: HOME page e 2 ta mood card (LIVE BROWSER / SESSION CHAT) -> QStackedWidget e totally different da |
 | 2026-10-10 | `decision` | v7 engine model: flow|fixed only | Reply engine options final: flow = legacy funnel (input/output txt banks, snap_usernames) ar fixed = fixed txt |

@@ -8,6 +8,9 @@ HOME-এ ২টা MOOD — যেটা select করবে সেটার জ
                           (1) লাইভ ব্রাউজার চালু করে session collect
                           (2) পুরনো saved session দিয়ে চ্যাট শুরু
 
+দুই mood dashboard থেকেই ⚙️ BOT SETUP খোলা যায় — engine, fixed sms txt,
+snap.txt ফাইল ইত্যাদি এক জায়গায় সেট হয় (দুই mood-ই একই config পড়ে)।
+
 Runs standalone:   python -m eva.gui.dashboard
 Frozen exe:        built by build_exe.bat (PyInstaller, EVA_Dashboard.spec)
 """
@@ -18,6 +21,7 @@ import asyncio
 import json
 import logging
 import queue
+import subprocess
 import sys
 import threading
 import time
@@ -87,6 +91,7 @@ QPushButton#stopBtn {{
 }}
 QPushButton#stopBtn:hover {{ background-color: #ff7070; }}
 QPushButton#launchBtn {{ border-color: {C_ACCENT}; color: {C_ACCENT}; }}
+QPushButton#setupBtn {{ border-color: {C_BLUE}; color: {C_BLUE}; font-weight: 700; }}
 QPushButton#moodCard {{
     background-color: {C_PANEL}; border: 2px solid {C_BORDER};
     border-radius: 18px; padding: 24px; text-align: left;
@@ -106,13 +111,17 @@ QCheckBox::indicator {{
     border: 1px solid {C_BORDER}; background: #1A2130;
 }}
 QCheckBox::indicator:checked {{ background: {C_ACCENT}; border-color: {C_ACCENT}; }}
-QFrame#sidebar {{ background: {C_PANEL}; border-right: 1px solid {C_BORDER}; }}
 QLabel#brand {{ font-size: 26px; font-weight: 800; }}
 QLabel#hdr {{ font-size: 22px; font-weight: 700; }}
 QLabel#dim {{ color: {C_TEXT_DIM}; font-size: 12px; }}
 QLabel#statVal {{ font-size: 17px; font-weight: 700; }}
 QLabel#statLbl {{ color: {C_TEXT_DIM}; font-size: 11px; }}
 QLabel#homeSub {{ color: {C_TEXT_DIM}; font-size: 14px; }}
+QLabel#engSum {{
+    color: {C_BLUE}; font-size: 12px; font-weight: 600;
+    background: {C_PANEL}; border: 1px solid {C_BORDER};
+    border-radius: 8px; padding: 6px 10px;
+}}
 """
 
 
@@ -168,9 +177,11 @@ class BotWorker:
             if "token" not in cookies:
                 raise RuntimeError("session.json-এ cookies.token নেই — আবার Pull Session করো")
             ua = session.get("user_agent") or ""
-        snap = [s.strip() for s in (cfg.get("snap_usernames") or []) if s and s.strip()]
-        if cfg.get("engine", "flow") == "flow" and not snap:
-            raise RuntimeError("Flow engine-এর জন্য Snap Username দাও (Engine & Snap সেকশন)")
+        if (cfg.get("engine") or "flow") == "flow":
+            from ..brain.flow_reply_engine import resolve_snap_usernames
+            if not resolve_snap_usernames(cfg):
+                raise RuntimeError("Flow engine-এর জন্য Snap দরকার — BOT SETUP-এ snap.txt "
+                                   "ফাইল বা Snap username দাও")
 
         def runner() -> None:
             self.loop = asyncio.new_event_loop()
@@ -207,7 +218,8 @@ class BotWorker:
         session = json.loads(mgr.session_path.read_text(encoding="utf-8"))
         cookies = session.get("cookies") or {}
         ua = session.get("user_agent") or ""
-        await self._run(cfg, cookies, ua, on_ready, auto_save=bool(cfg.get("browser_autosave", True)))
+        await self._run(cfg, cookies, ua, on_ready,
+                        auto_save=bool(cfg.get("browser_autosave", True)))
 
     @staticmethod
     async def _auto_save_session(interval_s: int = 60) -> None:
@@ -244,8 +256,9 @@ class BotWorker:
             engine = FixedReplyEngine(script_path=cfg.get("fixed_file"),
                                       timing=cfg.get("timing"))
         else:
-            from ..brain.flow_reply_engine import FlowReplyEngine
-            engine = FlowReplyEngine(snap_usernames=cfg.get("snap_usernames"),
+            from ..brain.flow_reply_engine import (FlowReplyEngine,
+                                                   resolve_snap_usernames)
+            engine = FlowReplyEngine(snap_usernames=resolve_snap_usernames(cfg),
                                      timing=cfg.get("timing"))
 
         self.chat_loop = WsChatLoop(self.api, socket, engine, loop_cfg)
@@ -371,6 +384,22 @@ def _session_ua() -> str:
         return ""
 
 
+def open_in_editor(path: str) -> None:
+    """txt ফাইল ডিফল্ট এডিটরে খোলা (Windows: os.startfile)।"""
+    p = Path(path)
+    if not p.is_absolute():
+        p = ROOT / p
+    if not p.exists():
+        raise FileNotFoundError(f"{p} নেই — আগে Save করো বা ফাইলটা বানাও")
+    if sys.platform.startswith("win"):
+        import os
+        os.startfile(str(p))  # noqa: S606
+    elif sys.platform == "darwin":
+        subprocess.Popen(["open", str(p)])
+    else:
+        subprocess.Popen(["xdg-open", str(p)])
+
+
 # ================================================================ GUI
 
 def run_gui() -> int:
@@ -378,8 +407,8 @@ def run_gui() -> int:
     from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                                  QHBoxLayout, QGridLayout, QPushButton, QTextEdit,
                                  QLabel, QGroupBox, QCheckBox, QComboBox, QFrame,
-                                 QLineEdit, QSpinBox, QDoubleSpinBox, QMessageBox,
-                                 QFileDialog, QStackedWidget)
+                                 QLineEdit, QSpinBox, QMessageBox, QFileDialog,
+                                 QStackedWidget)
 
     log_q: "queue.Queue[str]" = queue.Queue()
     qh = QueueLogHandler(log_q)
@@ -403,99 +432,210 @@ def run_gui() -> int:
 
     worker = BotWorker()
     status_colors = {"ok": C_GREEN, "warn": C_AMBER, "err": C_RED, "info": C_BLUE}
+    pages: Dict[str, dict] = {}
+    setup_return_page = {"key": "browser"}
 
-    # shared engine-widgets per page (Qt-তে এক widget দুই parent-এ থাকতে পারে না)
-    engine_sets: Dict[str, dict] = {}
+    def goto(page_key: str) -> None:
+        stacked.setCurrentWidget(pages[page_key]["widget"])
+        if page_key in ("browser", "session"):
+            paint_engine_summary()
 
-    def make_engine_set() -> dict:
-        w: dict = {}
-        row = QHBoxLayout()
-        eng_group = QGroupBox("ENGINE & SNAP")
-        eg = QGridLayout(eng_group)
-        w["engine_combo"] = QComboBox()
-        w["engine_combo"].addItems([
-            "flow — SMS detect → input/output matching reply (funnel logic)",
-            "fixed — একটা fixed txt ফাইল, line-by-line reply",
-        ])
-        eg.addWidget(QLabel("Engine:"), 0, 0)
-        eg.addWidget(w["engine_combo"], 0, 1, 1, 3)
-        w["snap_edit"] = QLineEdit()
-        w["snap_edit"].setPlaceholderText("snap username (%username% এ যাবে, কমা দিলে rotate)")
-        eg.addWidget(QLabel("Snap:"), 1, 0)
-        eg.addWidget(w["snap_edit"], 1, 1, 1, 3)
-        w["group"] = eng_group
-        row.addWidget(eng_group, 2)
+    # ---------------------------------------------- shared widgets (BOT SETUP)
+    eng_group = QGroupBox("ENGINE — কীভাবে reply হবে")
+    eg = QGridLayout(eng_group)
+    engine_combo = QComboBox()
+    engine_combo.addItems([
+        "flow — SMS detect → input/output matching reply (funnel logic)",
+        "fixed — একটা fixed txt ফাইল, line-by-line reply",
+    ])
+    eg.addWidget(QLabel("Engine:"), 0, 0)
+    eg.addWidget(engine_combo, 0, 1, 1, 4)
+    engine_hint = QLabel("flow = তোমার funnel logic (greeting→age→country→flirty→snap) • "
+                         "fixed = তোমার পুরনো Fixed SMS মোড (প্রতি SMS-এ পরের লাইন)")
+    engine_hint.setObjectName("dim")
+    engine_hint.setWordWrap(True)
+    eg.addWidget(engine_hint, 1, 0, 1, 5)
 
-        fixed_group = QGroupBox("FIXED SCRIPT (engine=fixed হলে)")
-        fg = QGridLayout(fixed_group)
-        w["fixed_edit"] = QLineEdit()
-        w["fixed_edit"].setPlaceholderText("configs/fixed_script.txt (প্রতি লাইনে একটা reply, ক্রম অনুযায়ী)")
-        btn_browse = QPushButton("Browse…")
-        fg.addWidget(QLabel("File:"), 0, 0)
-        fg.addWidget(w["fixed_edit"], 0, 1)
-        fg.addWidget(btn_browse, 0, 2)
-        fixed_hint = QLabel("line শেষ হলে bot match skip করে next-এ যাবে")
-        fixed_hint.setObjectName("dim")
-        fixed_hint.setWordWrap(True)
-        fg.addWidget(fixed_hint, 1, 0, 1, 3)
+    snap_group = QGroupBox("SNAP — %username% pool (flow engine)")
+    sg_grid = QGridLayout(snap_group)
+    snap_edit = QLineEdit()
+    snap_edit.setPlaceholderText("snap username কমা দিয়ে (যেমন: name1, name2)")
+    snapfile_edit = QLineEdit()
+    snapfile_edit.setPlaceholderText("configs/snap.txt (optional — প্রতি লাইনে একটা username)")
+    btn_browse_snapfile = QPushButton("Browse…")
+    snap_hint = QLabel("snap.txt ফাইল দিলে সেটাই ব্যবহার হবে (priority বেশি) — "
+                       "configs/snap.txt.example দেখো")
+    snap_hint.setObjectName("dim")
+    snap_hint.setWordWrap(True)
+    snap_status = QLabel("")
+    snap_status.setObjectName("dim")
+    sg_grid.addWidget(QLabel("Usernames:"), 0, 0)
+    sg_grid.addWidget(snap_edit, 0, 1, 1, 3)
+    sg_grid.addWidget(QLabel("Snap file:"), 1, 0)
+    sg_grid.addWidget(snapfile_edit, 1, 1, 1, 2)
+    sg_grid.addWidget(btn_browse_snapfile, 1, 3)
+    sg_grid.addWidget(snap_hint, 2, 0, 1, 4)
+    sg_grid.addWidget(snap_status, 3, 0, 1, 4)
 
-        def browse_fixed() -> None:
-            path, _ = QFileDialog.getOpenFileName(win, "Fixed script বাছাই করো", "",
-                                                  "Text files (*.txt);;All files (*)")
-            if path:
-                w["fixed_edit"].setText(path)
-        btn_browse.clicked.connect(browse_fixed)
-        w["fixed_group"] = fixed_group
-        row.addWidget(fixed_group, 1)
-        w["row"] = row
+    fixed_group = QGroupBox("FIXED SMS TXT — fixed engine-এর script")
+    fg = QGridLayout(fixed_group)
+    fixed_edit = QLineEdit()
+    fixed_edit.setPlaceholderText("configs/fixed_script.txt (প্রতি লাইনে একটা reply, ক্রম অনুযায়ী)")
+    btn_browse_fixed = QPushButton("Browse…")
+    btn_open_fixed = QPushButton("📖 এডিটরে খোলো")
+    fixed_hint = QLabel("opener = ১ম লাইন • প্রতিটা partner SMS-এ পরের লাইন • ফুরালে skip • '#'=comment")
+    fixed_hint.setObjectName("dim")
+    fixed_hint.setWordWrap(True)
+    fixed_preview = QLabel("—")
+    fixed_preview.setObjectName("dim")
+    fixed_preview.setWordWrap(True)
+    fg.addWidget(QLabel("File:"), 0, 0)
+    fg.addWidget(fixed_edit, 0, 1, 1, 2)
+    fg.addWidget(btn_browse_fixed, 0, 3)
+    fg.addWidget(btn_open_fixed, 0, 4)
+    fg.addWidget(fixed_hint, 1, 0, 1, 5)
+    fg.addWidget(fixed_preview, 2, 0, 1, 5)
 
-        # ---- LOOP SETTINGS (প্রতি পেজে আলাদা instance)
-        loop_group = QGroupBox("LOOP SETTINGS")
-        lg = QGridLayout(loop_group)
-        w["idle_spin"] = QSpinBox()
-        w["idle_spin"].setRange(15, 600)
-        w["idle_spin"].setValue(90)
-        w["typing_cb"] = QCheckBox("Typing indicator")
-        w["typing_cb"].setChecked(True)
-        w["autonext_cb"] = QCheckBox("Auto next match")
-        w["autonext_cb"].setChecked(True)
-        lg.addWidget(QLabel("Skip idle (sec)"), 0, 0)
-        lg.addWidget(w["idle_spin"], 0, 1)
-        lg.addWidget(w["typing_cb"], 0, 2)
-        lg.addWidget(w["autonext_cb"], 0, 3)
-        lg.addWidget(QLabel("partner এত সেকেন্ড চুপ থাকলে next match-এ যাবে"), 1, 0, 1, 4)
-        lg.itemAt(1).widget().setObjectName("dim")
-        w["loop_group"] = loop_group
-        return w
+    loop_group = QGroupBox("LOOP — matching behavior")
+    lg = QGridLayout(loop_group)
+    idle_spin = QSpinBox()
+    idle_spin.setRange(15, 600)
+    idle_spin.setValue(90)
+    typing_cb = QCheckBox("Typing indicator")
+    typing_cb.setChecked(True)
+    autonext_cb = QCheckBox("Auto next match")
+    autonext_cb.setChecked(True)
+    lg.addWidget(QLabel("Skip idle (sec)"), 0, 0)
+    lg.addWidget(idle_spin, 0, 1)
+    lg.addWidget(typing_cb, 0, 2)
+    lg.addWidget(autonext_cb, 0, 3)
+    loop_hint = QLabel("partner এত সেকেন্ড চুপ থাকলে next match-এ যাবে")
+    loop_hint.setObjectName("dim")
+    lg.addWidget(loop_hint, 1, 0, 1, 4)
 
-    def collect_engine(w: dict) -> None:
-        """এই পেজের widget থেকে config সেভ + অন্য পেজের widget-ও sync করে।"""
+    def _resolve_path(p: str) -> Path:
+        pp = Path(p)
+        return pp if pp.is_absolute() else ROOT / pp
+
+    def refresh_fixed_preview() -> None:
+        p = fixed_edit.text().strip()
+        if not p:
+            fixed_preview.setText("—")
+            return
+        try:
+            lines = [l.strip() for l in _resolve_path(p).read_text(encoding="utf-8").splitlines()
+                     if l.strip() and not l.strip().startswith("#")]
+            if lines:
+                fixed_preview.setText(f"✓ {len(lines)}টা reply পাওয়া গেছে — শুরুটা: "
+                                      f"{lines[0][:40]!r} → {lines[1][:40]!r}…" if len(lines) > 1
+                                      else f"✓ ১টা reply: {lines[0][:60]!r}")
+            else:
+                fixed_preview.setText("⚠ ফাইল খালি / সব comment")
+        except Exception as exc:  # noqa: BLE001
+            fixed_preview.setText(f"✗ পড়া গেল না: {exc}")
+
+    def refresh_snap_status() -> None:
+        from ..brain.flow_reply_engine import resolve_snap_usernames
+        cfg = collect_config_from_widgets()
+        names = resolve_snap_usernames(cfg)
+        src = "snap.txt ফাইল" if (snapfile_edit.text().strip() and names) else "comma লিস্ট"
+        snap_status.setText(f"→ {len(names)}টা username কাজ করবে ({src})"
+                            + (f": {', '.join(names[:3])}{'…' if len(names) > 3 else ''}"
+                               if names else " ⚠ flow engine-এর জন্য অন্তত ১টা দরকার"))
+
+    def browse(line_edit: QLineEdit, title: str) -> None:
+        path, _ = QFileDialog.getOpenFileName(win, title, "", "Text files (*.txt);;All files (*)")
+        if path:
+            line_edit.setText(path)
+
+    btn_browse_snapfile.clicked.connect(lambda: browse(snapfile_edit, "snap.txt বাছাই করো"))
+    btn_browse_fixed.clicked.connect(lambda: browse(fixed_edit, "Fixed SMS script বাছাই করো"))
+    fixed_edit.editingFinished.connect(refresh_fixed_preview)
+    btn_open_fixed.clicked.connect(lambda: _try_open_editor())
+    snapfile_edit.editingFinished.connect(refresh_snap_status)
+
+    def _try_open_editor() -> None:
+        save_config_from_widgets()
+        try:
+            open_in_editor(fixed_edit.text().strip() or "configs/fixed_script.txt")
+        except Exception as exc:  # noqa: BLE001
+            QMessageBox.warning(win, "খোলা গেল না", str(exc))
+
+    def collect_config_from_widgets() -> dict:
         cfg = _load_config()
-        cfg["engine"] = "flow" if w["engine_combo"].currentIndex() == 0 else "fixed"
-        cfg["snap_usernames"] = [s.strip() for s in w["snap_edit"].text().split(",") if s.strip()]
-        cfg["fixed_file"] = w["fixed_edit"].text().strip() or "configs/fixed_script.txt"
+        cfg["engine"] = "flow" if engine_combo.currentIndex() == 0 else "fixed"
+        cfg["snap_usernames"] = [s.strip() for s in snap_edit.text().split(",") if s.strip()]
+        cfg["snap_file"] = snapfile_edit.text().strip()
+        cfg["fixed_file"] = fixed_edit.text().strip() or "configs/fixed_script.txt"
         cfg.setdefault("loop", {}).update({
-            "skip_idle_s": w["idle_spin"].value(),
-            "typing_indicator": w["typing_cb"].isChecked(),
-            "auto_next": w["autonext_cb"].isChecked(),
+            "skip_idle_s": idle_spin.value(),
+            "typing_indicator": typing_cb.isChecked(),
+            "auto_next": autonext_cb.isChecked(),
         })
-        _save_config(cfg)
-        apply_engine_all(cfg)
+        return cfg
 
-    def apply_engine_all(cfg: dict) -> None:
+    def save_config_from_widgets() -> dict:
+        cfg = collect_config_from_widgets()
+        _save_config(cfg)
+        return cfg
+
+    def load_config_to_widgets() -> None:
+        cfg = _load_config()
+        engine_combo.setCurrentIndex(0 if (cfg.get("engine", "flow") == "flow") else 1)
+        snap_edit.setText(", ".join(cfg.get("snap_usernames") or []))
+        snapfile_edit.setText(cfg.get("snap_file", "configs/snap.txt") or "")
+        fixed_edit.setText(cfg.get("fixed_file", "configs/fixed_script.txt"))
         lp = cfg.get("loop") or {}
-        for w in engine_sets.values():
-            w["engine_combo"].setCurrentIndex(0 if (cfg.get("engine", "flow") == "flow") else 1)
-            w["snap_edit"].setText(", ".join(cfg.get("snap_usernames") or []))
-            w["fixed_edit"].setText(cfg.get("fixed_file", "configs/fixed_script.txt"))
-            w["idle_spin"].setValue(int(lp.get("skip_idle_s", 90)))
-            w["typing_cb"].setChecked(bool(lp.get("typing_indicator", True)))
-            w["autonext_cb"].setChecked(bool(lp.get("auto_next", True)))
+        idle_spin.setValue(int(lp.get("skip_idle_s", 90)))
+        typing_cb.setChecked(bool(lp.get("typing_indicator", True)))
+        autonext_cb.setChecked(bool(lp.get("auto_next", True)))
+        refresh_fixed_preview()
+        refresh_snap_status()
+
+    def paint_engine_summary() -> None:
+        from ..brain.flow_reply_engine import resolve_snap_usernames
+        cfg = _load_config()
+        eng = cfg.get("engine", "flow")
+        snaps = resolve_snap_usernames(cfg)
+        snap_src = "snap.txt" if (cfg.get("snap_file") and snaps) else "setup list"
+        txt = (f"⚙️ engine: {eng}   •   snap pool: {len(snaps)}টা ({snap_src})   •   "
+               f"script: {cfg.get('fixed_file', 'configs/fixed_script.txt')}")
+        for key in ("browser", "session"):
+            if key in pages:
+                pages[key]["eng_sum"].setText(txt)
+
+    # ---------------------------------------------- page factory (mood pages)
+
+    def make_header(title: str, with_setup: bool = False) -> tuple:
+        bar = QHBoxLayout()
+        back = QPushButton("←  Home")
+        back.setObjectName("backBtn")
+        hdr = QLabel(title)
+        hdr.setObjectName("hdr")
+        bar.addWidget(back)
+        bar.addWidget(hdr)
+        bar.addStretch()
+        btn_setup = None
+        if with_setup:
+            btn_setup = QPushButton("⚙️  Bot Setup (engine / fixed txt / snap)")
+            btn_setup.setObjectName("setupBtn")
+            bar.addWidget(btn_setup)
+        return bar, back, btn_setup
+
+    def make_status_strip() -> QLabel:
+        lbl = QLabel("● Ready")
+        lbl.setStyleSheet(f"color: {C_GREEN}; font-size: 14px;")
+        return lbl
+
+    def make_engine_summary() -> QLabel:
+        lbl = QLabel("⚙️ …")
+        lbl.setObjectName("engSum")
+        return lbl
 
     def make_stats_and_log() -> dict:
         out: dict = {}
         stats_group = QGroupBox("STATS")
-        sg = QGridLayout(stats_group)
+        sgg = QGridLayout(stats_group)
         vals: Dict[str, QLabel] = {}
         for i, key in enumerate(["Matches", "Sent", "Recv", "Skips T/U", "WS in/out", "Uptime"]):
             val = QLabel("0")
@@ -504,11 +644,11 @@ def run_gui() -> int:
             lbl.setObjectName("statLbl")
             val.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            sg.addWidget(val, 0, i)
-            sg.addWidget(lbl, 1, i)
+            sgg.addWidget(val, 0, i)
+            sgg.addWidget(lbl, 1, i)
             vals[key] = val
-        out["stats_group"] = stats_group
         out["stat_vals"] = vals
+        out["stats_group"] = stats_group
 
         match_group = QGroupBox("CURRENT MATCH")
         mg = QGridLayout(match_group)
@@ -525,7 +665,6 @@ def run_gui() -> int:
         mg.addWidget(m_partner, 1, 1)
         mg.addWidget(QLabel("Flow"), 2, 0)
         mg.addWidget(m_stage, 2, 1)
-        match_group.setParent(None)
         out["m_state"] = m_state
         out["m_partner"] = m_partner
         out["m_stage"] = m_stage
@@ -541,22 +680,6 @@ def run_gui() -> int:
         out["log_group"] = log_group
         return out
 
-    def make_header(title: str) -> tuple:
-        bar = QHBoxLayout()
-        back = QPushButton("←  Home")
-        back.setObjectName("backBtn")
-        hdr = QLabel(title)
-        hdr.setObjectName("hdr")
-        bar.addWidget(back)
-        bar.addWidget(hdr)
-        bar.addStretch()
-        return bar, back
-
-    def make_status_strip() -> QLabel:
-        lbl = QLabel("● Ready")
-        lbl.setStyleSheet(f"color: {C_GREEN}; font-size: 14px;")
-        return lbl
-
     def make_cpu_ram() -> tuple:
         cpu_lbl = QLabel("CPU: –")
         ram_lbl = QLabel("RAM: –")
@@ -564,7 +687,7 @@ def run_gui() -> int:
             w.setStyleSheet(f"font-size: 11px; color: {c};")
         return cpu_lbl, ram_lbl
 
-    # ================================================== PAGE 0 — HOME (mood select)
+    # ================================================== PAGE 0 — HOME
     page_home = QWidget()
     hl = QVBoxLayout(page_home)
     hl.setContentsMargins(60, 50, 60, 40)
@@ -574,11 +697,12 @@ def run_gui() -> int:
     brand.setObjectName("brand")
     brand.setAlignment(Qt.AlignmentFlag.AlignCenter)
     hl.addWidget(brand)
-    home_sub = QLabel("কোন MOOD-এ চালাবে? — বাছাই করলে সেই mood-এর নিজের dashboard খুলবে")
+    home_sub = QLabel("কোন MOOD-এ চালাবে? — বাছাই করলে সেই mood-এর নিজের dashboard খুলবে\n"
+                      "(engine / fixed sms txt / snap.txt সেট করা হয় mood dashboard-এর ⚙️ Bot Setup-এ)")
     home_sub.setObjectName("homeSub")
     home_sub.setAlignment(Qt.AlignmentFlag.AlignCenter)
     hl.addWidget(home_sub)
-    hl.addSpacing(14)
+    hl.addSpacing(10)
 
     card_browser = QPushButton(
         "🌐   LIVE BROWSER MOOD\n\n"
@@ -600,27 +724,7 @@ def run_gui() -> int:
     ver_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
     hl.addWidget(ver_lbl)
     stacked.addWidget(page_home)
-
-    # shared ui-state
-    pages: Dict[str, dict] = {}
-
-    def goto(page_key: str) -> None:
-        stacked.setCurrentWidget(pages[page_key]["widget"])
-
-    # start/stop enable across pages
-    start_btns = []
-    stop_btns = []
-
-    def set_running_ui(running: bool) -> None:
-        for b in start_btns:
-            b.setEnabled(not running)
-        for b in stop_btns:
-            b.setEnabled(running)
-
-    def _bot_err_common(e: str, status_lbl: QLabel) -> None:
-        status_lbl.setText(f"● সমস্যা: {e[:140]}")
-        status_lbl.setStyleSheet(f"color: {C_RED}; font-size: 14px;")
-        set_running_ui(False)
+    pages["home"] = {"widget": page_home}
 
     # ================================================== PAGE 1 — LIVE BROWSER MOOD
     page_browser = QWidget()
@@ -628,8 +732,10 @@ def run_gui() -> int:
     bl.setContentsMargins(20, 18, 20, 14)
     bl.setSpacing(10)
 
-    bar, back_b = make_header("🌐  LIVE BROWSER MOOD")
-    bl.addLayout(bar)
+    bar_b, back_b, setup_b = make_header("🌐  LIVE BROWSER MOOD", with_setup=True)
+    bl.addLayout(bar_b)
+    eng_sum_b = make_engine_summary()
+    bl.addWidget(eng_sum_b)
     status_browser = make_status_strip()
     bl.addWidget(status_browser)
 
@@ -648,11 +754,6 @@ def run_gui() -> int:
     bg.addWidget(auto_save_cb, 0, 2)
     bg.addWidget(live_info, 1, 0, 1, 3)
     bl.addWidget(browser_group)
-
-    eng_b = make_engine_set()
-    engine_sets["browser"] = eng_b
-    bl.addLayout(eng_b["row"])
-    bl.addWidget(eng_b["loop_group"])
 
     run_row_b = QHBoxLayout()
     start_b = QPushButton("▶  START — LIVE BROWSER MOOD")
@@ -679,7 +780,7 @@ def run_gui() -> int:
     bl.addLayout(foot_b)
     stacked.addWidget(page_browser)
     pages["browser"] = {"widget": page_browser, **ui_b, "status": status_browser,
-                        "cpu": cpu_b, "ram": ram_b}
+                        "cpu": cpu_b, "ram": ram_b, "eng_sum": eng_sum_b}
 
     # ================================================== PAGE 2 — SESSION CHAT MOOD
     page_session = QWidget()
@@ -687,15 +788,16 @@ def run_gui() -> int:
     sl2.setContentsMargins(20, 18, 20, 14)
     sl2.setSpacing(10)
 
-    bar2, back_s = make_header("🔑  SESSION CHAT MOOD")
-    sl2.addLayout(bar2)
+    bar_s, back_s, setup_s = make_header("🔑  SESSION CHAT MOOD", with_setup=True)
+    sl2.addLayout(bar_s)
+    eng_sum_s = make_engine_summary()
+    sl2.addWidget(eng_sum_s)
     status_session = make_status_strip()
     sl2.addWidget(status_session)
 
     sess_pick = QGroupBox("SESSION — ২টা অপশন (যেটা চাও)")
     spl = QGridLayout(sess_pick)
 
-    # ---- Option 1: live browser → session collect
     opt1 = QGroupBox("🆕  Option 1 — লাইভ ব্রাউজার চালু করে session collect")
     o1 = QGridLayout(opt1)
     btn_launch_s = QPushButton("🚀 Browser খোলো")
@@ -709,7 +811,6 @@ def run_gui() -> int:
     o1.addWidget(opt1_status, 1, 0, 1, 2)
     spl.addWidget(opt1, 0, 0)
 
-    # ---- Option 2: old saved session → chat
     opt2 = QGroupBox("💾  Option 2 — পুরনো saved session দিয়ে চ্যাট শুরু")
     o2 = QGridLayout(opt2)
     old_status = QLabel("checking…")
@@ -721,11 +822,6 @@ def run_gui() -> int:
                  1, 0, 1, 2)
     spl.addWidget(opt2, 0, 1)
     sl2.addWidget(sess_pick)
-
-    eng_s = make_engine_set()
-    engine_sets["session"] = eng_s
-    sl2.addLayout(eng_s["row"])
-    sl2.addWidget(eng_s["loop_group"])
 
     run_row_s = QHBoxLayout()
     start_s = QPushButton("▶  START — SESSION MOOD")
@@ -752,16 +848,63 @@ def run_gui() -> int:
     sl2.addLayout(foot_s)
     stacked.addWidget(page_session)
     pages["session"] = {"widget": page_session, **ui_s, "status": status_session,
-                        "cpu": cpu_s, "ram": ram_s}
+                        "cpu": cpu_s, "ram": ram_s, "eng_sum": eng_sum_s}
 
-    start_btns = [start_b, start_s]
-    stop_btns = [stop_b, stop_s]
+    # ================================================== PAGE 3 — BOT SETUP (shared)
+    page_setup = QWidget()
+    ul = QVBoxLayout(page_setup)
+    ul.setContentsMargins(20, 18, 20, 14)
+    ul.setSpacing(10)
+
+    bar_u, back_u, _ = make_header("⚙️  BOT SETUP — engine ও ফাইল এক জায়গায়")
+    ul.addLayout(bar_u)
+    setup_info = QLabel("এই সেটিংস দুই mood-এর জন্যই প্রযোজ্য (configs/chitchat_bot.json-এ সেভ হয়) — "
+                        "দরকার নেই দুই জায়গায় আলাদা করা")
+    setup_info.setObjectName("dim")
+    ul.addWidget(setup_info)
+
+    rows = QHBoxLayout()
+    rows.addWidget(eng_group, 1)
+    rows.addWidget(snap_group, 1)
+    ul.addLayout(rows)
+    ul.addWidget(fixed_group)
+    ul.addWidget(loop_group)
+
+    save_row = QHBoxLayout()
+    btn_save_setup = QPushButton("💾 SAVE SETUP")
+    btn_save_setup.setObjectName("startBtn")
+    setup_status = QLabel("Save করলে দুই mood dashboard-ই নতুন সেটিংস পাবে")
+    setup_status.setObjectName("dim")
+    save_row.addWidget(btn_save_setup, 1)
+    save_row.addWidget(setup_status, 2)
+    ul.addLayout(save_row)
+    ul.addStretch()
+
+    stacked.addWidget(page_setup)
+    pages["setup"] = {"widget": page_setup, "status": setup_status}
 
     # ---------------------------------------------------------- navigation
     card_browser.clicked.connect(lambda: goto("browser"))
     card_session.clicked.connect(lambda: goto("session"))
     back_b.clicked.connect(lambda: stacked.setCurrentWidget(page_home))
     back_s.clicked.connect(lambda: stacked.setCurrentWidget(page_home))
+    back_u.clicked.connect(lambda: stacked.setCurrentWidget(pages[setup_return_page["key"]]["widget"]))
+
+    def open_setup(from_page: str) -> None:
+        setup_return_page["key"] = from_page
+        load_config_to_widgets()
+        stacked.setCurrentWidget(page_setup)
+    setup_b.clicked.connect(lambda: open_setup("browser"))
+    setup_s.clicked.connect(lambda: open_setup("session"))
+
+    start_btns = [start_b, start_s]
+    stop_btns = [stop_b, stop_s]
+
+    def set_running_ui(running: bool) -> None:
+        for b in start_btns:
+            b.setEnabled(not running)
+        for b in stop_btns:
+            b.setEnabled(running)
 
     # ---------------------------------------------------------- actions
 
@@ -770,7 +913,8 @@ def run_gui() -> int:
         lbl.setText(text)
         lbl.setStyleSheet(f"color: {status_colors[color]}; font-size: 14px;")
 
-    def _launch_done(page: str, res: dict) -> None:
+    def _launch_done(page: str, res: dict, btn) -> None:
+        btn.setEnabled(True)
         ok = res.get("status") in ("launched", "already-running")
         if page == "browser":
             set_status("browser",
@@ -793,7 +937,7 @@ def run_gui() -> int:
                 res = cdp_launch_blocking()
             except Exception as exc:  # noqa: BLE001
                 res = {"status": f"error: {exc}"}
-            QTimer.singleShot(0, lambda: (_launch_done(page, res), btn.setEnabled(True)))
+            QTimer.singleShot(0, lambda: _launch_done(page, res, btn))
         threading.Thread(target=work, daemon=True).start()
 
     def do_pull(btn, done) -> None:
@@ -811,7 +955,7 @@ def run_gui() -> int:
         if res.get("saved"):
             who = res.get("username")
             opt1_status.setText(f"Session saved ✓ {('— ' + who) if who else '(verify skip)'} — "
-                                f"এবার Option 2 দিয়ে বা সরাসরি START চাপো")
+                                f"এবার START চাপো")
             set_status("session", "● Session ready ✓ — START চাপলেই চ্যাট শুরু", "ok")
             refresh_session()
         else:
@@ -852,17 +996,21 @@ def run_gui() -> int:
 
     btn_refresh_sess.clicked.connect(refresh_session)
 
+    def _bot_err_common(e: str, page: str) -> None:
+        set_status(page, f"● সমস্যা: {e[:140]}", "err")
+        set_running_ui(False)
+
     def do_start(mode: str, page: str) -> None:
-        collect_engine(engine_sets[page])
-        cfg = _load_config()
+        cfg = save_config_from_widgets()
         cfg["browser_autosave"] = auto_save_cb.isChecked()
         _save_config(cfg)
+        paint_engine_summary()
         try:
             worker.start(mode=mode,
                          on_ready=lambda u: QTimer.singleShot(
                              0, lambda: set_status(page, f"● LIVE — {u} হিসেবে চলছে", "ok")),
                          on_error=lambda e: QTimer.singleShot(
-                             0, lambda: _bot_err_common(e, pages[page]["status"])))
+                             0, lambda: _bot_err_common(e, page)))
         except Exception as exc:  # noqa: BLE001
             QMessageBox.warning(win, "START সমস্যা", str(exc))
             return
@@ -879,6 +1027,17 @@ def run_gui() -> int:
     start_s.clicked.connect(lambda: do_start("session", "session"))
     stop_b.clicked.connect(do_stop)
     stop_s.clicked.connect(do_stop)
+
+    def do_save_setup() -> None:
+        cfg = save_config_from_widgets()
+        from ..brain.flow_reply_engine import resolve_snap_usernames
+        snaps = resolve_snap_usernames(cfg)
+        eng = cfg.get("engine", "flow")
+        setup_status.setText(f"✓ Saved — engine: {eng} • snap: {len(snaps)}টা • "
+                             f"script: {cfg.get('fixed_file')}")
+        setup_status.setStyleSheet(f"color: {C_GREEN}; font-weight:700;")
+        paint_engine_summary()
+    btn_save_setup.clicked.connect(do_save_setup)
 
     # ---------------------------------------------------------- timers
 
@@ -898,14 +1057,13 @@ def run_gui() -> int:
             "WS in/out": f"{s.get('ws_in', 0)}/{s.get('ws_out', 0)}",
             "Uptime": f"{up // 60}m{up % 60:02d}s",
         }
-        for key in pages:
+        for key in ("browser", "session"):
             pg = pages[key]
             pg["m_state"].setText(state_txt)
             pg["m_partner"].setText(partner_txt)
             pg["m_stage"].setText(stage_txt or "—")
             for k, v in vals_txt.items():
                 pg["stat_vals"][k].setText(v)
-        # drain log queue → সব পেজের log-এ
         lines = []
         try:
             while True:
@@ -914,7 +1072,7 @@ def run_gui() -> int:
             pass
         if lines:
             chunk = "\n".join(lines[-200:])
-            for key in pages:
+            for key in ("browser", "session"):
                 pages[key]["log_text"].append(chunk)
 
     def poll_sys() -> None:
@@ -957,9 +1115,8 @@ def run_gui() -> int:
     t_auto.start(60_000)
 
     refresh_session()
-    apply_engine_all(_load_config())
-    lp = _load_config().get("loop") or {}
-    auto_save_cb.setChecked(True)
+    load_config_to_widgets()
+    paint_engine_summary()
 
     logging.getLogger("eva").info("Mood Dashboard চালু — root: %s", ROOT)
     win.show()

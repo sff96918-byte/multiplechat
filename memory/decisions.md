@@ -2,6 +2,9 @@
 
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
 
+## 2026-10-10 | v9: settings ek jaygay (BOT SETUP)
+
+Architecture answer: mood dashboards e shudhu mood-specific controls (browser/session/START); shared settings (engine, fixed_file, snap_file/snap_usernames, loop) ek BOT SETUP page e -- karon dui mood ek config file chalay. Duplicated per-page widget sets er sync bug risk mone rakhe ek set e naamano hoyeche.
 ## 2026-10-10 | v8 mood architecture
 
 Mood = separate dashboard pages in one QStackedWidget (HOME + browser + session). Qt constraint: same widget cannot be in two layouts -> per-page engine/loop widget sets kept in sync via collect_engine/apply_engine_all. Browser mood bot still uses WS transport (captured protocol); visible browser shows chats live via site's own socket -- no new protocol guessing.

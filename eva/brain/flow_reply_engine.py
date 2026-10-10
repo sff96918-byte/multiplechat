@@ -21,6 +21,27 @@ from . import eva_flow
 log = logging.getLogger("eva.flow_engine")
 
 
+def resolve_snap_usernames(cfg: dict) -> List[str]:
+    """Config theke snap username list ber kore.
+
+    Priority: cfg["snap_file"] (txt, prottek line e ekta username, '#'=comment)
+              > cfg["snap_usernames"] (comma list).
+    File na thakle/empty hole comma list fallback.
+    """
+    from ..paths import project_root
+    f = (cfg.get("snap_file") or "").strip()
+    if f:
+        p = Path(f)
+        if not p.is_absolute():
+            p = project_root() / p
+        if p.exists():
+            names = [l.strip() for l in p.read_text(encoding="utf-8").splitlines()
+                     if l.strip() and not l.strip().startswith("#")]
+            if names:
+                return names
+    return [s.strip() for s in (cfg.get("snap_usernames") or []) if s and s.strip()]
+
+
 def write_snap_ids(data_dir: Path, snap_usernames: List[str]) -> None:
     """Refresh data/snap_ids.txt (round-robin pool used by %username%)."""
     names = [s.strip() for s in (snap_usernames or []) if s and s.strip()]

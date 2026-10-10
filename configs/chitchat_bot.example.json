@@ -44,7 +44,8 @@
       6.0
     ]
   },
-  "_comment2": "snap_usernames = %username% pool। timing = human pacing। loop = matching behavior।",
+  "_comment2": "snap: snap_file (txt, প্রতি লাইনে একটা) priority বেশি — না থাকলে snap_usernames comma list। timing = human pacing। loop = matching behavior। browser_autosave = browser mood-এর session auto-save।",
   "_comment3": "timing = realistic human pacing (legacy project-এর human_behavior/chat_timing মান)",
-  "fixed_file": "configs/fixed_script.txt"
+  "fixed_file": "configs/fixed_script.txt",
+  "snap_file": "configs/snap.txt"
 }

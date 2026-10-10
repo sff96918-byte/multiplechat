@@ -1,0 +1,6 @@
+# snap.txt — প্রতি লাইনে একটা snap username (flow engine-এর %username% pool)
+# '#' দিয়ে শুরু হলে comment। এই ফাইলটা configs/snap.txt নামে copy করে এডিট করো।
+# Bot Setup page-এ Snap file = configs/snap.txt দিলে এই লিস্টই rotate হবে
+# (Setup-এর comma লিস্টের চেয়ে এই ফাইলের priority বেশি)।
+your_snap_name_1
+your_snap_name_2

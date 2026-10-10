@@ -38,20 +38,40 @@ EXE চালু করলে প্রথমে **HOME** পেজ — এখ�
 
 ---
 
-## 🧩 COMMON SECTIONS (দুই mood dashboard-এই একই)
+## ⚙️ BOT SETUP — এক জায়গায় সব সেটিংস (দুই mood থেকেই খোলে)
+
+**কোথায় কী করব?** — উত্তর: mood dashboard গুলোতে শুধু সেই mood-এর কাজের বাটন (browser/session/START)। **Engine, fixed sms txt, snap.txt — এসব একটাই shared BOT SETUP পেজে** (প্রতিটা mood dashboard-এর ডান-উপরে `⚙️ Bot Setup` বাটন)। কারণ দুই mood-ই একই bot engine আর একই `configs/chitchat_bot.json` ব্যবহার করে — আলাদা করে দুই জায়গায় সেট করার দরকার নেই, ভুলও হয় না।
 
 | Option | কী করে | Config key |
 |--------|--------|------------|
 | **ENGINE combo** | `flow — SMS detect → input/output matching reply` = funnel logic (greeting→age→country→flirty→snap) [DEFAULT] / `fixed — একটা fixed txt ফাইল, line-by-line reply` = পুরনো Fixed SMS মোড | `engine`: `"flow"` বা `"fixed"` |
-| **Snap** | Snap username (কমা দিলে rotate)। Reply-র `%username%` এখান থেকে বসে। ⚠️ flow engine-এ লাগবেই | `snap_usernames` |
-| **FIXED SCRIPT** | শুধু fixed engine-এ: প্রতি লাইন = একটা reply, opener = ১ম লাইন, প্রতি partner-এর pointer আলাদা, ফুরালে skip। `#` = comment, **Browse…** দিয়ে ফাইল বাছাই | `fixed_file` |
-| **LOOP SETTINGS — Skip idle (sec)** | Partner এত সেকেন্ড চুপ থাকলে skip (typing করলে থামবে) | `loop.skip_idle_s` (15–600, default 90) |
-| **LOOP SETTINGS — Typing indicator** | পাঠানোর আগে `POST .../typing` — partner-এর স্ক্রিনে "typing..." দেখবে | `loop.typing_indicator` |
-| **LOOP SETTINGS — Auto next match** | Match শেষে 2–5s পর আবার queue | `loop.auto_next` |
-| **STATS** | Matches / Sent / Recv / Skips / WS frames / Uptime — লাইভ (1s) | — |
-| **CURRENT MATCH** | এখন কার সাথে চ্যাট, flow engine হলে কোন stage-এ | — |
-| **LIVE LOG** | প্রতিটা কাজের লগ (মিনিট-বাই-মিনিট) | — |
-| **CPU / RAM** | লাইভ সিস্টেম মিটার | — |
+| **SNAP — Usernames** | কমা দিয়ে একাধিক; reply-র `%username%` এখান থেকে rotate হয় | `snap_usernames`: `["name1","name2"]` |
+| **SNAP — Snap file** | `configs/snap.txt` — প্রতি লাইনে একটা username, `#`=comment। **ফাইল থাকলে comma লিস্টের চেয়ে এটার priority বেশি**। (এডিট করতে: `configs/snap.txt.example` → copy করে `configs/snap.txt`) | `snap_file`: `"configs/snap.txt"` |
+| **FIXED SMS TXT — File + Browse** | শুধু fixed engine-এ: প্রতি লাইন = একটা reply, opener = ১ম লাইন, প্রতি partner-এর pointer আলাদা, ফুরালে skip | `fixed_file`: `"configs/fixed_script.txt"` |
+| **FIXED SMS TXT — 📖 এডিটরে খোলো** | script txt ফাইলটা সরাসরি ডিফল্ট এডিটরে খুলে দেয় (আগে auto-save হয়) | — |
+| **FIXED preview** | নিচে দেখায় কতগুলো reply পাওয়া গেছে + প্রথম লাইনগুলো (ফাইল ঠিক আছে কিনা সাথে সাথে বোঝা যায়) | — |
+| **SNAP status** | দেখায় কতগুলো username কাজ করবে + কোন উৎস থেকে (snap.txt নাকি comma লিস্ট) | — |
+| **LOOP — Skip idle (sec)** | Partner এত সেকেন্ড চুপ থাকলে skip (typing করলে থামবে) | `loop.skip_idle_s` (15–600, default 90) |
+| **LOOP — Typing indicator** | পাঠানোর আগে `POST .../typing` — partner-এর স্ক্রিনে "typing..." দেখবে | `loop.typing_indicator` |
+| **LOOP — Auto next match** | Match শেষে 2–5s পর আবার queue | `loop.auto_next` |
+| **💾 SAVE SETUP** | সব একসাথে সেভ — mood dashboard-গুলোর উপরে সবসময় সামার দেখা যায়: `⚙️ engine: … • snap pool: … • script: …` | `configs/chitchat_bot.json` |
+
+**চ্যাট বট চালানোর ধাপ (দুই mood-এই একই):**
+1. HOME → mood বাছাই
+2. ডান-উপরে `⚙️ Bot Setup` → engine বাছাই + ফাইল সেট (fixed engine = fixed_script.txt; flow engine = snap.txt/username) → SAVE
+3. mood dashboard-এ ফিরে এসে START
+4. browser mood-এ আগে `🚀 Browser খোলো` (+login); session mood-এ Option 1 (session নেই হলে) বা Option 2
+
+---
+
+## 🧩 অন্যান্য COMMON জিনিস (দুই mood dashboard-এই একই)
+
+| Option | কী করে |
+|--------|--------|
+| **STATS** | Matches / Sent / Recv / Skips / WS frames / Uptime — লাইভ (1s) |
+| **CURRENT MATCH** | এখন কার সাথে চ্যাট, flow engine হলে কোন stage-এ |
+| **LIVE LOG** | প্রতিটা কাজের লগ (মিনিট-বাই-মিনিট) |
+| **CPU / RAM** | লাইভ সিস্টেম মিটার |
 
 > 💡 **দুই mood-এর Settings sync হয়** — যেকোনো এক পেজে বদলালে (START চাপলে auto-save হয়) অন্য পেজেও সেটাই দেখাবে।
 

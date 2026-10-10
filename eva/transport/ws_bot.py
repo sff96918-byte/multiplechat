@@ -65,10 +65,11 @@ async def run(args: argparse.Namespace) -> None:
                                   timing=cfg_data.get("timing"))
         print(f"[i] reply engine: FIXED (line-by-line) file={engine.script_path}")
     else:
-        from ..brain.flow_reply_engine import FlowReplyEngine
-        engine = FlowReplyEngine(snap_usernames=cfg_data.get("snap_usernames"),
+        from ..brain.flow_reply_engine import FlowReplyEngine, resolve_snap_usernames
+        snap = resolve_snap_usernames(cfg_data)
+        engine = FlowReplyEngine(snap_usernames=snap,
                                  timing=cfg_data.get("timing"))
-        print(f"[i] reply engine: FLOW (SMS detect → input/output matching) snap={cfg_data.get('snap_usernames')}")
+        print(f"[i] reply engine: FLOW (SMS detect → input/output matching) snap={snap}")
     loop_cfg = LoopConfig(**{k: tuple(v) if isinstance(v, list) else v
                              for k, v in (cfg_data.get("loop") or {}).items()})
 

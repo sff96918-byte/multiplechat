@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v9: shared BOT SETUP page + snap.txt support
+
+User asked: engine/fixed-sms-txt/snap settings main dashboard e na ki each mood e? Answer implemented: ekta shared BOT SETUP page (dui mood thekei ⚙️ button e khule, back = origin mood). Snap nicher feature: resolve_snap_usernames(cfg) in flow_reply_engine -- snap_file (one per line, # comment) > snap_usernames comma list; wired in ws_bot + server + GUI worker; tests/test_snap_resolve.py 4 tests. Setup page: fixed script preview (count + first lines), open-in-editor button, snap status label, engine summary labels on mood headers. Suite 37/37, protocol 24/24, session 7/7, GUI audit 11/11.
 ## 2026-10-10 | v8: mood dashboards (browser/session)
 
 GUI rewrite: HOME page e 2 ta mood card (LIVE BROWSER / SESSION CHAT) -> QStackedWidget e totally different dashboard per mood. Browser mood: CDP live browser visible, bot start pulls cookies live via pull_and_save, in-bot auto-save task every 60s (cfg browser_autosave), pre-start GUI auto-save timer too. Session mood: option 1 = live browser -> Pull Session, option 2 = old saved session.json headless. Loop settings group per page, synced via apply_engine_all. Max-matches spin dropped (was dead code, LoopConfig has no max_matches). Static audit green, tests 33/33.
