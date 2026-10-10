@@ -88,3 +88,8 @@ PERSONA puro bad (GUI group, ws_bot/server Persona branch, config example, docs)
 
 ## 2026-10-10 | v19 delivered (picture sender removed)
 - Script /tmp/rm_pic.py applied on v18 copy; zip v19 (161 files) pushed. GUI not launched (PyQt6 missing in sandbox).
+
+## 2026-10-10 | Direct capture tool (tools/chitchat_capture)
+- Playwright-based capture: user নিজে chat করে, tool HTTP/WS/DOM/UI event auto-save করে, share_bundle.json (masked) বানায়।
+- weebbsssc repo-তে push করা হয়নি (এই session শুধু arena branch-এ push করতে পারে)। Zip: chitchat_capture_tool.zip।
+- Verified: --selftest 20+ checks PASS; DOM JS jsdom-এ চালিয়ে যাচাই। Real browser run sandbox-এ সম্ভব নয় (Chromium download blocked) — user-এর PC-তে প্রথম run দরকার।

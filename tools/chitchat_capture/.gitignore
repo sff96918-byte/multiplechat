@@ -1,0 +1,5 @@
+# login session (cookie) - কখনো commit/share করবেন না
+browser_profile/
+# capture output - ব্যক্তিগত chat text থাকতে পারে
+capture_out/
+__pycache__/
