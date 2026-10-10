@@ -21,6 +21,7 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `decision` | Autonomous engineer loop AGENTS.md-এ যোগ | ইউজার চেয়েছে: Analyze→Plan→TDD→Execute→Debug→Verify→Output loop প্রতিটা কাজে. System prompt agent নিজে বদলাতে |
 | 2026-10-10 | `question` | Browser rest | RESOLVED v21: বন্ধ করা হয়েছে (ইউজার নির্দেশ). |
 | 2026-10-10 | `question` | config/eva_config.json মুছে ফেলা হয়েছে | ইউজার নির্দেশে delete করা হয়েছে (কোনো code পড়ত না). |
 | 2026-10-10 | `decision` | Browser rest বন্ধ করা হয়েছে | ইউজার নির্দেশ: rest off. Settings থেকে আগেই সরানো ছিল, এখন code+config থেকেও সরানো. Rest চাইলে ফেরানো যাবে (আগ |

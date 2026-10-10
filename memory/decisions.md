@@ -2,6 +2,9 @@
 
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
 
+## 2026-10-10 | Autonomous engineer loop AGENTS.md-এ যোগ
+
+ইউজার চেয়েছে: Analyze→Plan→TDD→Execute→Debug→Verify→Output loop প্রতিটা কাজে. System prompt agent নিজে বদলাতে পারে না, তাই project AGENTS.md (root + eva-full-project) এ লেখা হলো — নতুন session এটা আগে পড়ে. Sandbox-এর network সীমা ও existing verify gate-এর সাথে মিলিয়ে লেখা (minimal change নিয়ম বজায়).
 ## 2026-10-10 | Browser rest বন্ধ করা হয়েছে
 
 ইউজার নির্দেশ: rest off. Settings থেকে আগেই সরানো ছিল, এখন code+config থেকেও সরানো. Rest চাইলে ফেরানো যাবে (আগের logic: commit 65ba433 বা picccccccfull-project-v20.zip-এর browser_automation.py).

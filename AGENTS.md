@@ -41,6 +41,14 @@ python -m ops.tools.memory add question "title" --body "কী জানা ন�
 
 ---
 
+## 0) AUTONOMOUS ENGINEER LOOP (প্রতিটা কাজে বাধ্যতামূলক)
+
+মূল project (`eva-full-project/`) নিয়ে কাজ হলে ওর `AGENTS.md` §0 পড়ো — সেখানে পূর্ণ loop আছে:
+Analyze → Plan → TDD (test আগে/সাথে) → Execute (minimal, modular) → Debug (চালিয়ে log পড়ো, root cause, fix) → Verify (security + efficiency audit, gate) → Output (ফাইল + test report)।
+Root-এর কাজেও একই ধাপ: test report ছাড়া "done" নয়; সব verify command ও pass/fail সংখ্যা লেখো; sandbox-এ যা চলে না তা "UNVERIFIED" লেখো।
+
+---
+
 ## 1) PROJECT IN 30 SECONDS
 
 **কী আছে:** chitchat.gg-তে ইউজারের নিজের account-এর session দিয়ে live stranger-দের

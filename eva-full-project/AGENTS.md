@@ -7,6 +7,30 @@
 
 ---
 
+## 0. AUTONOMOUS ENGINEER LOOP (প্রতিটা কাজে বাধ্যতামূলক)
+
+**Mission:** EVA Bot-এর কাজ (build/fix/feature/debug) নির্ভুলভাবে শেষ করা — zero known bug, ভালো performance, নিরাপদ code।
+
+1. **Analyze** — কোড বদলানোর আগে: সংশ্লিষ্ট ফাইল ও function পড়ো; tech stack-এর জন্য দরকার হলে latest docs দেখো
+   (sandbox-এ শুধু github, npm, pypi, files.pythonhosted.org reachable — অন্য সাইটে না গেলে সেটা রিপোর্টে লেখো)। Finding-কে CONFIRMED / LIKELY / UNKNOWN ভাগ করো।
+2. **Plan** — কোড লেখার আগে ছোট technical plan লেখো: কোন ফাইল/function বদলাবে, কেন, কী ঝুঁকি, কী test হবে।
+   (ছোট fix-এও ৩–৫ লাইন যথেষ্ট; বড় feature হলে ইউজারকে approach জিজ্ঞেস করো — `ask_user`।)
+3. **TDD** — প্রতিটা নতুন feature-এর জন্য test script আগে বা একসাথে লেখো। Bug fix-এ একটা regression check যোগ করো
+   (যেখানে bug ধরা পড়ত)। Existing test (`test_flow.py`, `test_live.py`, `test_fuzz.py`, `test_matcher.py`, `demo_chat.py`) বাড়াও; নতুন test ফাইল root-এ রাখো।
+4. **Execute** — clean, modular, minimal change। Unrelated code reformat করবে না। Hard rules (§4) মানো।
+5. **Debug** — পরিবর্তনের পর চালাও (sandbox-এ যা সম্ভব: py_compile, import, unit/flow/fuzz/demo, stubbed GUI import — §5)।
+   Error হলে console/log পড়ো (`data/logs/`, Dashboard LIVE LOG), root cause খোঁজো, fix করো, আবার চালাও।
+   Live chitchat network sandbox-এ নেই — সেটা "UNVERIFIED (live)" হিসেবে লেখো।
+6. **Verify (final audit)** — পরিবর্তিত ফাইলের security check: secret/token log বা zip-এ যাচ্ছে কিনা (§4 rule 5),
+   unbounded loop/timeout/retry, path hard-code, unhandled exception। `python -m pyflakes <files>` দিয়ে undefined name দেখো (unused import blocking নয়)।
+   তারপর §5 verify gate পুরো চালাও।
+7. **Output** — শেষে দাও: (ক) কী বদলেছে (ফাইল + function), (খ) **test report** — প্রতিটা command, pass/fail সংখ্যা, এবং কী চালানো যায়নি,
+   (গ) remaining risk, (ঘ) প্রয়োজনে zip + path। "done" বলার আগে §5 gate PASS হতে হবে; একটাও FAIL থাকলে done নয়।
+
+**Memory:** কাজ শেষে `python -m ops.tools.memory add session/bug/decision/question ...` (root AGENTS.md §0/§4 — mandatory)।
+
+---
+
 ## 1. ৩০ সেকেন্ডে প্রজেক্ট
 
 EVA Bot একটি Python (PyQt6 GUI) অ্যাপ। chitchat.gg-তে random stranger-দের সাথে
