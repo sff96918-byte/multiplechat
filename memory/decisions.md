@@ -85,3 +85,9 @@ Reply engine options final: flow = legacy funnel (input/output txt banks, snap_u
 - অপরিবর্তিত: chat engine (eva_flow.py, chat/*, data/*), যার মধ্যে "send pic" keyword detection ও pic_mood_reply_rules.json আছে — এগুলো picture sender নয়।
 - যাচাই: py_compile, pyflakes (নতুন issue নেই), test_flow 126/0, test_live 44/44, test_fuzz 4/4, ChitchatAutomation ও ThreadManager constructor stub-সহ চালু (PyQt6/winsound sandbox-এ নেই, তাই GUI launch হয়নি)।
 - Shipped: picccccccfull-project-v19-NO-PICTURES.zip (v18 zip removed).
+
+## 2026-10-11 — weebbsssc repo পড়ার অনুমতি (ইউজারের নির্দেশ)
+- ইউজার বলেছেন: `sff96918-byte/weebbsssc` থেকে তথ্য পড়ে কাজ এগিয়ে নেওয়া যাবে; আগের "এখান থেকে কিছু নেওয়া যাবে না" নির্দেশটি বাদ।
+- **যা এখনো নিষিদ্ধ:** ওই repo-তে capture tool copy বা push (আলাদা permission ও branch লাগবে)।
+- **সব সময় নিষিদ্ধ (নিরাপত্তা):** repo-র credential/token/cookie কখনো project, zip বা git-এ কপি করা যাবে না।
+- পর্যবেক্ষণ: repo public; `capture_tool.zip`-এ পূর্ণ Chrome profile (Login Data, Cookies, Local Storage) আছে; `capture apii.zip`-এ `18_cookies_tokens.json` আছে। ইউজারকে জানানো হয়েছে।
