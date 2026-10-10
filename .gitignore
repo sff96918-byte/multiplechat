@@ -16,3 +16,11 @@ captures/*.jsonl
 data/bot_data.db
 Unselected files/
 evabot-zip-*.zip
+
+# pyinstaller / runtime outputs — zip-এ যাবে না, নিজের PC-তে build হবে
+build/
+dist/
+logs/
+debug_report_*.txt
+*.exe
+*.dll

@@ -5,6 +5,8 @@ cd /d "%~dp0"
 echo.
 echo ============================================================
 echo    EVA Dashboard - EXE Builder (one-time, needs internet)
+echo    NOTE: zip-er vitore ready-made EXE thake na!
+echo    ei script tomar PC-te notun EXE banabe.
 echo ============================================================
 echo.
 
@@ -34,13 +36,21 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo   [4/4] Done!
+echo   [4/4] Copying configs next to exe...
+if not exist "dist\EVA Dashboard\configs" mkdir "dist\EVA Dashboard\configs"
+copy /y "configs\fixed_script.txt" "dist\EVA Dashboard\configs\" >nul
+copy /y "configs\fixed_script.example.txt" "dist\EVA Dashboard\configs\" >nul
+copy /y "configs\snap.txt.example" "dist\EVA Dashboard\configs\" >nul
+copy /y "configs\chitchat_bot.example.json" "dist\EVA Dashboard\configs\" >nul
+copy /y "configs\session.example.json" "dist\EVA Dashboard\configs\" >nul
+
 echo.
 echo ============================================================
 echo    EXE READY:
 echo    dist\EVA Dashboard\EVA Dashboard.exe
 echo.
-echo    - ei folder ta copy kore jekhono rakhte paro
+echo    - exe chalate "EVA Dashboard" FOLDER ta puro copy koro
+echo      (exe + _internal folder + configs -- sob lagbe!)
 echo    - exe double-click = dashboard (console window chhara)
 echo    - desktop shortcut banate chaile:
 echo        powershell -Command "$s=(New-Object -COM WScript.Shell).CreateShortcut([Environment]::GetFolderPath('Desktop')+'\EVA Bot.lnk');$s.TargetPath=(Resolve-Path 'dist\EVA Dashboard\EVA Dashboard.exe').Path;$s.WorkingDirectory=(Resolve-Path 'dist\EVA Dashboard').Path;$s.Save()"

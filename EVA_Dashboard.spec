@@ -15,8 +15,12 @@ datas = [
     ("eva/brain/data", "eva/brain/data"),
     ("configs/chitchat_bot.example.json", "configs"),
     ("configs/session.example.json", "configs"),
+    ("configs/fixed_script.txt", "configs"),
+    ("configs/fixed_script.example.txt", "configs"),
+    ("configs/snap.txt.example", "configs"),
     ("README.md", "."),
     ("BANGLA_QUICK_START.txt", "."),
+    ("docs/DASHBOARD_OPTIONS_BN.md", "docs"),
 ]
 
 hiddenimports = []
@@ -36,7 +40,15 @@ a = Analysis(
         "eva.gui.dashboard",
         "eva.brain.eva_flow",
         "eva.brain.flow_reply_engine",
+        "eva.brain.fixed_reply_engine",
+        "eva.debugtools",
         "eva.dashboard.cdp_session",
+        "eva.transport.ws_chat_loop",
+        "eva.transport.chitchat_api",
+        "eva.transport.chitchat_socket",
+        "eva.transport.socketio_codec",
+        "eva.transport.protocol",
+        "psutil",
         "PyQt6.QtCore",
         "PyQt6.QtGui",
         "PyQt6.QtWidgets",

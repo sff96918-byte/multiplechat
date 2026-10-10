@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v12: EXE error fix (python314.dll)
+
+User hit PyInstaller bootloader error running a stale broken exe from previous build on their PC (build/EVA_Dashboard_internal/python314.dll missing). Our zip never contained exe/dll (git ls-files verified). Fixes: .gitignore now blocks build/dist/logs/debug_report/*.exe/*.dll; EVA_Dashboard.spec hiddenimports += fixed_reply_engine/debugtools/transport modules/psutil, datas += fixed_script.txt + snap.txt.example + docs guide; build_exe.bat copies configs next to exe post-build + big warning that zip has no exe; README_PARO.txt (Bengali) explains 2 routes (run_dashboard.bat / build_exe.bat) and to delete old build+dist folders.
 ## 2026-10-10 | v11: dead/broken stuff removed (user: 'useless none-work remove')
 
 REMOVED: eva/replies.py (persona engine, persona already cut from UI), eva/dashboard/server.py (web dashboard :8800 -- out of sync with mood GUI), 9 superseded zips (20261009/multi-site-bot/v3..v9 -- only newest zip kept on branch), TestReplyEngine tests, GUI unused imports (QFrame/QDoubleSpinBox), ws_chat_loop dead ReplyEngine fallback (engine now required). FIXED after removal: socket_smoke_test now uses inline _StubEngine (was importing deleted eva.replies -> ModuleNotFoundError) 24/24 green again; run_dashboard.bat repointed to GUI (python -m eva.gui.dashboard, auto-installs aiohttp+PyQt6); BANGLA_QUICK_START.txt rewritten for mood system; README/TASK_PROMPT references updated. Suite 38/38.

@@ -21,6 +21,7 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `session` | v12: EXE error fix (python314.dll) | User hit PyInstaller bootloader error running a stale broken exe from previous build on their PC (build/EVA_Da |
 | 2026-10-10 | `bug` | smoke test imported deleted module | socket_smoke_test.py imported eva.replies.ReplyEngine; after v11 removal of eva/replies.py the smoke test cras |
 | 2026-10-10 | `session` | v11: dead/broken stuff removed (user: 'useless none-work remove') | REMOVED: eva/replies.py (persona engine, persona already cut from UI), eva/dashboard/server.py (web dashboard  |
 | 2026-10-10 | `decision` | v10: report share-safe rule | Debug report NEVER contains session.json content (only exists/has_token booleans + cookie NAMES) and WS frame  |
