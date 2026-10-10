@@ -85,3 +85,6 @@ PERSONA puro bad (GUI group, ws_bot/server Persona branch, config example, docs)
 - User approved the v18 fix. Edited eva_flow.py (reply guard), browser_automation.py (empty reply → next user), test_flow.py (2 post-END assertions updated + underage case added), AGENTS.md skip-rule line.
 - Repo pytest tests/ → 38 passed. Zip v18 built from /tmp/w17 (161 files, no account_sessions, no pyc).
 - Still not run: socket_smoke_test, session_smoke_test, live browser run.
+
+## 2026-10-10 | v19 delivered (picture sender removed)
+- Script /tmp/rm_pic.py applied on v18 copy; zip v19 (161 files) pushed. GUI not launched (PyQt6 missing in sandbox).

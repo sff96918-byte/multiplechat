@@ -69,3 +69,10 @@ Reply engine options final: flow = legacy funnel (input/output txt banks, snap_u
 - Fix: eva_flow.reply() — stage END এবং farewell_sent=True হলে "" ফেরত; farewell প্রথমবার END-এ গেলে sets farewell_sent. Browser: empty reply → chat শেষ → পরের user. ws_chat_loop আগে থেকেই empty reply-তে পরের user-এ যায়।
 - Snap rules অপরিবর্তিত (_should_share, share/ask flow, stage functions). test_flow 126/0, test_live 44/44 (legacy engine, unchanged), test_fuzz 4/4.
 - Shipped: picccccccfull-project-v18-END-FAREWELL-ONCE.zip (v17 zip removed).
+
+## 2026-10-10 | v19: Picture sender সম্পূর্ণ সরানো
+- কারণ: user চেয়েছে picture option dashboard ও project থেকে পুরোপুরি বাদ দিতে।
+- সরানো হয়েছে: Dashboard PICTURE SENDER group + "PICS SENT"/"Pics" stat ও column, Pictures page ও sidebar entry, Settings-এর picture config load/save, browser (`_setup_pic_pool`, `_next_pic_file`, `_send_picture`, `_maybe_click_send_after_upload`, middle-chat-point block), thread_manager ও ThreadManager/ChitchatAutomation-এর pic পরামিতি, session feed 'pic' line, log parsing।
+- অপরিবর্তিত: chat engine (eva_flow.py, chat/*, data/*), যার মধ্যে "send pic" keyword detection ও pic_mood_reply_rules.json আছে — এগুলো picture sender নয়।
+- যাচাই: py_compile, pyflakes (নতুন issue নেই), test_flow 126/0, test_live 44/44, test_fuzz 4/4, ChitchatAutomation ও ThreadManager constructor stub-সহ চালু (PyQt6/winsound sandbox-এ নেই, তাই GUI launch হয়নি)।
+- Shipped: picccccccfull-project-v19-NO-PICTURES.zip (v18 zip removed).
