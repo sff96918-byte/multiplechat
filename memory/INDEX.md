@@ -21,6 +21,10 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `question` | Browser rest | RESOLVED v21: বন্ধ করা হয়েছে (ইউজার নির্দেশ). |
+| 2026-10-10 | `question` | config/eva_config.json মুছে ফেলা হয়েছে | ইউজার নির্দেশে delete করা হয়েছে (কোনো code পড়ত না). |
+| 2026-10-10 | `decision` | Browser rest বন্ধ করা হয়েছে | ইউজার নির্দেশ: rest off. Settings থেকে আগেই সরানো ছিল, এখন code+config থেকেও সরানো. Rest চাইলে ফেরানো যাবে (আগ |
+| 2026-10-10 | `session` | v21: browser rest OFF + eva_config.json delete | Browser rest বন্ধ: browser/browser_automation.py _schedule_next_rest -> _next_rest_at=None; _maybe_take_rest - |
 | 2026-10-10 | `question` | weebbsssc-এ capture tool copy | ইউজার বলেছেন এখন না। পরে আলাদা permission/branch লাগবে. |
 | 2026-10-10 | `question` | Browser rest চালু থাকবে নাকি বন্ধ? | Settings থেকে Rest UI সরানো হয়েছে, কিন্তু browser_automation-এ rest scheduler config মান নিয়ে চলে. ইউজার বলল |
 | 2026-10-10 | `question` | config/eva_config.json মুছবে? | ফাইলটি কোনো code পড়ে না (intent tuning পুরনো)। Repo-তে রাখা আছে, mapping-এ ⚠ দেওয়া। ইউজার মুছতে চাইলে delete |

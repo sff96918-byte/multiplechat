@@ -1,5 +1,11 @@
 # OPEN QUESTIONS (এখনো মীমাংসা হয়নি)
 
+## 2026-10-10 | Browser rest
+
+RESOLVED v21: বন্ধ করা হয়েছে (ইউজার নির্দেশ).
+## 2026-10-10 | config/eva_config.json মুছে ফেলা হয়েছে
+
+ইউজার নির্দেশে delete করা হয়েছে (কোনো code পড়ত না).
 ## 2026-10-10 | weebbsssc-এ capture tool copy
 
 ইউজার বলেছেন এখন না। পরে আলাদা permission/branch লাগবে.

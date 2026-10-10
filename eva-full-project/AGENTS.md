@@ -78,7 +78,6 @@ data/unique_sites.txt, urls.txt → background-tab sites
 data/logs/                 → chat_debug.log, gui_console.log (zip-এ নেই, runtime এ তৈরি)
 account_sessions/<key>/    → storage_state.json (TOKEN!), metadata.json, fingerprint.json (zip-এ নেই)
 configs/session.json       → (optional) manual session/token source — SECRET (zip-এ নেই)
-config/eva_config.json     → ⚠ কোনো code পড়ে না (intent tuning-এর পুরনো config, শুধু README-তে উল্লেখ)। মোছার আগে ইউজারকে জিজ্ঞেস করো।
 run_chat.py                → interactive REPL: নিজে stranger হয়ে bot-এর সাথে chat
 demo_chat.py / demo_flow.py → scripted stranger → END demo
 tools/live_chat.py         → interactive REPL (test.bat থেকে চলে)
@@ -194,7 +193,7 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
 
 ## 8. বর্তমান অবস্থা (snapshot)
 
-- **Timing (v17 + v20):** Settings-এ শুধু "New Chat Delay (s)" (একটাই মান, min=max, default 5) + "Silence timeout" (default 90)। Dashboard-এ কোনো timing field নেই। Rest Interval/Duration শুধু `config.json`-এ (browser mode-এর auto rest; UI থেকে সরানো)।
+- **Timing (v17 + v20):** Settings-এ শুধু "New Chat Delay (s)" (একটাই মান, min=max, default 5) + "Silence timeout" (default 90)। Dashboard-এ কোনো timing field নেই। **Browser rest বন্ধ (v20)** — Rest interval/duration আর নেই (code ও config থেকে সরানো)।
 - **Skip নিয়ম (v17):** Max Replies cap নেই — snap share পর্যন্ত chat চলে; partner চুপ থাকলে Settings-এর "Silence timeout" (default 90s) পর্যন্ত অপেক্ষা, তারপর পরের user। Engine END (snap ছাড়া, যেমন underage) হলে farewell একবার যায়, তারপর আর reply নেই → পরের user (v18, `farewell_sent`)। New Chat Delay শুধু chat-এর মাঝে wait (Settings থেকে)। Dashboard-এ timing override নেই।
 - **Session chat:** ইন্টিগ্রেটেড (SESSIONS page-এ ⚡ box)। Sandbox-এ engine ও
   funnel চলে (`hi` → `hi there`, `m 21` → `f.25`, `usa` → `wanna be brave with me`);
@@ -218,4 +217,4 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
 - **Remaining risk:** কী যাচাই হয়নি (যেমন live network)
 
 - **v19:** Picture sender সম্পূর্ণ সরানো হয়েছে — Dashboard-এর PICTURE SENDER group, Pictures page, Settings-এর picture config, browser/thread_manager-এর pic পরামিতি ও upload কোড। Chat engine (eva_flow / chat/*) অপরিবর্তিত; user-এর "send pic" কথার keyword detection engine-এ আছে, সেটা picture sender নয়।
-- **v20 (recheck):** (1) `entry/main.py` Settings-এর New Chat Delay min/max + Rest UI → একটাই "New Chat Delay (s)" (default 5); save-এ rest key পাঠানো হয় না (config অক্ষত)। (2) `data/config.json` + `core/config_loader.py` default new_chat_delay 5/5। (3) `core/ws_transport/chitchat_api.py` `List` import ও `ws_chat_loop.py` অচেনা `ReplyEngine` type-hint ঠিক (আগে pyflakes-এ undefined name ছিল; runtime-এ lazy annotation-এর কারণে crash হতো না)। (4) `entry/main.py` unused `sms_enabled`। (5) `docs/FLOW_SPEC.md` Max Replies section আপডেট (cap off, horny 5-cap কোডে নেই)। (6) Gate-এ `ws import ok` লাইন যোগ। (7) Project folder repo-র ভিতরে `eva-full-project/` হিসেবে এলো।
+- **v20 (recheck):** (1) `entry/main.py` Settings-এর New Chat Delay min/max + Rest UI → একটাই "New Chat Delay (s)" (default 5); save-এ rest key পাঠানো হয় না (config অক্ষত)। (2) `data/config.json` + `core/config_loader.py` default new_chat_delay 5/5। (3) `core/ws_transport/chitchat_api.py` `List` import ও `ws_chat_loop.py` অচেনা `ReplyEngine` type-hint ঠিক (আগে pyflakes-এ undefined name ছিল; runtime-এ lazy annotation-এর কারণে crash হতো না)। (4) `entry/main.py` unused `sms_enabled`। (5) `docs/FLOW_SPEC.md` Max Replies section আপডেট (cap off, horny 5-cap কোডে নেই)। (6) Gate-এ `ws import ok` লাইন যোগ। (7) Project folder repo-র ভিতরে `eva-full-project/` হিসেবে এলো। (8) Browser rest বন্ধ (`_schedule_next_rest`/`_maybe_take_rest`), rest config key সরানো, CLI-এর "Chat Timeout 30s" hard-code → আসল silence timeout দেখায়। (9) `config/eva_config.json` (কোনো code পড়ত না) মুছে ফেলা হয়েছে।

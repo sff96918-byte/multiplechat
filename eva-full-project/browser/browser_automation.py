@@ -1328,38 +1328,11 @@ class ChitchatAutomation:
         return self._wait_while_running(delay)
 
     def _schedule_next_rest(self):
-        """Schedule the next rest from the end of the current rest period."""
-        minimum = self.chat_timing["rest_interval_min_minutes"]
-        maximum = self.chat_timing["rest_interval_max_minutes"]
-        if maximum <= 0:
-            self._next_rest_at = None
-            return
-
-        interval_minutes = random.uniform(minimum, maximum)
-        self._next_rest_at = time.monotonic() + (interval_minutes * 60)
+        """Browser rest বন্ধ (v20, ইউজারের সিদ্ধান্ত). কোনো rest schedule হয় না।"""
+        self._next_rest_at = None
 
     def _maybe_take_rest(self, chat_number=None):
-        """Rest after the configured active interval, without interrupting a chat."""
-        if not self.is_running:
-            return False
-        if self._next_rest_at is None:
-            return True
-        if time.monotonic() < self._next_rest_at:
-            return True
-
-        rest_minutes = random.uniform(
-            self.chat_timing["rest_duration_min_minutes"],
-            self.chat_timing["rest_duration_max_minutes"],
-        )
-        chat_label = f" after chat #{chat_number}" if chat_number is not None else ""
-        self.log(
-            f"[Chat Bot] Taking a {rest_minutes:.2f}-minute rest{chat_label}"
-        )
-        if not self._wait_while_running(rest_minutes * 60):
-            return False
-
-        self.log("[Chat Bot] Rest complete; resuming chat")
-        self._schedule_next_rest()
+        """Browser rest বন্ধ (v20) — শুধু running অবস্থা ফেরত দেয়, কখনো wait করে না."""
         return self.is_running
 
     def _humanize_click(self, locator, *, timeout=None, no_wait_after=None):

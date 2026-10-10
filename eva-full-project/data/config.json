@@ -2,10 +2,6 @@
   "chat_timing": {
     "new_chat_delay_min_seconds": 5.0,
     "new_chat_delay_max_seconds": 5.0,
-    "rest_interval_min_minutes": 8.0,
-    "rest_interval_max_minutes": 15.0,
-    "rest_duration_min_minutes": 2.0,
-    "rest_duration_max_minutes": 3.0,
     "silence_timeout_seconds": 90.0
   },
   "human_behavior": {

@@ -23,10 +23,6 @@ from pathlib import Path
 DEFAULT_CHAT_TIMING = {
     "new_chat_delay_min_seconds": 5.0,
     "new_chat_delay_max_seconds": 5.0,
-    "rest_interval_min_minutes": 5.0,
-    "rest_interval_max_minutes": 10.0,
-    "rest_duration_min_minutes": 1.0,
-    "rest_duration_max_minutes": 2.0,
     "silence_timeout_seconds": 90.0,
 }
 
@@ -255,8 +251,6 @@ def _normalize_section(raw_section, defaults, *, numeric_keys=(), bool_keys=(),
 _CHAT_TIMING_NUMERIC = tuple(DEFAULT_CHAT_TIMING.keys())
 _CHAT_TIMING_PAIRS = (
     ("new_chat_delay_min_seconds", "new_chat_delay_max_seconds"),
-    ("rest_interval_min_minutes", "rest_interval_max_minutes"),
-    ("rest_duration_min_minutes", "rest_duration_max_minutes"),
 )
 
 

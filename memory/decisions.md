@@ -2,6 +2,9 @@
 
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
 
+## 2026-10-10 | Browser rest বন্ধ করা হয়েছে
+
+ইউজার নির্দেশ: rest off. Settings থেকে আগেই সরানো ছিল, এখন code+config থেকেও সরানো. Rest চাইলে ফেরানো যাবে (আগের logic: commit 65ba433 বা picccccccfull-project-v20.zip-এর browser_automation.py).
 ## 2026-10-10 | Rest Interval/Duration: UI থেকে সরানো, config.json-এ রেখে দেওয়া
 
 কারণ: user v17-এ Dashboard rest fields বাদ চেয়েছিলেন; Settings-এও একটাই New Chat Delay চেয়েছেন. Browser mode-এ rest এখনো config মান (8–15 min কাজ, 2–3 min বিরতি) অনুযায়ী চলে. বিকল্প: rest logic বন্ধ করা — ইউজারের সিদ্ধান্ত অপেক্ষায় (open_questions).

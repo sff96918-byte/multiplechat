@@ -111,7 +111,6 @@ browser/    Playwright/Camoufox automation, context pool, sessions,
             human behavior, device sign-in
 chat/       rule_bot.py (engine switch) + rules.py (legacy engine)
 core/       config loader, resource governor, engine bridge, accounts
-config/     eva_config.json (intent tuning)
 data/       input/ + output/ categories, countries.txt, snap_ids.txt,
             local_db/, config.json (runtime behavior)
 docs/       architecture, flow spec, installers (INSTALL_SMOOTH.*)
@@ -144,5 +143,5 @@ install.bat / run.vbs / run_console.bat / test.bat   Windows helpers
 6. `data/countries.txt` added (editable country keywords)
 7. `data/output/info.txt` — Bangla guide (A to Z)
 
-Everything else (browser/, entry/, core/, docs/, config/, bats) is
+Everything else (browser/, entry/, core/, docs/, bats) is
 unchanged from the original project.

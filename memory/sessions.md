@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v21: browser rest OFF + eva_config.json delete
+
+Browser rest বন্ধ: browser/browser_automation.py _schedule_next_rest -> _next_rest_at=None; _maybe_take_rest -> return is_running (wait নেই; test PASS). Rest config key সরানো: config_loader defaults/pairs, data/config.json. cli_runner: Rest line সরানো; 'Chat Timeout 30s' hard-code -> silence timeout. config/eva_config.json মুছে; README + project AGENTS mapping আপডেট. Tests: matcher, live 44/44, fuzz 4/4, flow 126/0, demo, settings stub test, pytest 38, socket 24/24, session 7/7, capture selftest — all PASS. Zip: picccccccfull-project-v21.zip (v20 zip রাখা হয়েছে).
 ## 2026-10-10 | v20: deep recheck + eva-full-project repo-তে আনা + docs/mapping sync
 
 Project folder eva-full-project/ repo-তে আনা (v19 zip থেকে). Fix: entry/main.py Settings New Chat Delay একটা field (default 5, min=max) + Rest UI সরানো (config অক্ষত); data/config.json + config_loader default 5; chitchat_api List import; ws_chat_loop ReplyEngine hint; sms_enabled dead var বাদ; .gitignore-এ account_sessions/ browser_profile/ capture_out/ যোগ (আগে ignore ছিল না); capture_direct.py html redact + README সীমা সঠিক. Docs: project AGENTS §2 full map + §5 ws import gate + §8 v20; skills project-map/verify/gui-dashboard; FLOW_SPEC Max Replies; PROJECT_STATE/TASKS counts; Architecture.txt historical note; root AGENTS mapping. Tests: matcher OK, live 44/44, fuzz 4/4, flow 126/0, demo OK, pytest 38, socket 24/24, session 7/7, capture selftest PASS, settings save stub test PASS. Zip: picccccccfull-project-v20.zip (187 files, 0 forbidden).

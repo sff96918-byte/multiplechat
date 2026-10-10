@@ -247,16 +247,10 @@ class CLIRunner(QObject):
         self.log(f"  Fixed Messages: {len(fixed_messages)} messages")
         self.log(f"  Snapchat IDs: {len(snapchat_ids)} available")
         self.log(f"  Threads: {self.thread_count}")
-        self.log(f"  Chat Timeout: 30s")
+        self.log(f"  Silence timeout: {chat_timing['silence_timeout_seconds']:.0f}s")
         self.log(
             f"  New Chat Delay: {chat_timing['new_chat_delay_min_seconds']:.1f} - "
             f"{chat_timing['new_chat_delay_max_seconds']:.1f}s"
-        )
-        self.log(
-            f"  Rest: every {chat_timing['rest_interval_min_minutes']:.1f} - "
-            f"{chat_timing['rest_interval_max_minutes']:.1f}m for "
-            f"{chat_timing['rest_duration_min_minutes']:.1f} - "
-            f"{chat_timing['rest_duration_max_minutes']:.1f}m"
         )
         
         if proxy_configs:
