@@ -21,6 +21,14 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `question` | weebbsssc-এ capture tool copy | ইউজার বলেছেন এখন না। পরে আলাদা permission/branch লাগবে. |
+| 2026-10-10 | `question` | Browser rest চালু থাকবে নাকি বন্ধ? | Settings থেকে Rest UI সরানো হয়েছে, কিন্তু browser_automation-এ rest scheduler config মান নিয়ে চলে. ইউজার বলল |
+| 2026-10-10 | `question` | config/eva_config.json মুছবে? | ফাইলটি কোনো code পড়ে না (intent tuning পুরনো)। Repo-তে রাখা আছে, mapping-এ ⚠ দেওয়া। ইউজার মুছতে চাইলে delete |
+| 2026-10-10 | `decision` | Rest Interval/Duration: UI থেকে সরানো, config.json-এ রেখে দেওয়া | কারণ: user v17-এ Dashboard rest fields বাদ চেয়েছিলেন; Settings-এও একটাই New Chat Delay চেয়েছেন. Browser mode |
+| 2026-10-10 | `bug` | secret ignore: account_sessions/ git-এ ignore হচ্ছিল না | Symptom: git check-ignore account_sessions/x/storage_state.json => not ignored. Fix: root .gitignore + eva-ful |
+| 2026-10-10 | `bug` | Settings timing UI মিলছিল না (New Chat Delay min/max + Rest UI) | Symptom: user-এর নির্দেশ (v17) ছিল Settings-এ একটা New Chat Delay (default 5); কোডে min/max + Rest Interval/Du |
+| 2026-10-10 | `bug` | ws_transport chitchat_api/ws_chat_loop type-hint অচেনা নাম (List, ReplyEngine) | Symptom: pyflakes undefined name. Cause: List import নেই; ReplyEngine define নেই। Runtime-এ from __future__ an |
+| 2026-10-10 | `session` | v20: deep recheck + eva-full-project repo-তে আনা + docs/mapping sync | Project folder eva-full-project/ repo-তে আনা (v19 zip থেকে). Fix: entry/main.py Settings New Chat Delay একটা f |
 | 2026-10-10 | `decision` | No reply cap; silence timeout is the only idle rule | Reason: skip before snap share was caused by Max Replies 8 (dashboard + engine), which counted greeting/age/co |
 | 2026-10-10 | `session` | v17: Max Replies cap removed + Silence timeout (90s) + dashboard auto fields removed | Approved plan: (A) silence timeout visible setting in Settings (chat_timing.silence_timeout_seconds default 90 |
 | 2026-10-10 | `question` | Silence rule and Max Replies policy | Need user decision before fixing: (1) silence after partner msg: keep waiting (recommended) vs skip after X se |

@@ -24,3 +24,9 @@ logs/
 debug_report_*.txt
 *.exe
 *.dll
+
+# live login/session tokens — never commit or zip (v20)
+account_sessions/
+data/account_sessions/
+browser_profile/
+capture_out/

@@ -47,7 +47,7 @@ python capture_direct.py --minutes 15
 | `dom/`, `screens/` | ❌ না | পূর্ণ page HTML ও screenshot, chat text আছে |
 | `browser_profile/` | ❌ কখনো না | Login cookie আছে |
 
-Tool নিজে থেকে cookie value, JWT token, email লিখে না। `--keep-text` না দিলে `share_bundle.json`-এ message text থাকে না।
+`events.jsonl`, `dom/*.json`, `summary.json`, `REPORT.md`, `dom/*.html`-এ cookie value, JWT ও email masked করা হয়। তবু `dom/`, `screens/`, `events.jsonl`-এ পূর্ণ chat text থাকে, তাই এগুলো local-only। `--keep-text` না দিলে `share_bundle.json`-এ message text ও username থাকে না।
 
 ## ৪. Site update হলে কী করবেন
 

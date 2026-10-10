@@ -1,0 +1,15 @@
+# runtime artifacts
+__pycache__/
+*.pyc
+data/.snap_ids.idx
+data/.ask_snap.idx
+data/.share_snap.idx
+data/.snapchat.idx
+data/logs/*.log*
+.venv/
+
+# live login/session tokens — never commit or zip (v20)
+account_sessions/
+data/account_sessions/
+browser_profile/
+capture_out/

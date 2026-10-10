@@ -1,5 +1,14 @@
 # BUGS FIXED (আর খুঁজতে হবে না — newest first)
 
+## 2026-10-10 | secret ignore: account_sessions/ git-এ ignore হচ্ছিল না
+
+Symptom: git check-ignore account_sessions/x/storage_state.json => not ignored. Fix: root .gitignore + eva-full-project/.gitignore-এ account_sessions/, data/account_sessions/, browser_profile/, capture_out/. Verified: git check-ignore OK.
+## 2026-10-10 | Settings timing UI মিলছিল না (New Chat Delay min/max + Rest UI)
+
+Symptom: user-এর নির্দেশ (v17) ছিল Settings-এ একটা New Chat Delay (default 5); কোডে min/max + Rest Interval/Duration ছিল. Fix: entry/main.py _build_settings_page + _reload_config_from_file + _load_settings_into_fields + _save_config_to_file; config default 5/5. Verified: stubbed Qt save test PASS (min=max=7, rest keys preserved, 0 rejected).
+## 2026-10-10 | ws_transport chitchat_api/ws_chat_loop type-hint অচেনা নাম (List, ReplyEngine)
+
+Symptom: pyflakes undefined name. Cause: List import নেই; ReplyEngine define নেই। Runtime-এ from __future__ annotations থাকায় crash হতো না, তবে py_compile ও gate এটা ধরত না. Fix: core/ws_transport/chitchat_api.py typing import-এ List; ws_chat_loop reply_engine: Optional[object]. Verified: pyflakes clean (non-unused), ws import ok, test_flow 126/0.
 ## 2026-10-10 | Logs shown twice (sidebar page + dashboard box)
 
 Symptom: same log output in Dashboard LIVE LOG box and sidebar Logs page. Cause: two separate QTextEdit widgets, each written by log_message/on_thread_log. Fix: entry/main.py single panel in dashboard; writes only to All Logs tab. Verified: offscreen GUI check, each message count 1.

@@ -1,5 +1,14 @@
 # OPEN QUESTIONS (এখনো মীমাংসা হয়নি)
 
+## 2026-10-10 | weebbsssc-এ capture tool copy
+
+ইউজার বলেছেন এখন না। পরে আলাদা permission/branch লাগবে.
+## 2026-10-10 | Browser rest চালু থাকবে নাকি বন্ধ?
+
+Settings থেকে Rest UI সরানো হয়েছে, কিন্তু browser_automation-এ rest scheduler config মান নিয়ে চলে. ইউজার বললে বন্ধ করা হবে।
+## 2026-10-10 | config/eva_config.json মুছবে?
+
+ফাইলটি কোনো code পড়ে না (intent tuning পুরনো)। Repo-তে রাখা আছে, mapping-এ ⚠ দেওয়া। ইউজার মুছতে চাইলে delete করা যাবে।
 ## 2026-10-10 | Silence rule and Max Replies policy
 
 Need user decision before fixing: (1) silence after partner msg: keep waiting (recommended) vs skip after X sec; (2) Max Replies: remove cap until snap share (recommended) vs raise to N; (3) apply to browser and session both.

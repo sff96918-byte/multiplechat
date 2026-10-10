@@ -2,6 +2,9 @@
 
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
 
+## 2026-10-10 | Rest Interval/Duration: UI থেকে সরানো, config.json-এ রেখে দেওয়া
+
+কারণ: user v17-এ Dashboard rest fields বাদ চেয়েছিলেন; Settings-এও একটাই New Chat Delay চেয়েছেন. Browser mode-এ rest এখনো config মান (8–15 min কাজ, 2–3 min বিরতি) অনুযায়ী চলে. বিকল্প: rest logic বন্ধ করা — ইউজারের সিদ্ধান্ত অপেক্ষায় (open_questions).
 ## 2026-10-10 | No reply cap; silence timeout is the only idle rule
 
 Reason: skip before snap share was caused by Max Replies 8 (dashboard + engine), which counted greeting/age/country replies. Chosen: cap off by default, chat until snap share; silence timeout 90s visible in Settings. Alternatives rejected: skip at 6-9s silence (kills slow-replying good chats), raise cap to 20 (still arbitrary). Safety: no hard ceiling now; EVA_MAX_REPLIES available if user wants one back.

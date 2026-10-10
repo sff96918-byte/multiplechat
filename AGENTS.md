@@ -1,7 +1,7 @@
 # AGENTS.md — এই ফাইল প্রতিটা agent session-এর শুরুতে পড়ো (এটা mandatory)
 
 > **⚠ আগে এটা পড়ো:** ইউজারের মূল চালানোর project হলো
-> `picccccccfull-project-v15-AGENTS-SKILLS.zip`-এর ভিতরের `eva-full-project/`
+> **`eva-full-project/`** (এই repo-র ভিতরে plain folder, v20 থেকে; zip: `picccccccfull-project-v19-NO-PICTURES.zip`)
 > (entry/, core/, chat/, data/ …)। সেখানকার **`AGENTS.md` + `skills/`** হলো মূল গাইড —
 > reply engine, SESSION CHAT, GUI, error fix, verify gate সব সেখানে।
 > এই repo-র `eva/` ফোল্ডার হলো protocol R&D/আগের workspace; এখানকার নিয়মগুলো
@@ -58,7 +58,10 @@ capture-backed** — ইউজারের নিজের browser traffic captu
 | `eva/dashboard/` | web dashboard + `cdp_session.py` (browser login → cookie pull) |
 | `ops/tools/` | `socket_smoke_test`, `session_smoke_test`, `extract_session`, `memory` |
 | `tests/fixtures/captured_frames.json` | আসল captured frames — smoke test-এর ভিত্তি |
-| `configs/` | `session.json` (SECRET, gitignored), `chitchat_bot.json` (engine/snap/persona/loop) |
+| `configs/` | `session.json` (SECRET, gitignored), `chitchat_bot.example.json` (engine/snap/persona/loop — example) |
+| `eva-full-project/` | **মূল চালানোর project** (PyQt6 GUI, eva_flow, browser + session chat). নিজের `AGENTS.md` + `skills/` + `README.md` আছে — ওখানকার verify gate ব্যবহার করো |
+| `tools/chitchat_capture/` | Playwright direct capture tool (browser চালিয়ে ইউজার নিজে chat করে, সব data JSON-এ save; `share_bundle.json` masked). README বাংলায়। **Token/cookie/chat text কখনো শেয়ার নয়** |
+| `chitchat_capture_tool.zip` | উপরের tool-এর zip (download-এর জন্য) |
 | `TASK_PROMPT.md` | বাংলায় সাজানো পুরো task spec (নতুন agent-কে দেওয়ার মতো) |
 | `project/` | legacy multi-site bot (অন্য সাইট; আলাদা, বেশি ধরবে না) |
 
@@ -71,6 +74,8 @@ capture-backed** — ইউজারের নিজের browser traffic captu
 | Bug fix | `memory/bugs_fixed.md` আগে → তারপর সংশ্লিষ্ট ফাইল → fix → test → `memory add bug` |
 | Protocol behavior change | `protocol_manifest.json` + `protocol_facts.md` → fixture update → codec/client → smoke test → `memory add decision` |
 | Reply/chat logic | `eva/brain/` (flow) বা `eva/replies.py` (simple) → `tests/test_flow_engine.py` |
+| **মূল project (eva-full-project)** — reply, GUI, session, browser | `eva-full-project/AGENTS.md` পড়ো → তার verify gate চালাও |
+| Capture tool (`tools/chitchat_capture`) | `tools/chitchat_capture/README.md` → `python3 capture_direct.py --selftest` |
 | Dashboard/GUI | `eva/gui/dashboard.py` (desktop) / `eva/dashboard/server.py` (web) |
 | New capture এলে | আগে পুরনো ফরম্যাট দেখো (`15_websocket_all.json` style) → facts বের করো → manifest+fixture update → tests চালাও |
 | Release/zip | নিচে RELEASE CHECKLIST |
@@ -82,7 +87,7 @@ capture-backed** — ইউজারের নিজের browser traffic captu
 1. **Guess নিষিদ্ধ** — chitchat.gg protocol-এর প্রতিটা behavior-এর capture evidence থাকতে হবে। নতুন behavior দরকার হলে ইউজারকে নতুন capture করতে বলো। Unknowns: `protocol_facts.md`।
 2. **No WS/socket.io dependency** — wire protocol নিজেরাই বলে (`socketio_codec.py`)। `python-socketio` install করবে না।
 3. **Secrets কখনো commit/zip হবে না** — `configs/session.json`, cookies, JWT।
-4. **Verification gate** — `eva/` বদলালে এই ৪টা test চালাও, সব PASS না হলে কাজ complete না:
+4. **Verification gate** — `eva/` বদলালে এই ৪টা test চালাও, সব PASS না হলে কাজ complete না। `eva-full-project/` বদলালে তার নিজের `AGENTS.md` §5 gate চালাও:
 ```bash
 python3 -m pytest tests/ -q                  # unit + flow + debugtools (38)
 python3 -m ops.tools.socket_smoke_test       # protocol (24/24)
@@ -133,6 +138,8 @@ python3 -m ops.tools.session_smoke_test      # session flow (7/7)
 
 - v4 পর্যন্ত complete: transport + loop + web dashboard + PyQt6 EXE dashboard + flow engine merge
 - Tests: pytest 38, protocol smoke 24/24, session smoke 7/7 — সব সবুজ (sandbox-এ যাচাই)
+- **v20 recheck (2026-10-10):** `eva-full-project/` repo-তে আনা হয়েছে; project-এর test (matcher ✓, live 44/44, fuzz 4/4, flow 126/126, demo ✓); `ws_transport` import fix; Settings-এর timing একটাই "New Chat Delay" (default 5); capture tool selftest পাস (live browser run sandbox-এ সম্ভব নয়, ইউজারের PC-তে বাকি)
+- Capture tool (`tools/chitchat_capture`) weebbsssc repo-তে এখনো copy হয়নি — ইউজারের সিদ্ধান্ত অপেক্ষায়
 - **Live test এখনো হয়নি** (ইউজারের PC-তে হবে) — প্রথম live report এলে `open_questions.md`-র জিনিসগুলো verify করো
 - পরের সম্ভাব্য কাজ: live-debug, multi-account, proxy — ইউজার চাইলেই
 

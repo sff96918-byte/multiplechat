@@ -363,7 +363,7 @@ class Recorder:
         html = snap.pop("html", "")
         base = self.dir / "dom" / f"{self.dom_n:04d}"
         base.with_suffix(".json").write_text(json.dumps(snap, ensure_ascii=False, indent=1), encoding="utf-8")
-        base.with_suffix(".html").write_text(html, encoding="utf-8")
+        base.with_suffix(".html").write_text(redact_text(html), encoding="utf-8")   # token/email masked; chat text still local-only
         return True
 
     def screenshot_bytes_ok(self) -> bool:
