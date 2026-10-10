@@ -21,6 +21,8 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `question` | Silence rule and Max Replies policy | Need user decision before fixing: (1) silence after partner msg: keep waiting (recommended) vs skip after X se |
+| 2026-10-10 | `session` | v16 analysis: early skip before snap share (no code change) | User: dashboard New Chat Delay / Rest Every / Rest For auto fields remove; bot skips new user before snap shar |
 | 2026-10-10 | `bug` | Logs shown twice (sidebar page + dashboard box) | Symptom: same log output in Dashboard LIVE LOG box and sidebar Logs page. Cause: two separate QTextEdit widget |
 | 2026-10-10 | `session` | v16: Logs ek jaygay (Dashboard LIVE LOG panel) | User: logs option 2 jaygay. Fix: sidebar Logs page + nav button removed; full log panel (search, Clear, Export |
 | 2026-10-10 | `question` | Shared zip contains account_sessions token | Earlier root-project zips (v14 and before) contained account_sessions/*/storage_state.json with a live chitcha |

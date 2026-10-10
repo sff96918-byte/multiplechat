@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v16 analysis: early skip before snap share (no code change)
+
+User: dashboard New Chat Delay / Rest Every / Rest For auto fields remove; bot skips new user before snap share. Findings from code read + offline sim (no network): New Chat Delay is only a wait between chats (browser _wait_before_new_chat, session opener_delay); no code uses it as partner-silence timeout. Real skip causes: browser Max Replies default 8 (dashboard chat_timeout_input, loop counts bot replies) and engine EVA_MAX_REPLIES=8 (eva_flow closer then END); snap share typically occurs at reply 4-10 in sim so cap 8 cuts a share of chats. Session mode: ignores dashboard settings (LoopConfig defaults), no snap end (keeps chatting), no rest, no Max Replies from UI. Silence skip: browser inactivity 600s+300s grace, session skip_idle 90s - none is 6-9s. Plan proposed to user, awaiting approval.
 ## 2026-10-10 | v16: Logs ek jaygay (Dashboard LIVE LOG panel)
 
 User: logs option 2 jaygay. Fix: sidebar Logs page + nav button removed; full log panel (search, Clear, Export, All/Thread tabs) moved into Dashboard page as LIVE LOG. log_text now alias of All Logs tab; duplicate append removed in log_message and on_thread_log. Verified: GUI offscreen with stub libGL/libEGL/libxkbcommon (sandbox-only, not shipped): nav has no logs, log inside dashboard, each line once, search/clear/thread tabs OK; test_live 44/44, fuzz 4/4, flow 124, matcher, demo OK. Zip picccccccfull-project-v16-ONE-LOG.zip (no account_sessions). v15 zip removed from branch.

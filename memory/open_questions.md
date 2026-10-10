@@ -1,5 +1,8 @@
 # OPEN QUESTIONS (এখনো মীমাংসা হয়নি)
 
+## 2026-10-10 | Silence rule and Max Replies policy
+
+Need user decision before fixing: (1) silence after partner msg: keep waiting (recommended) vs skip after X sec; (2) Max Replies: remove cap until snap share (recommended) vs raise to N; (3) apply to browser and session both.
 ## 2026-10-10 | Shared zip contains account_sessions token
 
 Earlier root-project zips (v14 and before) contained account_sessions/*/storage_state.json with a live chitchat token. v15 excludes it. Open: user should rotate/logout that account session if the zip was shared publicly; old zip still exists in git history on branch.
