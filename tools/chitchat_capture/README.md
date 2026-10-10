@@ -40,14 +40,18 @@ python capture_direct.py --minutes 15
 
 | ফাইল | শেয়ার? | কারণ |
 |---|---|---|
-| **`share_bundle.json`** | ✅ হ্যাঁ | Token redacted, message text ও username masked, শুধু structure ও প্রমাণ |
+| **`share_bundle.json`** | ✅ হ্যাঁ | Token redacted, message text ও username masked (`--keep-text` ছাড়া), structure ও প্রমাণ, multipart field নাম |
 | **`REPORT.md`** | ✅ হ্যাঁ | মানুষের পড়ার সারাংশ |
 | `summary.json` | ✅ হ্যাঁ | একই তথ্য, machine-readable |
 | `events.jsonl` | ❌ না | পূর্ণ chat text আছে (ব্যক্তিগত) |
 | `dom/`, `screens/` | ❌ না | পূর্ণ page HTML ও screenshot, chat text আছে |
 | `browser_profile/` | ❌ কখনো না | Login cookie আছে |
 
-`events.jsonl`, `dom/*.json`, `summary.json`, `REPORT.md`, `dom/*.html`-এ cookie value, JWT ও email masked করা হয়। তবু `dom/`, `screens/`, `events.jsonl`-এ পূর্ণ chat text থাকে, তাই এগুলো local-only। `--keep-text` না দিলে `share_bundle.json`-এ message text ও username থাকে না।
+**Redaction-এর সঠিক সীমা (v23-এ সংশোধিত):**
+- কোড যা করে: request/response body-তে token-জাতীয় key-এর মান, JWT, email, এবং URL query-র `token`/secret মান মask করে (`redact_*`, `redact_text`); cookie/header-এর মানের বদলে শুধু নাম রাখে।
+- `--keep-text` না দিলে `share_bundle.json`-এ message text (`text`/`content`/`body` key) ও username মask থাকে। multipart send body-তে field নাম ও ধরন থাকে, `content`-এর মান মask থাকে, `nonce`-এর মান থাকে।
+- `events.jsonl`, `dom/*.html`, `dom/*.json`, `screens/`-এ পূর্ণ chat text ও username থাকতে পারে। এগুলো তাই **local-only**।
+- `summary.json` ও `REPORT.md` কে আমরা "সব সময় পুরোপুরি মask" বলছি না। শেয়ারের আগে সেগুলোও একবার দেখে নিন। অর্থাৎ শেয়ার করুন শুধু `share_bundle.json` ও `REPORT.md`।
 
 ## ৪. Site update হলে কী করবেন
 

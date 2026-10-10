@@ -39,7 +39,8 @@ class LoopConfig:
     next_delay_s: (int, int) = (2, 5)   # human-ish pause before requeueing
     skip_idle_s: float = 90.0           # partner silent this long -> skip
     skip_after_msgs: int = 0            # 0 = no cap (chat until snap share / silence)
-    min_reply_delay_s: float = 1.0
+    # v23: floor = capture minimum of human inbound->reply lag (4.5 s, n=10 weebbsssc)
+    min_reply_delay_s: float = 4.5
     typing_indicator: bool = True
     opener_delay_s: (int, int) = (1, 3)
     queue_timeout_s: float = 120.0      # in queue this long -> re-POST /match

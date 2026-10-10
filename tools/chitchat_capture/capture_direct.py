@@ -165,6 +165,45 @@ def parse_body(raw: bytes | None, ctype: str):
     return redact_text(text[:4000])
 
 
+def parse_multipart(raw: bytes | None, ctype: str):
+    """multipart/form-data body -> list of parts (names, types, sizes).
+
+    Text fields keep their value (mask_for_share hides it unless --keep-text),
+    file parts keep only name/type/size. Needed to learn the exact field names
+    of e.g. POST …/messages without guessing.
+    """
+    if not raw or "multipart" not in (ctype or ""):
+        return None
+    m = re.search(r'boundary=("?)([^";]+)\1', ctype)
+    if not m:
+        return None
+    boundary = b"--" + m.group(2).strip().encode("utf-8", "replace")
+    parts = []
+    for chunk in raw.split(boundary):
+        if chunk[:2] == b"--" or not chunk.strip():
+            continue
+        chunk = chunk[2:] if chunk.startswith(b"\r\n") else chunk
+        head, sep, body = chunk.partition(b"\r\n\r\n")
+        if not sep:
+            continue
+        body = body[:-2] if body.endswith(b"\r\n") else body
+        headers = head.decode("utf-8", "replace")
+        name = re.search(r'name="([^"]*)"', headers)
+        fname = re.search(r'filename="([^"]*)"', headers)
+        ptype = re.search(r"Content-Type:\s*([^\r\n]+)", headers, re.I)
+        entry = {"name": name.group(1) if name else None,
+                 "content_type": ptype.group(1).strip() if ptype else None}
+        if fname:
+            entry.update({"filename": "<file>", "size": len(body)})
+        else:
+            text_val = body.decode("utf-8", "replace")
+            # text-like field names use key "text" so mask_for_share hides them by default
+            key = "text" if (name and name.group(1) in TEXT_KEYS) else "value"
+            entry.update({"value_len": len(body), key: text_val})
+        parts.append(entry)
+    return parts
+
+
 def redact_obj(o):
     return redact_value(None, o)
 
@@ -729,9 +768,18 @@ def drain(q: "queue.Queue[tuple]", rec: Recorder, ctx) -> None:
                     data["res_json"] = parsed
                 elif parsed is not None:
                     data["res_text"] = parsed
-                post = req.post_data
-                data["req_json_or_text"] = parse_body(post.encode("utf-8") if post else None,
-                                                      req.headers.get("content-type", ""))
+                ctype_req = req.headers.get("content-type", "")
+                try:
+                    raw_req = req.post_data_buffer
+                except Exception:  # noqa: BLE001 — not every request has a body buffer
+                    raw_req = None
+                if raw_req is None:
+                    post = req.post_data
+                    raw_req = post.encode("utf-8") if post else None
+                data["req_json_or_text"] = parse_body(raw_req, ctype_req)
+                mp = parse_multipart(raw_req, ctype_req)
+                if mp is not None:
+                    data["req_multipart"] = mp
                 if isinstance(data["req_json_or_text"], (dict, list)):
                     data["req_json"] = data["req_json_or_text"]
                 rec.event("http", data)
@@ -782,6 +830,27 @@ def selftest() -> int:
     m = mask_for_share({"messages": [{"text": "secret words", "n": 1}]}, keep_text=False)
     ok("share mask hides text", m["messages"][0]["text"] == "<text len=12>")
     ok("share mask keeps keep_text", mask_for_share({"text": "a"}, keep_text=True)["text"] == "a")
+    # v23: multipart request body -> field names visible (send_message form fields)
+    mp_ctype = "multipart/form-data; boundary=----WebKitFormBoundaryABC"
+    mp_raw = (b"------WebKitFormBoundaryABC\r\n"
+              b'Content-Disposition: form-data; name="content"\r\n\r\n'
+              b"hello there\r\n"
+              b"------WebKitFormBoundaryABC\r\n"
+              b'Content-Disposition: form-data; name="nonce"\r\n\r\n'
+              b"n-123\r\n"
+              b"------WebKitFormBoundaryABC\r\n"
+              b'Content-Disposition: form-data; name="attachment"; filename="a.png"\r\n'
+              b"Content-Type: image/png\r\n\r\n"
+              b"\x89PNG\r\n"
+              b"------WebKitFormBoundaryABC--\r\n")
+    mp = parse_multipart(mp_raw, mp_ctype)
+    ok("multipart: field names parsed", [f["name"] for f in mp] == ["content", "nonce", "attachment"])
+    ok("multipart: file part marked, no bytes kept",
+       mp[2].get("filename") == "<file>" and mp[2].get("size") == 4 and "value" not in mp[2])
+    ok("multipart: text value kept for nonce", mp[1].get("value") == "n-123")
+    ok("multipart: content value masked on share",
+       mask_for_share({"req_multipart": mp}, keep_text=False)["req_multipart"][0].get("text") != "hello there")
+    ok("multipart: no boundary -> None", parse_multipart(mp_raw, "multipart/form-data") is None)
     sh = shape({"a": 1, "b": [{"c": "x"}]})
     ok("shape has types, no values", sh == {"a": "int", "b": [{"c": "str"}]})
 

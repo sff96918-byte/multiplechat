@@ -143,11 +143,49 @@ def test_send_message() -> None:
     asyncio.run(run())
 
 
+# ---------------------------------------------------------------- reply timing
+def test_reply_timing() -> None:
+    """Reply floor follows the human reference captured in weebbsssc (v23 evidence:
+    inbound chatMessage -> reply 4.5-11.8 s, median 6.3 s, n=10). The floor is
+    LoopConfig.min_reply_delay_s; the engine delay is added on top only when larger."""
+    print("\n[reply timing]")
+    from core.ws_transport import ws_chat_loop as wcl
+
+    check("default reply floor = 4.5 s (capture minimum)",
+          wcl.LoopConfig().min_reply_delay_s == 4.5, str(wcl.LoopConfig().min_reply_delay_s))
+
+    class _Eng:
+        def __init__(self, d): self.d = d
+        def delay_for(self, text): return self.d
+
+    class _Api:
+        async def send_typing(self, cid): return None
+        async def send_message(self, cid, text): return {"nonce": "n"}
+
+    async def sleeps_for(engine_delay):
+        loop = wcl.WsChatLoop(_Api(), None, _Eng(engine_delay), wcl.LoopConfig(typing_indicator=False))
+        loop.conversation_id = "c1"
+        recorded = []
+        real = wcl.asyncio.sleep
+        async def fake(d, *a, **k):
+            recorded.append(d)
+        wcl.asyncio.sleep = fake
+        try:
+            await loop._send("hi")
+        finally:
+            wcl.asyncio.sleep = real
+        return recorded[-1] if recorded else None
+
+    check("short engine delay -> floor 4.5 applied", asyncio.run(sleeps_for(0.5)) == 4.5)
+    check("long engine delay -> engine value kept", asyncio.run(sleeps_for(7.0)) == 7.0)
+
+
 def main() -> int:
     test_codec()
     test_partner()
     test_find_by_nonce()
     test_send_message()
+    test_reply_timing()
     failed = [n for n, ok in _results if not ok]
     print(f"\nRESULT: {len(_results) - len(failed)}/{len(_results)} passed")
     return 1 if failed else 0

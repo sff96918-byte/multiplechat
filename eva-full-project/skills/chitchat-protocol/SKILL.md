@@ -46,5 +46,6 @@ Token চাওয়া/দেখানো নিষেধ। Debug-এ শু�
 - 4xx definitive, 403 `Flagged` → আগের মতোই raise (`FlaggedError`)।
 - Unit test: `python test_ws_transport.py` (22 checks, synthetic fixture)।
 - Open unknown (গোপনে ধরে নেবে না): send request-এর exact body/field name capture-এ নেই (14/14 POST body খালি)। `capture.py`-তে `Network.getRequestPostData` ডাকা হয় না — নতুন capture-এ এটা যাচাই করতে হবে।
-- Timing evidence (এক session, n=10): inbound chatMessage → bot reply 4.5–11.8 s (median 6.3 s)। Timing পরিবর্তন এই evidence দিয়ে হবে না — আলাদা অনুমোদন লাগবে।
+- Timing (v24, অনুমোদিত): session reply floor `LoopConfig.min_reply_delay_s = 4.5` — capture-এর human inbound→reply minimum (n=10; 4.5–11.8 s, median 6.3 s)। Engine delay বড় হলে তা-ই। আরও পরিবর্তনে নতুন অনুমোদন লাগবে।
+- Capture tool (root `tools/chitchat_capture`): multipart body field নাম parse করে; নতুন capture-এ `share_bundle.json`-এর `req_multipart` দেখে send form-এর field নাম নিশ্চিত করুন।
 
