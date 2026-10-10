@@ -1210,7 +1210,10 @@ class ThreadManager(QObject):
         # Do not call terminate(), force_cleanup(), or global taskkill here.
         # If a browser takes longer than the graceful window, its own finally
         # block still owns cleanup and the Qt finished signal will remove it.
-        remaining = [tid for tid, w in self.workers.items() if w.isRunning()]
+        # Snapshot first: the GUI thread may delete entries from self.workers
+        # while this shutdown thread runs; iterating the live dict could raise
+        # "dictionary changed size during iteration" and skip force cleanup.
+        remaining = [tid for tid, w in list(self.workers.items()) if w.isRunning()]
         if remaining:
             self.thread_log.emit(
                 0,
@@ -1225,7 +1228,7 @@ class ThreadManager(QObject):
             # pending browser call errors out; run()'s own finally-block is
             # idempotent, so closing again is harmless.  We still NEVER call
             # terminate() / taskkill — clean thread exit paths stay intact.
-            for tid, worker in list(self.workers.items()):
+            for _tid, worker in list(self.workers.items()):
                 try:
                     worker.force_cleanup()
                 except Exception:

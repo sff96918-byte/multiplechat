@@ -57,3 +57,5 @@ QT_QPA_PLATFORM=offscreen python -c "import entry.main; print('gui import ok')" 
 - "চালানো যায়নি" আর "PASS" আলাদা রাখো।
 - Sandbox-এ chitchat.gg network নেই — live test ইউজারের PC-তে; সেটা "UNVERIFIED (live)" হিসেবে লেখো।
 - একটাও FAIL থাকলে "done" বলবে না।
+
+**v28:** `entry/thread_manager.py` stop path: worker list snapshot (`list(self.workers.items())`) এর জন্য কোনো runtime test নেই (PyQt6 লাগে); gate-এর `py_compile` + `gui import (stubbed)` দিয়ে যাচাই হয়। Windows GUI-তে Stop চাপলে "All threads stopped" ও Start আবার সক্রিয় হওয়া manual যাচাই করুন।

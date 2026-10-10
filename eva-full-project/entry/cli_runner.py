@@ -344,7 +344,7 @@ def main():
     runner.quit_signal.connect(app.quit)
     
     # Setup signal handler for Ctrl+C
-    def signal_handler(signum, frame):
+    def signal_handler(_signum, _frame):
         print("\n")
         runner.stop()
     

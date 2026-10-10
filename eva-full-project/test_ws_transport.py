@@ -159,8 +159,8 @@ def test_reply_timing() -> None:
         def delay_for(self, text): return self.d
 
     class _Api:
-        async def send_typing(self, cid): return None
-        async def send_message(self, cid, text): return {"nonce": "n"}
+        async def send_typing(self, _cid): return None
+        async def send_message(self, _cid, _text): return {"nonce": "n"}
 
     async def sleeps_for(engine_delay):
         loop = wcl.WsChatLoop(_Api(), None, _Eng(engine_delay), wcl.LoopConfig(typing_indicator=False))
