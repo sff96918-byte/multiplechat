@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v16: Logs ek jaygay (Dashboard LIVE LOG panel)
+
+User: logs option 2 jaygay. Fix: sidebar Logs page + nav button removed; full log panel (search, Clear, Export, All/Thread tabs) moved into Dashboard page as LIVE LOG. log_text now alias of All Logs tab; duplicate append removed in log_message and on_thread_log. Verified: GUI offscreen with stub libGL/libEGL/libxkbcommon (sandbox-only, not shipped): nav has no logs, log inside dashboard, each line once, search/clear/thread tabs OK; test_live 44/44, fuzz 4/4, flow 124, matcher, demo OK. Zip picccccccfull-project-v16-ONE-LOG.zip (no account_sessions). v15 zip removed from branch.
 ## 2026-10-10 | v15: root project AGENTS.md + skills/ added (A-Z guide for any agent)
 
 Root project eva-full-project got rewritten AGENTS.md (Bangla, project map, hard rules, verify gate, delivery rules, current state) and skills/ with 7 SKILL.md: project-map, session-chat-debug, fix-error, reply-content, gui-dashboard, chitchat-protocol, verify. Fixed stale facts from old AGENTS (test counts now 44/124/4/matcher; no-test-framework claim removed). Verified in sandbox: test_matcher, test_live 44/44, test_fuzz 4/4, test_flow 124, demo_chat, py_compile, session_chat --list. GUI import fails only due to missing libGL in sandbox (not project bug). Zip picccccccfull-project-v15-AGENTS-SKILLS.zip 161 files, account_sessions and configs/session.json excluded. Repo AGENTS.md got pointer to root project; v14 zip removed from branch. Commit 85b4010.

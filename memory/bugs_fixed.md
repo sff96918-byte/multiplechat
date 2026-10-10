@@ -1,5 +1,8 @@
 # BUGS FIXED (আর খুঁজতে হবে না — newest first)
 
+## 2026-10-10 | Logs shown twice (sidebar page + dashboard box)
+
+Symptom: same log output in Dashboard LIVE LOG box and sidebar Logs page. Cause: two separate QTextEdit widgets, each written by log_message/on_thread_log. Fix: entry/main.py single panel in dashboard; writes only to All Logs tab. Verified: offscreen GUI check, each message count 1.
 ## 2026-10-10 | smoke test imported deleted module
 
 socket_smoke_test.py imported eva.replies.ReplyEngine; after v11 removal of eva/replies.py the smoke test crashed with ModuleNotFoundError. Lesson: before deleting a module, grep WHOLE repo including ops/ and project/ for importers (grep -rn 'module_name' --include='*.py'). Fixed with inline _StubEngine.
