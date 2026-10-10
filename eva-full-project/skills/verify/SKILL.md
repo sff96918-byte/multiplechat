@@ -7,9 +7,13 @@ description: যেকোনো কোড/config/content বদলের পর 
 
 ## এক কমান্ড (সবসময় প্রথমে)
 ```bash
-python tools/verify_gate.py     # project map + compile + import + সব test + GUI stub import; শেষে GATE: N/13
+python tools/verify_gate.py     # project map + compile + import + সব test + GUI stub import; শেষে GATE: N/M steps passed (optional tool না থাকলে SKIP, FAIL নয়)
 ```
 FAIL দেখালে কোন step ব্যর্থ তা নাম ধরে দেখায়; সেই step-এর পুরো output আলাদা করে দেখো।
+
+**v26 নতুন step:** `test_rules_characterization.py` (chat/rules.py contract, 33 check); `tools/secret_scan.py --selftest` + `tools/secret_scan.py` (secret pattern, মান প্রিন্ট হয় না); `pip-audit -r data/requirements.txt` (PyPI JSON, network লাগে)। Optional (SKIP হতে পারে): `gitleaks` (binary PATH-এ থাকলে), `pyflakes` (module থাকলে), `tools/rules_coverage.py --floor 50` (`coverage` package লাগে)।
+
+**CRITICAL_CORE ফাইল বদলালে:** `python tools/critical_guard.py` — test_*.py পরিবর্তন ছাড়া CRITICAL ফাইল বদলালে FAIL। এটা gate-এ নেই (zip-এ git history নেই); commit-এর আগে হাতে চালাও। TDD-র ক্রম এটা যাচাই করে না।
 
 ## Tier 1 — সবসময় (ছোট পরিবর্তনও)
 ```bash

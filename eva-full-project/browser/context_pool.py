@@ -39,7 +39,7 @@ from __future__ import annotations
 import threading
 import time
 import warnings
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 # Camoufox emits greenlet/deprecation noise that floods logs.
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -133,7 +133,8 @@ class ContextPool:
 
         if engine == "camoufox":
             try:
-                from camoufox.sync_api import Camoufox
+                import importlib
+                importlib.import_module("camoufox.sync_api").Camoufox  # availability probe
             except Exception as e:
                 if self.verbose:
                     print(f"[ContextPool] Camoufox import failed: {e}")

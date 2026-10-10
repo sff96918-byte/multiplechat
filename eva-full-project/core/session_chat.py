@@ -32,7 +32,6 @@ if str(ROOT) not in sys.path:
 from core.config_loader import load_chat_timing, load_runtime_config  # noqa: E402
 from core.ws_transport.chitchat_api import ChitchatApi, SessionExpiredError  # noqa: E402
 from core.ws_transport.chitchat_socket import ChitchatSocket  # noqa: E402
-from core.ws_transport.protocol import DEFAULT_UA  # noqa: E402
 from core.ws_transport.ws_chat_loop import LoopConfig, WsChatLoop  # noqa: E402
 
 log = logging.getLogger("session_chat")

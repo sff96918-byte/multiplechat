@@ -138,7 +138,6 @@ class TgBrain:
                     continue
                 rule = _Rule(cat, priority, short_only,
                              [q for q, _ in keep_q], clean_ans)
-                base = len(self.rules)
                 self.rules.append(rule)
                 for qi, s in enumerate(rule.sig):
                     for tok in set(s):

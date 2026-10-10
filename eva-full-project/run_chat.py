@@ -75,7 +75,7 @@ def main() -> int:
         for extra in bot.get_pending_replies(state):
             print(f"eva> {extra}")
             if show_debug:
-                print(f"     # horny.txt (2nd line of the answer)")
+                print("     # horny.txt (2nd line of the answer)")
         if state["stage"] == "END":
             print("--- chat ended, type /new to start another ---")
         print()

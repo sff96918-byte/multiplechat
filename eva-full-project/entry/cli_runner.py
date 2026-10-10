@@ -14,7 +14,6 @@ if _ROOT_DIR not in sys.path:
     sys.path.insert(0, _ROOT_DIR)
 
 import signal
-import threading
 from datetime import datetime
 
 from PyQt6.QtCore import QCoreApplication, QObject, pyqtSignal
@@ -125,7 +124,7 @@ class CLIRunner(QObject):
         proxies = []
         
         if not os.path.exists(self.proxy_file):
-            self.log(f"ℹ Proxy file not found, continuing without proxy")
+            self.log("ℹ Proxy file not found, continuing without proxy")
             return proxies
         
         try:
@@ -133,7 +132,7 @@ class CLIRunner(QObject):
                 content = f.read().strip()
             
             if not content:
-                self.log(f"ℹ Proxy file is empty, continuing without proxy")
+                self.log("ℹ Proxy file is empty, continuing without proxy")
                 return proxies
             
             # Parse proxy file
@@ -163,7 +162,7 @@ class CLIRunner(QObject):
             if proxies:
                 self.log(f"✓ Loaded {len(proxies)} proxy(ies) from {self.proxy_file}")
             else:
-                self.log(f"⚠ Could not parse proxy file, continuing without proxy")
+                self.log("⚠ Could not parse proxy file, continuing without proxy")
         except Exception as e:
             self.log(f"⚠ Error reading proxy file: {str(e)}, continuing without proxy")
         
@@ -354,7 +353,7 @@ def main():
     
     # On Windows, we need to periodically process events to handle signals
     if sys.platform == 'win32':
-        import ctypes
+        pass
         
         # Create a timer to process events and check for signals
         from PyQt6.QtCore import QTimer

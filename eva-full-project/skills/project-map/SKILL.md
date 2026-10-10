@@ -45,7 +45,7 @@ Test-গুলো `legacy` সেট করে।
 GUI-তে এগুলো Live Chat feed-এ `[S97]` হিসেবে দেখায় (`SESSION_THREAD_ID = 97`)।
 
 ## Fragile ফাইল (সাবধানে)
-- `browser/browser_automation.py` (~3600 লাইন) — login/chat lifecycle; thread-safe ধরবে না।
+- `browser/browser_automation.py` (~3700 লাইন) — login/chat lifecycle; thread-safe ধরবে না।
 - `entry/thread_manager.py` (~1250) — orchestration + Qt signal।
-- `entry/main.py` (~2600) — GUI। Settings → CHAT TIMING: New Chat Delay (একটা field) + Silence timeout।
-- `chat/rules.py` (~1300) — legacy engine + TXT matcher।
+- `entry/main.py` (~2180) — GUI। Settings → CHAT TIMING: New Chat Delay (একটা field) + Silence timeout।
+- `chat/rules.py` (~2140) — legacy engine + TXT matcher। Contract test: `test_rules_characterization.py`; coverage: `python tools/rules_coverage.py`।

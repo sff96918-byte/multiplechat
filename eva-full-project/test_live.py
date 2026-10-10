@@ -52,6 +52,7 @@ except (AttributeError, ValueError):
 
 from chat.rules import RuleEngine, _ANSWER_ACK_POOL
 from chat import persona as _persona
+del _persona  # import side effect only
 
 
 AGE_BITS = ["how old", "u? age", "age??", "asl?", "ur age", "age?"]

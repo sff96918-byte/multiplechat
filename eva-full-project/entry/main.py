@@ -6,7 +6,6 @@ browser session manager, performance presets.
 import sys
 import os
 import argparse
-import random
 import threading
 import re
 
@@ -16,13 +15,12 @@ warnings.filterwarnings('ignore', message='.*greenlet.*')
 
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                              QHBoxLayout, QPushButton, QTextEdit, QLabel,
-                             QProgressBar, QGroupBox, QRadioButton, QButtonGroup,
-                             QSizePolicy, QLineEdit, QFileDialog, QFrame, QScrollArea,
-                             QGridLayout, QFormLayout, QMessageBox,
-                             QTabWidget, QCheckBox, QComboBox, QListWidget,
-                             QListWidgetItem, QSplitter, QStackedWidget,
+                             QGroupBox, QRadioButton, QButtonGroup, QSizePolicy,
+                             QLineEdit, QFileDialog, QFrame, QScrollArea, QGridLayout,
+                             QMessageBox, QTabWidget, QCheckBox,
+                             QComboBox, QListWidget, QListWidgetItem, QStackedWidget,
                              QTableWidget, QTableWidgetItem, QHeaderView)
-from PyQt6.QtCore import QThread, pyqtSignal, QTimer, Qt
+from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QFont, QIcon, QColor
 import psutil
 import datetime

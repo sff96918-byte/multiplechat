@@ -26,8 +26,7 @@ except (AttributeError, ValueError):
 
 import random
 from eva_flow import (EvaFlowBot, TriggerMatcher, _load_triggers,
-                      INPUT_DIR, OUTPUT_DIR, MAX_BOT_REPLIES,
-                      CATEGORY_PRIORITY, TERMINAL_CATEGORIES)
+                      INPUT_DIR)
 
 PASS, FAIL = 0, 0
 FAILURES = []

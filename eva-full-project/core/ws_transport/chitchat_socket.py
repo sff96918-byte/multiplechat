@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import asyncio
 from collections import deque
-import json
 import logging
 import random
 import time

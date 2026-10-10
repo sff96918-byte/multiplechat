@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import importlib
 import json
-import os
 import platform
 import sys
 from pathlib import Path
@@ -61,7 +60,8 @@ def check_packages() -> None:
 
 def check_qt_display() -> None:
     try:
-        from PyQt6.QtWidgets import QApplication  # noqa: F401
+        from PyQt6.QtWidgets import QApplication
+        del QApplication  # import is the check
         rec("PASS", "Qt widgets load", "QtWidgets import ok")
     except Exception as e:
         rec("FAIL", "Qt widgets load", f"{type(e).__name__}: {e}  (Windows-এ সাধারণত PyQt6 reinstall করলে ঠিক হয়)")

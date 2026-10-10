@@ -18,7 +18,7 @@ import random
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Callable, Dict, List, Optional
+from typing import Callable, List, Optional
 
 from .chitchat_api import ChitchatApi, FlaggedError
 from .chitchat_socket import ChitchatSocket

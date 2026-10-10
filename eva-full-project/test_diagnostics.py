@@ -25,7 +25,7 @@ def ok(name, cond, extra=""):
 
 
 # 1) redaction
-r = D.redact("token=abc123SECRET user@mail.com eyJhbGciOiJIUzI1.eyJzdWIiOiIxMjM0.SflKxwRJSMeK Bearer xyz.tok password: hunter2")
+r = D.redact("token=abc123SECRET user@mail.com eyJhbGciOiJIUzI1.eyJzdWIiOiIxMjM0.SflKxwRJSMeK Bearer xyz.tok password: hunter2")  # secretscan: ignore (redaction fixture, not a real token)
 ok("token value masked", "abc123SECRET" not in r)
 ok("email masked", "user@mail.com" not in r and "<email>" in r)
 ok("JWT masked", "eyJhbGciOi" not in r and "<JWT>" in r)

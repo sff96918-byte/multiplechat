@@ -494,7 +494,8 @@ class ChitchatAutomation:
             # Playwright downloads its Chromium into its cache directory.
             # If missing, install it so the frozen app can launch Chromium.
             try:
-                from playwright.sync_api import sync_playwright
+                import importlib
+                importlib.import_module("playwright.sync_api").sync_playwright  # availability probe
                 # Triggering the driver start probes the browser; if the
                 # browser isn't present Playwright raises a clear error that
                 # the user can fix by running `playwright install chromium`.
@@ -842,11 +843,11 @@ class ChitchatAutomation:
                 else:
                     mark_session_banned(self.account)
                     self.log(
-                        f"[Ban] Could not fully delete; flagged session as banned"
+                        "[Ban] Could not fully delete; flagged session as banned"
                     )
             elif email:
                 mark_session_banned(self.account)
-                self.log(f"[Ban] Flagged session as banned (auto-delete disabled)")
+                self.log("[Ban] Flagged session as banned (auto-delete disabled)")
         except Exception as error:
             self.log(f"[Ban] Warning during session cleanup: {error}")
         # Live stock update after the ban is processed.
@@ -2626,7 +2627,7 @@ class ChitchatAutomation:
             ''')
             
             return is_disconnected.get('disconnected', False)
-        except Exception as e:
+        except Exception:
             return False
     
     def send_chat_message(self, page, message, chat_number=None):
@@ -2759,7 +2760,7 @@ class ChitchatAutomation:
                         button = page.locator(selector).first
                         if button.is_visible(timeout=1000):
                             self._humanize_click(button)
-                            self.log(f"[Chat] Clicked new chat button (fallback)")
+                            self.log("[Chat] Clicked new chat button (fallback)")
                             time.sleep(random.uniform(1.0, 1.5))
                             return True
                     except Exception:
@@ -2884,7 +2885,7 @@ class ChitchatAutomation:
         }
         
         self.log("="*60)
-        self.log(f"[Chat Bot] Starting continuous chat loop")
+        self.log("[Chat Bot] Starting continuous chat loop")
         self.log(f"[Chat Bot] Loaded {len(self.fixed_message_templates)} message template file(s)")
         self.log("="*60)
         if self.session_management_cfg.get("log_alive_count_on_start", True):
@@ -2981,7 +2982,7 @@ class ChitchatAutomation:
                         self.log(f"[Chat #{stats['total_chats']}] ✓ Connected to stranger! (via: {method})")
                         break
                         
-                except Exception as e:
+                except Exception:
                     pass
                 
                 # Captcha may block chat connection; alert user to solve it.
@@ -3307,7 +3308,7 @@ class ChitchatAutomation:
                 time.sleep(0.5)
         
         self.log("="*60)
-        self.log(f"[Chat Bot] Session completed")
+        self.log("[Chat Bot] Session completed")
         self.log(f"  Total Chats: {stats['total_chats']}")
         self.log(f"  Messages Sent: {stats['messages_sent']}")
         self.log(f"  Messages Received: {stats['messages_received']}")

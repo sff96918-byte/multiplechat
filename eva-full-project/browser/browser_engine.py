@@ -36,8 +36,6 @@ Camoufox manager for Camoufox).  Callers should NEVER inspect it directly.
 
 from __future__ import annotations
 
-import os
-import sys
 from typing import Any, Dict, Optional, Tuple, Callable
 
 LogFn = Optional[Callable[[str], None]]
@@ -432,7 +430,6 @@ def close_browser(handle: Any, log_fn: LogFn = None) -> None:
 # ---------------------------------------------------------------------------
 
 def _launch_chromium(headless, proxy, log_fn):
-    import random
     from playwright.sync_api import sync_playwright
 
     if log_fn:

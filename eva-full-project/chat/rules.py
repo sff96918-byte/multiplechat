@@ -37,7 +37,7 @@ from .geo_handler import CountryRotator
 from .database.loader import load_pipe_db, load_evoflow_rules, load_promote_extract
 from .horny_flirty_db import match_horny, match_flirty
 from .persona import answer_user, react_to_statement
-from .style_analyzer import mirror_reply, analyze_style, StyleProfile
+from .style_analyzer import mirror_reply, analyze_style
 from .tg_brain import TgBrain
 
 # ---------------------------------------------------------------------------
@@ -1423,7 +1423,6 @@ class RuleEngine:
         # ==============================================================
         # SIMPLE LOGIC: Detect user message → reply from output file
         # ==============================================================
-        st = state["flirty_state"]
 
         # Greeting done on first message
         if state["message_count"] == 0:
@@ -2080,10 +2079,10 @@ class RuleEngine:
                 # Generate a contextual ack that references the known fact
                 acks = [
                     f"that's cool {chosen_val} sounds fun",
-                    f"nice i like that about u",
-                    f"ok that's actually really cool",
-                    f"love that for u",
-                    f"haha that's awesome",
+                    "nice i like that about u",
+                    "ok that's actually really cool",
+                    "love that for u",
+                    "haha that's awesome",
                 ]
                 return random.choice(acks)
         if self.rule_brain is not None:
