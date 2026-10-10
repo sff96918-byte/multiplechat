@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import logging
 import random
+from collections import deque
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -78,6 +80,7 @@ class FlowReplyEngine:
         write_snap_ids(root / "data", snap_usernames or [])
         self.bot = eva_flow.EvaFlowBot(root=str(root))
         self._states: Dict[str, Dict[str, Any]] = {}
+        self._decisions: deque = deque(maxlen=200)   # debug ring buffer
         self.timing: Dict[str, Any] = dict(DEFAULT_TIMING)
         if timing:
             self.timing.update(timing)
@@ -87,6 +90,12 @@ class FlowReplyEngine:
     def opener(self, partner: dict) -> str:
         state = self._state_for(partner)
         reply = self.bot.reply("hi", state)  # force the greeting pool
+        self._decisions.append({
+            "t": time.strftime("%H:%M:%S"),
+            "partner": (partner or {}).get("id", "?"),
+            "stage": state.get("stage", "?"), "reason": self.last_reason(),
+            "in": "hi", "out": (reply or "")[:60],
+        })
         log.debug("opener via %s (%s)", self.bot.last_file, self.bot.last_reason)
         return reply
 
@@ -95,8 +104,13 @@ class FlowReplyEngine:
         pid = (partner or {}).get("id", "?")
         state = self._states.get(pid) or self._state_for(partner)
         reply = self.bot.reply(incoming or "hi", state)
-        log.debug("flow %r -> %r | stage=%s", (incoming or "")[:40],
-                  (reply or "")[:60], state.get("stage"))
+        self._decisions.append({
+            "t": time.strftime("%H:%M:%S"), "partner": pid,
+            "stage": state.get("stage", "?"), "reason": self.last_reason(),
+            "in": (incoming or "")[:60], "out": (reply or "")[:60],
+        })
+        log.debug("flow %r -> %r | stage=%s reason=%s", (incoming or "")[:40],
+                  (reply or "")[:60], state.get("stage"), self.last_reason())
         return reply
 
     def farewell(self, partner: dict) -> str:
@@ -129,6 +143,10 @@ class FlowReplyEngine:
 
     def last_reason(self) -> str:
         return getattr(self.bot, "last_reason", "")
+
+    def decisions(self) -> List[dict]:
+        """Debug ring buffer — প্রতিটা SMS-এ কী match হলো কী উত্তর গেল।"""
+        return list(self._decisions)
 
     def last_file(self) -> str:
         return getattr(self.bot, "last_file", "")

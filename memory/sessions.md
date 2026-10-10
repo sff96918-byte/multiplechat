@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v10: debug upgrade (file log, ring buffers, export report)
+
+New eva/debugtools.py: setup_debug_logging (logs/eva.log RotatingFile 1MBx5 ALWAYS DEBUG; eva logger level DEBUG when cfg debug=true), mask_secrets (token/cookie/password/secret keys + whole cookies dict), export_debug_report (config masked + session boolean-only + stats + last300 WS frames + API requests + engine decisions + 400 log lines -> logs/debug_report_*.txt). Socket: _recent deque300 + record_frame scrubs own cookie values (>=8 chars) from previews; API: _recent200 with status/ms/bytes + log.debug per request + log.warning on >=400. Flow+fixed engines: _decisions deque200 incl opener entries, decisions() accessor. GUI: debug checkbox in LOOP group, gui_tail deque800, Export Debug Report buttons on both mood footers, QTextEdit maximumBlockCount 2000, setup_debug_logging on app start + on START. CLI ws_bot: log file path print + last 15 decisions on stop. Tests 42/42 (5 new debugtools incl secret-leak regression).
 ## 2026-10-10 | v9: shared BOT SETUP page + snap.txt support
 
 User asked: engine/fixed-sms-txt/snap settings main dashboard e na ki each mood e? Answer implemented: ekta shared BOT SETUP page (dui mood thekei ⚙️ button e khule, back = origin mood). Snap nicher feature: resolve_snap_usernames(cfg) in flow_reply_engine -- snap_file (one per line, # comment) > snap_usernames comma list; wired in ws_bot + server + GUI worker; tests/test_snap_resolve.py 4 tests. Setup page: fixed script preview (count + first lines), open-in-editor button, snap status label, engine summary labels on mood headers. Suite 37/37, protocol 24/24, session 7/7, GUI audit 11/11.

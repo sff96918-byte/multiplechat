@@ -45,7 +45,8 @@
     ]
   },
   "_comment2": "snap: snap_file (txt, প্রতি লাইনে একটা) priority বেশি — না থাকলে snap_usernames comma list। timing = human pacing। loop = matching behavior। browser_autosave = browser mood-এর session auto-save।",
-  "_comment3": "timing = realistic human pacing (legacy project-এর human_behavior/chat_timing মান)",
+  "_comment3": "debug: true করলে verbose log (WS frames/API/engine decisions) — logs/eva.log এ সবসময় trail থাকে",
   "fixed_file": "configs/fixed_script.txt",
-  "snap_file": "configs/snap.txt"
+  "snap_file": "configs/snap.txt",
+  "debug": false
 }

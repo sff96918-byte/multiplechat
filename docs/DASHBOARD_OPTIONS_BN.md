@@ -64,6 +64,18 @@ EXE চালু করলে প্রথমে **HOME** পেজ — এখ�
 
 ---
 
+## 🐞 DEBUG ও PROBLEM REPORT (v10)
+
+| Option | কী করে |
+|--------|--------|
+| **🐞 Debug mode** (BOT SETUP → LOOP group) | ON করলে console/GUI log-এ সব বিস্তারিত যায়: প্রতিটা WS frame, প্রতিটা API request (status + ms), engine decision (কোন SMS-এ কী match হলো কী reply গেল), delay breakdown | `debug`: `true`/`false` |
+| **Log ফাইল** | `logs/eva.log` — **সবসময়** DEBUG level-এ লেখা হয় (Debug mode অফ থাকলেও), 1MB × 5 backup। পুরনো trail এখানেই থাকে | — |
+| **🐞 Export Debug Report** (দুই mood dashboard-এর নিচেই) | এক ক্লিকে `logs/debug_report_<সময়>.txt` বানায়: config (secrets masked) + session status (শুধু has_token true/false — **content কখনো যায় না**) + bot stats + শেষ 300 WS frame (cookie value scrub করা) + API requests + engine decisions + শেষ 400 log লাইন | — |
+
+**সমস্যা হলে যা পাঠাবে:** শুধু export করা `debug_report_*.txt` ফাইলটা — এটা share-safe (token/cookie মাস্ক করা)। CLI তে: `python -m eva.transport.ws_bot --debug` (stop করলে শেষ 15টা engine decision প্রিন্ট হয়)।
+
+---
+
 ## 🧩 অন্যান্য COMMON জিনিস (দুই mood dashboard-এই একই)
 
 | Option | কী করে |

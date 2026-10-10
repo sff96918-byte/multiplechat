@@ -20,6 +20,7 @@ WS (both already in src/requirements.txt).
 from __future__ import annotations
 
 import asyncio
+from collections import deque
 import json
 import logging
 import random
@@ -98,12 +99,30 @@ class ChitchatSocket:
 
         self._handler: Optional[Handler] = None
         self.stats = SocketStats()
+        self._recent: deque = deque(maxlen=300)   # debug ring buffer
 
     # ------------------------------------------------------------ public API
 
     def set_event_handler(self, handler: Handler) -> None:
         """handler(event_name, args) is awaited for every 42[..] event."""
         self._handler = handler
+
+    def record_frame(self, direction: str, text: str) -> None:
+        """Debug ring buffer — শেষ 300 frame (debug report-এ যায়)।
+        নিজের cookie value preview থেকে মুছে দেওয়া হয় (report শেয়ার-safe)।"""
+        clean = text or ""
+        for v in self._cookies.values():
+            if len(v or "") >= 8 and v in clean:
+                clean = clean.replace(v, "…MASKED")
+        self._recent.append({
+            "t": time.strftime("%H:%M:%S"),
+            "dir": direction,
+            "len": len(clean),
+            "preview": clean[:180],
+        })
+
+    def recent_frames(self) -> List[dict]:
+        return list(self._recent)
 
     @property
     def is_connected(self) -> bool:
@@ -143,6 +162,7 @@ class ChitchatSocket:
         frame = codec.encode_event(event, *args)
         await self._ws.send_str(frame)
         self.stats.frames_out += 1
+        self.record_frame("OUT", frame)
         log.debug("WS OUT %s", frame[:200])
         return True
 
@@ -246,6 +266,7 @@ class ChitchatSocket:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 frame = codec.decode(msg.data)
                 self.stats.frames_in += 1
+                self.record_frame("IN", msg.data)
                 if frame.kind == "ping":
                     await ws.send_str(codec.encode_pong())
                     self.stats.frames_out += 1
@@ -282,6 +303,7 @@ class ChitchatSocket:
                 except codec.CodecError as exc:
                     log.warning("undecodable frame: %s", exc)
                     continue
+                self.record_frame("IN", msg.data)
                 log.debug("WS IN  %s", msg.data[:200])
 
                 if frame.kind == "ping":

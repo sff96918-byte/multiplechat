@@ -28,7 +28,11 @@ import time
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+from collections import deque
+
 from ..paths import project_root
+
+from ..debugtools import export_debug_report, setup_debug_logging
 
 ROOT = project_root()
 sys.path.insert(0, str(ROOT))
@@ -411,6 +415,8 @@ def run_gui() -> int:
                                  QStackedWidget)
 
     log_q: "queue.Queue[str]" = queue.Queue()
+    gui_tail: deque = deque(maxlen=800)   # debug report-এ যাওয়ার জন্য
+    LOG_FILE = setup_debug_logging(False)   # ফাইল-লগ সবসময় চালু
     qh = QueueLogHandler(log_q)
     logging.getLogger("eva").addHandler(qh)
     logging.getLogger("eva").setLevel(logging.INFO)
@@ -509,9 +515,12 @@ def run_gui() -> int:
     lg.addWidget(idle_spin, 0, 1)
     lg.addWidget(typing_cb, 0, 2)
     lg.addWidget(autonext_cb, 0, 3)
-    loop_hint = QLabel("partner এত সেকেন্ড চুপ থাকলে next match-এ যাবে")
+    debug_cb = QCheckBox("🐞 Debug mode — verbose log (frames/API/engine decisions)")
+    lg.addWidget(debug_cb, 0, 4)
+    loop_hint = QLabel("partner এত সেকেন্ড চুপ থাকলে next match-এ যাবে • "
+                       "log ফাইল (logs/eva.log) সবসময় লেখা হয়")
     loop_hint.setObjectName("dim")
-    lg.addWidget(loop_hint, 1, 0, 1, 4)
+    lg.addWidget(loop_hint, 1, 0, 1, 5)
 
     def _resolve_path(p: str) -> Path:
         pp = Path(p)
@@ -572,6 +581,7 @@ def run_gui() -> int:
             "typing_indicator": typing_cb.isChecked(),
             "auto_next": autonext_cb.isChecked(),
         })
+        cfg["debug"] = debug_cb.isChecked()
         return cfg
 
     def save_config_from_widgets() -> dict:
@@ -589,6 +599,7 @@ def run_gui() -> int:
         idle_spin.setValue(int(lp.get("skip_idle_s", 90)))
         typing_cb.setChecked(bool(lp.get("typing_indicator", True)))
         autonext_cb.setChecked(bool(lp.get("auto_next", True)))
+        debug_cb.setChecked(bool(cfg.get("debug", False)))
         refresh_fixed_preview()
         refresh_snap_status()
 
@@ -675,6 +686,7 @@ def run_gui() -> int:
         log_text = QTextEdit()
         log_text.setReadOnly(True)
         log_text.setMinimumHeight(150)
+        log_text.setMaximumBlockCount(2000)   # মেমোরি cap
         ll.addWidget(log_text)
         out["log_text"] = log_text
         out["log_group"] = log_group
@@ -773,7 +785,9 @@ def run_gui() -> int:
     bl.addWidget(ui_b["log_group"], 1)
 
     cpu_b, ram_b = make_cpu_ram()
+    btn_report_b = QPushButton("🐞 Export Debug Report")
     foot_b = QHBoxLayout()
+    foot_b.addWidget(btn_report_b)
     foot_b.addWidget(cpu_b)
     foot_b.addWidget(ram_b)
     foot_b.addStretch()
@@ -841,7 +855,9 @@ def run_gui() -> int:
     sl2.addWidget(ui_s["log_group"], 1)
 
     cpu_s, ram_s = make_cpu_ram()
+    btn_report_s = QPushButton("🐞 Export Debug Report")
     foot_s = QHBoxLayout()
+    foot_s.addWidget(btn_report_s)
     foot_s.addWidget(cpu_s)
     foot_s.addWidget(ram_s)
     foot_s.addStretch()
@@ -1004,6 +1020,7 @@ def run_gui() -> int:
         cfg = save_config_from_widgets()
         cfg["browser_autosave"] = auto_save_cb.isChecked()
         _save_config(cfg)
+        setup_debug_logging(bool(cfg.get("debug")))   # verbose on/off সাথে সাথে
         paint_engine_summary()
         try:
             worker.start(mode=mode,
@@ -1039,6 +1056,31 @@ def run_gui() -> int:
         paint_engine_summary()
     btn_save_setup.clicked.connect(do_save_setup)
 
+    def export_report(page: str, btn) -> None:
+        btn.setEnabled(False)
+        set_status(page, "🐞 Debug report তৈরি হচ্ছে…", "info")
+
+        def work() -> None:
+            chat_loop = getattr(worker, "chat_loop", None)
+            try:
+                path = export_debug_report(
+                    config=_load_config(),
+                    session_path=SESSION_PATH,
+                    stats=worker.snapshot(),
+                    socket=getattr(chat_loop, "socket", None),
+                    api=getattr(worker, "api", None),
+                    engines=[getattr(chat_loop, "engine", None)] if chat_loop else [],
+                    log_tail=list(gui_tail))
+                QTimer.singleShot(0, lambda: (btn.setEnabled(True),
+                    set_status(page, f"🐞 Report সেভ হয়েছে: {path} — এই ফাইলটা শেয়ার করো", "ok")))
+            except Exception as exc:  # noqa: BLE001
+                QTimer.singleShot(0, lambda: (btn.setEnabled(True),
+                    set_status(page, f"🐞 Report fail: {exc}", "err")))
+        threading.Thread(target=work, daemon=True).start()
+
+    btn_report_b.clicked.connect(lambda: export_report("browser", btn_report_b))
+    btn_report_s.clicked.connect(lambda: export_report("session", btn_report_s))
+
     # ---------------------------------------------------------- timers
 
     def poll_stats() -> None:
@@ -1071,6 +1113,7 @@ def run_gui() -> int:
         except queue.Empty:
             pass
         if lines:
+            gui_tail.extend(lines)
             chunk = "\n".join(lines[-200:])
             for key in ("browser", "session"):
                 pages[key]["log_text"].append(chunk)
@@ -1118,7 +1161,7 @@ def run_gui() -> int:
     load_config_to_widgets()
     paint_engine_summary()
 
-    logging.getLogger("eva").info("Mood Dashboard চালু — root: %s", ROOT)
+    logging.getLogger("eva").info("Mood Dashboard চালু — root: %s — log file: %s", ROOT, LOG_FILE)
     win.show()
     return app.exec()
 

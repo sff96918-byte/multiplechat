@@ -125,6 +125,14 @@ async def run(args: argparse.Namespace) -> None:
             log.exception("stop() raised (continuing)")
         await api.close()
         print("[ok] stopped. stats:", json.dumps(loop.stats.snapshot(), indent=2))
+        eng = getattr(loop, "engine", None)
+        if hasattr(eng, "decisions"):
+            decs = eng.decisions()[-15:]
+            if decs:
+                print("[i] engine decisions (শেষ 15):")
+                for d in decs:
+                    print(f"    {d.get('t')} [{d.get('stage', d.get('line','?'))}] "
+                          f"in={d.get('in','')!r} -> out={d.get('out','')!r}")
 
 
 async def _report_loop(loop: WsChatLoop) -> None:
@@ -162,6 +170,9 @@ def main(argv: Optional[list] = None) -> None:
     if args.debug:
         for noisy in ("aiohttp", "asyncio"):
             logging.getLogger(noisy).setLevel(logging.WARNING)
+    from ..debugtools import setup_debug_logging
+    log_file = setup_debug_logging(bool(args.debug))
+    print(f"[i] log file: {log_file} (সব DEBUG trail এখানে জমা হয)")
 
     asyncio.run(run(args))
 

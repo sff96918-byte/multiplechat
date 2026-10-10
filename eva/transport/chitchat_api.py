@@ -8,6 +8,7 @@ their own session file.
 from __future__ import annotations
 
 import asyncio
+from collections import deque
 import json as _json
 import logging
 import time
@@ -71,6 +72,7 @@ class ChitchatApi:
         self._base_url = base_url
         self._session: Optional[aiohttp.ClientSession] = None
         self._last_request_t = 0.0
+        self._recent: deque = deque(maxlen=200)   # debug ring buffer
         self.stats = ApiStats()
 
     # ------------------------------------------------------------ lifecycle
@@ -102,10 +104,18 @@ class ChitchatApi:
 
         s = await self._http()
         self.stats.requests += 1
+        t0 = time.monotonic()
         async with s.request(method, path, **kw) as resp:
             self.stats.last_status = resp.status
             text = await resp.text()
+            elapsed_ms = round((time.monotonic() - t0) * 1000)
+            self._recent.append({"t": time.strftime("%H:%M:%S"),
+                                 "req": f"{method} {path}", "status": resp.status,
+                                 "ms": elapsed_ms, "bytes": len(text or "")})
+            log.debug("API %s %s -> %s (%sms, %sB)", method, path, resp.status,
+                      elapsed_ms, len(text or ""))
             try:
+
                 body: Any = _json.loads(text) if text else None
             except ValueError:
                 body = text
@@ -117,6 +127,9 @@ class ChitchatApi:
                     raise FlaggedError(resp.status, path, body)
                 raise ApiError(resp.status, path, body)
             return body
+
+    def recent_requests(self) -> List[dict]:
+        return list(self._recent)
 
     # ------------------------------------------------------------ endpoints
 

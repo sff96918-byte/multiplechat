@@ -10,7 +10,10 @@
 
 from __future__ import annotations
 
+import logging
 import random
+from collections import deque
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -18,6 +21,8 @@ from ..paths import project_root
 from .flow_reply_engine import DEFAULT_TIMING
 
 DEFAULT_SCRIPT = project_root() / "configs" / "fixed_script.txt"
+
+log = logging.getLogger("eva.fixed_reply_engine")
 
 
 class FixedReplyEngine:
@@ -42,6 +47,7 @@ class FixedReplyEngine:
             raise RuntimeError(f"Fixed script খালি: {path}")
 
         self._idx: Dict[str, int] = {}
+        self._decisions: deque = deque(maxlen=200)   # debug ring buffer
         self.timing: Dict[str, Any] = dict(DEFAULT_TIMING)
         if timing:
             self.timing.update(timing)
@@ -49,11 +55,28 @@ class FixedReplyEngine:
     # ------------------------------------------------ API used by WsChatLoop
 
     def opener(self, partner: dict) -> str:
-        return self._next((partner or {}).get("id"))
+        pid = (partner or {}).get("id", "?")
+        out = self._next(pid)
+        self._decisions.append({
+            "t": time.strftime("%H:%M:%S"), "partner": pid,
+            "line": min(self._idx.get(pid, 1), len(self.lines)),
+            "in": "(opener)", "out": (out or "")[:60],
+        })
+        return out
 
     def reply(self, partner: dict, incoming: str,
               history: Optional[List[dict]] = None) -> str:
-        return self._next((partner or {}).get("id"))
+        pid = (partner or {}).get("id", "?")
+        out = self._next(pid)
+        self._decisions.append({
+            "t": time.strftime("%H:%M:%S"), "partner": pid,
+            "line": min(self._idx.get(pid, 1), len(self.lines)),
+            "in": (incoming or "")[:60], "out": (out or "")[:60],
+        })
+        log.debug("fixed partner=%s line=%s %r -> %r",
+                  pid, min(self._idx.get(pid, 1), len(self.lines)),
+                  (incoming or "")[:40], (out or "")[:60])
+        return out
 
     def forget(self, partner_id: str) -> None:
         self._idx.pop(partner_id, None)
@@ -75,6 +98,10 @@ class FixedReplyEngine:
 
     def finished(self, partner_id: str) -> bool:
         return self._idx.get(partner_id, 0) >= len(self.lines)
+
+    def decisions(self) -> List[dict]:
+        """Debug ring buffer — কোন partner কোন লাইনে আছে কী গেল।"""
+        return list(self._decisions)
 
     def remaining(self, partner_id: str) -> int:
         return max(0, len(self.lines) - self._idx.get(partner_id, 0))

@@ -21,6 +21,8 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `decision` | v10: report share-safe rule | Debug report NEVER contains session.json content (only exists/has_token booleans + cookie NAMES) and WS frame  |
+| 2026-10-10 | `session` | v10: debug upgrade (file log, ring buffers, export report) | New eva/debugtools.py: setup_debug_logging (logs/eva.log RotatingFile 1MBx5 ALWAYS DEBUG; eva logger level DEB |
 | 2026-10-10 | `decision` | v9: settings ek jaygay (BOT SETUP) | Architecture answer: mood dashboards e shudhu mood-specific controls (browser/session/START); shared settings  |
 | 2026-10-10 | `session` | v9: shared BOT SETUP page + snap.txt support | User asked: engine/fixed-sms-txt/snap settings main dashboard e na ki each mood e? Answer implemented: ekta sh |
 | 2026-10-10 | `decision` | v8 mood architecture | Mood = separate dashboard pages in one QStackedWidget (HOME + browser + session). Qt constraint: same widget c |
