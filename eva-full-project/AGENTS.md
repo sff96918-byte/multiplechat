@@ -217,6 +217,7 @@ QT_QPA_PLATFORM=offscreen python -m core.session_chat --list   # source discover
 QT_QPA_PLATFORM=offscreen python -m core.session_chat --help   # CLI ঠিক আছে কি
 python -m core.session_chat --save                    # token যাচাই (hidden prompt) → configs/session.json
 python -m core.session_chat --run --max-matches 3     # browserless live chat (GUI লাগে না)
+python -m core.session_chat --import <path>/session_cookies.LOCAL.json   # browser capture-এর cookie → যাচাই → configs/session.json
 ```
 (network ছাড়া live connect ব্যর্থ হওয়া স্বাভাবিক — কিন্তু error পরিষ্কার হতে হবে, crash নয়।)
 
@@ -296,6 +297,13 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
     d. Dead code (vulture ≥60%): e.g. `chat/rules.py` `_wait_step_reply`, `_first_sms_reply`, `_middle_reply`; `browser/*` helpers; `ws` diagnostics `mark_read`, `moderation_standing`. Not removed (no approval for removal of non-trivial code).
   - **Sandbox limits:** no GUI (libGL), no Windows, no live chitchat.gg, no Playwright browser. Session path verified with synthetic fakes and the real `ChatRuleBot` engine only.
   - Gate: 20/20 pass, 1 optional skip (gitleaks). Coverage of `chat/rules.py`: 57% (unchanged).
+- **v30 (browser → session bridge, user request "2"):**
+  - `tools/chitchat_capture/capture_direct.py`: browser বন্ধ হওয়ার আগে chitchat.gg cookie export → `capture_out/<session>/session_cookies.LOCAL.json` (0600, শুধু cookie নাম/সংখ্যা print)। Selftest: 3 নতুন check, মোট 30 pass।
+  - `core/session_chat.py --import <file>`: cookie file (Playwright storage_state বা cookie list) পড়ে chitchat cookie নেয়, `token` না থাকলে থামে, `/users/me` দিয়ে যাচাই করে সব chitchat cookie `configs/session.json`-এ লেখে (socket-এর জন্য `__Secure-text-session` সহ)। 401 বা নেটওয়ার্ক fail হলে কিছু লেখে না।
+  - `tools/build_zip.py`: forbidden pattern-এ `session_cookies` যোগ (zip-এ যেন কখনো না যায়)।
+  - `test_session_save.py`: 21 check (আগের 12 + import 9)। Gate 21/21 pass (চালানো হয়েছে)।
+  - **Sandbox limit:** Chrome/Playwright browser চালিয়ে আসল capture এখানে চলেনি, live chitchat.gg-তে connect হয়নি। Export ও import আলাদাভাবে synthetic input দিয়ে যাচাই হয়েছে।
+  - **এখনো নেই:** `--run` সরাসরি capture ফাইল থেকে চলে না; আগে `--import` করতে হয়।
 - **v29 (browserless session chat — goal: saved session → WebSocket chat, no browser):**
   - `core/session_chat.py`: PyQt6 import optional → `--save` / `--run` CLI চলে GUI library ছাড়া (`test_session_save` PyQt6 block করে check করে)।
   - `--save`: token `GET /users/me` দিয়ে যাচাই করে `configs/session.json` লেখে (atomic, mode 0600)। 401 হলে কিছু লেখে না। Token কোথাও print হয় না; আগে শেষ 6 অক্ষর দেখাত — বন্ধ।

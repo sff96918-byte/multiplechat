@@ -72,3 +72,16 @@ python capture_direct.py --minutes 15
 - Tool শুধু আপনার নিজের browser-এ আপনার দেখা চ্যাট capture করে। অন্য কোনো account বা site-এ যায় না।
 - DOM selector জানা অংশগুলোই health-check হয়। নতুন element চিনতে `dom/` ফোল্ডারের HTML ও outline দরকার, যেটা শুধু আপনার কাছে থাকবে।
 - Playwright দিয়ে চালানো হয়েছে; site যদি automation শনাক্ত করে, সেটা আলাদা সমস্যা। তখন `REPORT.md`-তে তার চিহ্ন (block page, captcha) দেখা যাবে।
+
+## Bot-এর জন্য session বানানো (v30)
+
+Capture শেষ হলে `capture_out/session_<time>/session_cookies.LOCAL.json` তৈরি হয়। এটি login token ধারণ করে — **শেয়ার বা commit করবেন না।**
+
+Bot-এর project folder থেকে (`eva-full-project`):
+
+```
+python -m core.session_chat --import <path>\session_cookies.LOCAL.json
+python -m core.session_chat --run
+```
+
+`--import` প্রথমে server-এ যাচাই করে, তারপর `configs/session.json` লেখে। ফাইলে token না থাকলে বা token কাজ না করলে কিছু লেখা হয় না।

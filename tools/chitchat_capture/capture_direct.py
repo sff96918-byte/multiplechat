@@ -37,6 +37,7 @@ import argparse
 import base64
 import hashlib
 import json
+import os
 import queue
 import re
 import sys
@@ -576,6 +577,39 @@ def finalize(out_dir: Path, recorder: Recorder, keep_text: bool) -> None:
     print("[NOTE] events.jsonl, dom/, screens/, browser_profile/ শেয়ার করবেন না।")
 
 
+# ---------------------------------------------------------------- session export
+COOKIE_FILE = "session_cookies.LOCAL.json"
+
+
+def export_session_cookies(ctx, out_dir: Path) -> int:
+    """LOCAL ONLY: chitchat.gg cookie (login token সহ) Playwright storage_state-ধাঁচে লেখে।
+
+    এই ফাইল browser_profile-এর বদলে bot-এর session হিসেবে ব্যবহার হয়
+    (session_chat --import). এতে login token আছে — কখনো শেয়ার/commit করবেন না।
+    মান কোথাও print হয় না; শুধু cookie-র নাম ও সংখ্যা। Never raises; -1 = ব্যর্থ।
+    """
+    try:
+        cookies = [c for c in ctx.cookies() if TARGET_HOST in (c.get("domain") or "")]
+    except Exception:  # noqa: BLE001
+        return -1
+    path = out_dir / COOKIE_FILE
+    tmp = out_dir / (COOKIE_FILE + ".tmp")
+    try:
+        tmp.write_text(json.dumps({"cookies": cookies, "origins": []}, ensure_ascii=False, indent=1),
+                       encoding="utf-8")
+        try:
+            tmp.chmod(0o600)
+        except OSError:
+            pass
+        tmp.replace(path)
+    except OSError:
+        return -1
+    names = sorted({str(c.get("name")) for c in cookies})
+    print(f"[OK] login cookie local-এ সেভ: {len(cookies)}টি ({', '.join(names)}) -> {path.name}")
+    print("[NOTE] session_cookies.LOCAL.json শেয়ার করবেন না — এতে login token আছে।")
+    return len(cookies)
+
+
 # ---------------------------------------------------------------- browser loop
 def run_capture(url: str, minutes: float, channel: str, keep_text: bool) -> int:
     try:
@@ -715,6 +749,7 @@ def run_capture(url: str, minutes: float, channel: str, keep_text: bool) -> int:
             closed_reason = "ctrl+c"
         drain(q, rec, ctx)
         rec.event("session_end", {"reason": closed_reason})
+        export_session_cookies(ctx, out_dir)   # browser বন্ধ হওয়ার আগে
         try:
             ctx.close()
         except Exception:
@@ -886,6 +921,28 @@ def selftest() -> int:
     txt = json.dumps(b, ensure_ascii=False)
     ok("bundle has no raw 'partner text'", "partner text" not in txt)
     ok("bundle has no raw token", "\"abc\"" not in txt)
+    # session cookie export (fake context; no browser)
+    class _FakeCtx:
+        def cookies(self):
+            return [
+                {"name": "token", "value": "SELFTEST-VALUE-1", "domain": ".chitchat.gg"},
+                {"name": "__Secure-text-session", "value": "SELFTEST-VALUE-2", "domain": "app.chitchat.gg"},
+                {"name": "other", "value": "x", "domain": "example.com"},
+            ]
+    cdir = HERE / "capture_out" / "_selftest_cookies"
+    cdir.mkdir(parents=True, exist_ok=True)
+    n = export_session_cookies(_FakeCtx(), cdir)
+    cf = cdir / COOKIE_FILE
+    ck = json.loads(cf.read_text(encoding="utf-8")).get("cookies", []) if cf.exists() else []
+    ok("cookie export keeps only chitchat cookies", n == 2 and {c["name"] for c in ck} == {"token", "__Secure-text-session"})
+    ok("cookie export leaves no tmp file", not (cdir / (COOKIE_FILE + ".tmp")).exists())
+    if os.name != "nt":
+        ok("cookie export file mode 0600", (cf.stat().st_mode & 0o777) == 0o600)
+    for f in sorted(cdir.rglob("*"), reverse=True):
+        if f.is_file():
+            f.unlink()
+    cdir.rmdir()
+
     print(f"\nSELFTEST {'PASSED' if fails == 0 else f'FAILED ({fails})'}")
     return 0 if fails == 0 else 1
 

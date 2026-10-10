@@ -62,3 +62,10 @@ Token-সহ কোনো ফাইল/লাইন চাইবে না।
 2. Live chat (GUI ছাড়া): `python -m core.session_chat --run [--max-matches N]`। PyQt6 লাগে না।
 3. Token কোথাও print বা log করো না; শুধু user নাম দেখাও।
 4. Socket drop-এর পরে match recovery এখনো নেই — live test-এ দেখলে সেটা জানাও (capture লাগবে)।
+
+## Browser → session bridge (v30)
+1. Browser capture চালাও (`tools/chitchat_capture`), login করে chat করো, `quit` লেখো।
+2. `capture_out/session_<time>/session_cookies.LOCAL.json` তৈরি হবে। এটি শেয়ার বা commit করবে না।
+3. `python -m core.session_chat --import <path>` — যাচাই হলে `configs/session.json` লেখে।
+4. এরপর `python -m core.session_chat --run` (browser ছাড়া)।
+401 মানে login মেয়াদোত্তীর্ণ — capture আবার চালাও।

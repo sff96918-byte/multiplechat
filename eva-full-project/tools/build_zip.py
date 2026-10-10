@@ -21,7 +21,7 @@ PROJECT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CAPTURE = os.path.abspath(os.path.join(PROJECT, "..", "tools", "chitchat_capture"))
 FORBIDDEN = re.compile(
     r"(^|/)(account_sessions|browser_profile|capture_out|__pycache__|logs|\.git)(/|$)"
-    r"|\.pyc$|\.idx$|(^|/)configs/|storage_state|session\.json$|\.log$|\.zip$|\.exe$|(^|/)\.env$")
+    r"|\.pyc$|\.idx$|(^|/)configs/|storage_state|session\.json$|session_cookies|\.log$|\.zip$|\.exe$|(^|/)\.env$")
 
 
 def clean_runtime() -> int:

@@ -353,13 +353,38 @@ class SessionChatWorker(QThread):
 SESSION_FILE = ROOT / "configs" / "session.json"   # .gitignore-এ আছে, zip-এ যায় না
 
 
-def save_session_file(token: str, user_agent: str = "") -> Path:
-    """acc token configs/session.json-এ লেখে (atomic, মান কোথাও print হয় না)।"""
+def read_chitchat_cookies(path: Path) -> Dict[str, str]:
+    """Browser capture-এর cookie ফাইল (Playwright storage_state বা cookie list) থেকে
+    chitchat cookie নেয়। মান return করে, print করে না। 'token' না থাকলে RuntimeError।"""
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    cookies = data.get("cookies", []) if isinstance(data, dict) else data
+    if not isinstance(cookies, list):
+        raise RuntimeError("cookie ফাইলের format চেনা যাচ্ছে না")
+    picked: Dict[str, str] = {}
+    for c in cookies:
+        if not isinstance(c, dict):
+            continue
+        if DOMAIN_HINT in (c.get("domain") or "").lstrip(".") and c.get("value") and c.get("name"):
+            picked[str(c["name"])] = str(c["value"])
+    if "token" not in picked:
+        raise RuntimeError("cookie ফাইলে chitchat 'token' cookie নেই — browser-এ login করে capture আবার চালাও")
+    return picked
+
+
+def save_session_file(token: str, user_agent: str = "",
+                      extra_cookies: Optional[Dict[str, str]] = None,
+                      saved_by: str = "core.session_chat --save") -> Path:
+    """session configs/session.json-এ লেখে (atomic, মান কোথাও print হয় না)।
+
+    extra_cookies: browser capture থেকে আসা অন্য chitchat cookie (socket-এর জন্য)।
+    """
     SESSION_FILE.parent.mkdir(parents=True, exist_ok=True)
+    cookies: Dict[str, str] = {k: str(v) for k, v in (extra_cookies or {}).items() if v}
+    cookies["token"] = token.strip()
     data = {
-        "cookies": {"token": token.strip()},
+        "cookies": cookies,
         "user_agent": user_agent or FALLBACK_UA,
-        "saved_by": "core.session_chat --save",
+        "saved_by": saved_by,
     }
     tmp = SESSION_FILE.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -382,12 +407,42 @@ def _cli(argv: Optional[List[str]] = None) -> int:
                     help="token যাচাই করে configs/session.json-এ সেভ করো")
     ap.add_argument("--run", action="store_true",
                     help="--save-এর পরেও live chat চালাও (ডিফল্ট: --save হলে থামে)")
+    ap.add_argument("--import", dest="import_file", default="",
+                    help="browser capture-এর session_cookies.LOCAL.json → যাচাই করে সেভ")
     ap.add_argument("--max-matches", type=int, default=0)
     ap.add_argument("--debug", action="store_true")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO,
                         format="%(asctime)s %(levelname)-7s %(name)s: %(message)s",
                         datefmt="%H:%M:%S")
+
+    if args.import_file:
+        try:
+            cookies = read_chitchat_cookies(Path(args.import_file))
+        except (OSError, ValueError, RuntimeError) as exc:
+            print(f"[X] {exc}")
+            return 2
+
+        async def _check_full() -> dict:
+            api = ChitchatApi(cookies, user_agent=FALLBACK_UA)
+            try:
+                return await api.me()
+            finally:
+                await api.close()
+        try:
+            me = asyncio.run(_check_full())
+        except SessionExpiredError:
+            print("[X] cookie-র token কাজ করছে না (401) — browser capture আবার চালিয়ে নতুন login নাও")
+            return 2
+        except Exception as exc:  # noqa: BLE001
+            print(f"[X] server যাচাই করা যায়নি ({type(exc).__name__}) — নেটওয়ার্ক দেখো")
+            return 2
+        path = save_session_file(cookies["token"], extra_cookies=cookies,
+                                 saved_by=f"core.session_chat --import ({Path(args.import_file).name})")
+        print(f"[ok] session valid — user: {me.get('username', '?')} (id={me.get('id', '?')})")
+        print(f"[ok] {len(cookies)}টি chitchat cookie সেভ হয়েছে: {path}")
+        if not args.run:
+            return 0
 
     if args.save:
         token = args.token or getpass.getpass("acc token পেস্ট করো (দেখাবে না): ")

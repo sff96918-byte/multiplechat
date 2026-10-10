@@ -133,5 +133,56 @@ except Exception as exc:  # noqa: BLE001
     rc = f"raised {type(exc).__name__}"
 ok("run path: API session closed when start() fails", closed["api"], f"rc={rc}")
 
+# 5. --import from a browser capture cookie file (v29 bridge)
+IMP_TOKEN = "import-token-zyxw-98765"
+IMP_SESSION = "import-session-cookie-abc"
+cap_file = Path(tmpdir) / "session_cookies.LOCAL.json"
+
+
+def write_cap(cookies):
+    cap_file.write_text(json.dumps({"cookies": cookies, "origins": []}), encoding="utf-8")
+
+
+write_cap([
+    {"name": "token", "value": IMP_TOKEN, "domain": ".chitchat.gg"},
+    {"name": "__Secure-text-session", "value": IMP_SESSION, "domain": "app.chitchat.gg"},
+    {"name": "unrelated", "value": "zzz", "domain": "example.com"},
+])
+if sc.SESSION_FILE.exists():
+    sc.SESSION_FILE.unlink()
+sc.ChitchatApi = _FakeApiOK
+buf = io.StringIO()
+with contextlib.redirect_stdout(buf):
+    rc = sc._cli(["--import", str(cap_file)])
+out = buf.getvalue()
+ok("--import valid returns 0", rc == 0, f"rc={rc} out={out!r}")
+if sc.SESSION_FILE.exists():
+    saved = json.loads(sc.SESSION_FILE.read_text(encoding="utf-8")).get("cookies", {})
+    ok("--import keeps token + session cookie", saved == {"token": IMP_TOKEN, "__Secure-text-session": IMP_SESSION}, repr(sorted(saved)))
+    ok("--import drops non-chitchat cookie", "unrelated" not in saved)
+else:
+    ok("--import keeps token + session cookie", False, "no session file")
+ok("--import never prints token/session value", IMP_TOKEN not in out and IMP_SESSION not in out)
+sources = sc.discover_session_sources()
+ok("--import result is a session source", any(s.get("kind") == "session_json" for s in sources))
+
+# 5b. no token in file -> rc 2, nothing written
+sc.SESSION_FILE.unlink()
+write_cap([{"name": "__Secure-text-session", "value": IMP_SESSION, "domain": "app.chitchat.gg"}])
+buf = io.StringIO()
+with contextlib.redirect_stdout(buf):
+    rc = sc._cli(["--import", str(cap_file)])
+ok("--import without token returns 2 and writes nothing", rc == 2 and not sc.SESSION_FILE.exists(), f"rc={rc}")
+ok("--import without token prints no cookie value", IMP_SESSION not in buf.getvalue())
+
+# 5c. 401 token from file -> rc 2, nothing written
+write_cap([{"name": "token", "value": IMP_TOKEN, "domain": ".chitchat.gg"}])
+sc.ChitchatApi = _FakeApi401
+buf = io.StringIO()
+with contextlib.redirect_stdout(buf):
+    rc = sc._cli(["--import", str(cap_file)])
+ok("--import 401 returns 2 and writes nothing", rc == 2 and not sc.SESSION_FILE.exists(), f"rc={rc}")
+ok("--import 401 prints no token value", IMP_TOKEN not in buf.getvalue())
+
 print(f"\nRESULT: {passed} passed, {failed} failed")
 sys.exit(1 if failed else 0)
