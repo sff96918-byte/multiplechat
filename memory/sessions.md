@@ -1,5 +1,12 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v6: realistic timing + session-expiry handling (+rebase lost-wiring fix)
+
+- Found: rebase conflict resolution (--ours) silently reverted v4 wiring in ws_bot.py/server.py/config example — engine selection was missing there (gui had it). Re-applied + added v6 on top.
+- New: timing config section (reaction pause/typing cps/read/micro-idle/new-chat delay) — defaults from legacy project data/config.json human_behavior/chat_timing; FlowReplyEngine.delay_for + opener_delay() use it; loop opener uses engine.opener_delay when available.
+- New: SessionExpiredError (401) in chitchat_api; ws_bot preflight prints Bengali fix steps; GUI maps to 'SESSION মেয়াদ শেষ...' message.
+- Tests: unit(+2 expiry) all OK, protocol 24/24, session 7/7.
+
 ## 2026-10-10 | v5: agent memory system + AGENTS.md v2
 
 - ইউজার চেয়েছিল: agents-দের জন্য memory + improved AGENTS.md

@@ -154,6 +154,9 @@ class BotWorker:
                 self.loop.run_until_complete(self._run(cfg, cookies, ua, on_ready))
             except Exception as exc:  # noqa: BLE001
                 self.error = f"{type(exc).__name__}: {exc}"
+                if "SessionExpired" in self.error:
+                    self.error = ("SESSION মেয়াদ শেষ (401) — browser-এ chitchat.gg আবার "
+                                  "login করে 'Pull Session' চাপো")
                 if on_error:
                     on_error(self.error)
 
@@ -177,7 +180,8 @@ class BotWorker:
         engine_name = (cfg.get("engine") or "flow").lower()
         if engine_name == "flow":
             from ..brain.flow_reply_engine import FlowReplyEngine
-            engine = FlowReplyEngine(snap_usernames=cfg.get("snap_usernames"))
+            engine = FlowReplyEngine(snap_usernames=cfg.get("snap_usernames"),
+                                     timing=cfg.get("timing"))
         else:
             from ..replies import Persona, ReplyEngine
             persona = Persona(**{k: v for k, v in persona_cfg.items()})

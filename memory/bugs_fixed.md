@@ -1,5 +1,9 @@
 # BUGS FIXED (আর খুঁজতে হবে না — newest first)
 
+## 2026-10-10 | rebase --ours took wrong side, v4 wiring lost silently
+
+Symptom: grep-এ ws_bot/server-এ engine_name নেই যদিও v4 commit ছিল। Cause: AA conflict-এ git checkout --ours = ORIGIN side (v3), আমার v4 ফাইল হারায়। Lesson: rebase-এ --ours = base, --theirs = replaying commit; resolve-এর পরে সেই ফাইলের key symbols grep করে verify করতে হবে।
+
 
 Symptom: x
 Cause: y

@@ -79,12 +79,13 @@ def add_entry(kind: str, title: str, body: str = "") -> None:
     text = path.read_text(encoding="utf-8")
 
     lines = text.splitlines()
-    header_at = 0
+    # preamble (header + notes) পেরিয়ে প্রথম entry-এর ঠিক আগে বসাও
+    first_entry_at = len(lines)
     for i, line in enumerate(lines):
-        if line.strip().startswith("#"):
-            header_at = i
+        if line.startswith("## "):
+            first_entry_at = i
             break
-    out = "\n".join(lines[: header_at + 1]) + "\n" + entry + "\n".join(lines[header_at + 1:]).rstrip() + "\n"
+    out = "\n".join(lines[:first_entry_at]).rstrip() + "\n" + entry + "\n".join(lines[first_entry_at:]).rstrip() + "\n"
 
     path.write_text(out, encoding="utf-8")
 

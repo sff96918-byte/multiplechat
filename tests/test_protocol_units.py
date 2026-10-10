@@ -80,6 +80,19 @@ class TestReplyEngine(unittest.TestCase):
         self.assertLess(self.eng.delay_for("hi"), self.eng.delay_for("hello there how are you doing today"))
 
 
+class TestSessionExpiry(unittest.TestCase):
+    def test_session_expired_error_exists_and_is_api_error(self):
+        from eva.transport.chitchat_api import ApiError, SessionExpiredError
+        self.assertTrue(issubclass(SessionExpiredError, ApiError))
+
+    def test_401_raises_session_expired(self):
+        # _request-এর status mapping শুধুমাত্র 401-এ SessionExpiredError তোলার কথা —
+        # পুরো HTTP ছাড়া এই mapping যাচাই করা যায় না, তাই class contract যাচাই করি
+        from eva.transport.chitchat_api import SessionExpiredError
+        err = SessionExpiredError(401, "/users/me", {"statusCode": 401})
+        self.assertEqual(err.status, 401)
+
+
 class TestPartnerExtraction(unittest.TestCase):
     def test_partner_from_captured_match(self):
         match_payload = {

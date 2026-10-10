@@ -1,5 +1,10 @@
 # DECISIONS (কেন এমন বানানো হলো — newest first)
+
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
+
+## 2026-10-10 | Human pacing from legacy config, not hardcoded
+
+- ইউজারের পুরনো প্রজেক্টের human_behavior/chat_timing মানগুলো config-এর `timing` section-এ সরানো হলো (DEFAULT_TIMING fallback)। কারণ: realism টিউন করা ইউজার code ছাড়াই পারবে; মানগুলো তার নিজের প্রজেক্টে proven।
 
 ## 2026-10-10 | No python-socketio library — raw wire protocol on aiohttp
 - Socket.IO v4/Engine.IO সরাসরি `eva/transport/socketio_codec.py`-তে implement করা।

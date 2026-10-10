@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from .chitchat_api import ChitchatApi
+from .chitchat_api import ChitchatApi, SessionExpiredError
 from .chitchat_socket import ChitchatSocket
 from .protocol import DEFAULT_UA
 from .ws_chat_loop import LoopConfig, WsChatLoop
@@ -60,7 +60,15 @@ async def run(args: argparse.Namespace) -> None:
         cfg_data = json.loads(cfg_path.read_text(encoding="utf-8"))
 
     persona = Persona(**{k: v for k, v in (cfg_data.get("persona") or {}).items()})
-    engine = ReplyEngine(persona=persona, config=cfg_data.get("replies"))
+    engine_name = (cfg_data.get("engine") or "flow").lower()
+    if engine_name == "flow":
+        from ..brain.flow_reply_engine import FlowReplyEngine
+        engine = FlowReplyEngine(snap_usernames=cfg_data.get("snap_usernames"),
+                                 timing=cfg_data.get("timing"))
+        print(f"[i] reply engine: FLOW (txt banks) snap={cfg_data.get('snap_usernames')}")
+    else:
+        engine = ReplyEngine(persona=persona, config=cfg_data.get("replies"))
+        print("[i] reply engine: SIMPLE (persona templates)")
     loop_cfg = LoopConfig(**{k: tuple(v) if isinstance(v, list) else v
                              for k, v in (cfg_data.get("loop") or {}).items()})
 
@@ -72,7 +80,12 @@ async def run(args: argparse.Namespace) -> None:
     socket = ChitchatSocket(cookies, user_agent=ua)
 
     # -- preflight: session valid? moderation ok?
-    me = await api.me()
+    try:
+        me = await api.me()
+    except SessionExpiredError:
+        print("[X] SESSION মেয়াদ শেষ (401) — browser-এ chitchat.gg আবার login করো,")
+        print("    তারপর dashboard-এ 'Pull Session' (বা python -m ops.tools.extract_session)।")
+        return
     print(f"[ok] session valid — logged in as {me.get('username')} (id={me.get('id')}, gender={me.get('gender')})")
     standing = await api.moderation_standing()
     if standing.get("standing") not in (None, "good"):

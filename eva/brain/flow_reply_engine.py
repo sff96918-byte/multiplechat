@@ -34,17 +34,32 @@ def write_snap_ids(data_dir: Path, snap_usernames: List[str]) -> None:
         pass
 
 
+# ইউজারের পুরনো প্রজেক্টের data/config.json থেকে নেওয়া ডিফল্ট (human behavior)
+DEFAULT_TIMING = {
+    "reaction_pause_s": [0.5, 1.2],    # message দেখে react করার আগে
+    "typing_speed_cps": [6.0, 12.0],   # typing speed (chars/sec)
+    "read_reply_s": [1.0, 3.0],        # reply পড়তে সময়
+    "micro_idle_chance": 0.25,         # মাঝে মাঝে ছোট থামা (মানুষের মতো)
+    "micro_idle_s": [0.5, 2.0],
+    "new_chat_delay_s": [3.0, 6.0],    # নতুন match-এ opener-এর আগে
+}
+
+
 class FlowReplyEngine:
     """Drop-in replacement for the simple template ReplyEngine."""
 
     name = "flow"
 
     def __init__(self, root: Optional[Path] = None,
-                 snap_usernames: Optional[List[str]] = None) -> None:
+                 snap_usernames: Optional[List[str]] = None,
+                 timing: Optional[Dict[str, Any]] = None) -> None:
         root = Path(root) if root else Path(__file__).resolve().parent
         write_snap_ids(root / "data", snap_usernames or [])
         self.bot = eva_flow.EvaFlowBot(root=str(root))
         self._states: Dict[str, Dict[str, Any]] = {}
+        self.timing: Dict[str, Any] = dict(DEFAULT_TIMING)
+        if timing:
+            self.timing.update(timing)
 
     # ------------------------------------------------------------ API used by WsChatLoop
 
@@ -70,12 +85,20 @@ class FlowReplyEngine:
         self._states.pop(partner_id, None)
 
     def delay_for(self, incoming: str) -> float:
-        """Human timing from the user's config.json ranges:
-        reaction pause 0.5-1.2s + read reply 1-3s + typing at 6-12 cps."""
-        cps = random.uniform(6.0, 12.0)
-        pause = random.uniform(0.5, 1.2)
-        read = random.uniform(1.0, 3.0)
-        return round(pause + read + min(len(incoming or "hi") / cps, 12.0), 2)
+        """Human timing: reaction pause + read + typing@cps, মাঝে মাঝে micro idle.
+        সব range config-এর `timing` section থেকে (ইউজারের পুরনো মান ডিফল্ট)।"""
+        t = self.timing
+        cps = random.uniform(*t["typing_speed_cps"])
+        pause = random.uniform(*t["reaction_pause_s"])
+        read = random.uniform(*t["read_reply_s"])
+        total = pause + read + min(len(incoming or "hi") / max(cps, 1.0), 12.0)
+        if random.random() < float(t.get("micro_idle_chance", 0.25)):
+            total += random.uniform(*t["micro_idle_s"])
+        return round(total, 2)
+
+    def opener_delay(self) -> float:
+        """নতুন match-এ opener পাঠানোর আগে (config: timing.new_chat_delay_s)।"""
+        return round(random.uniform(*self.timing.get("new_chat_delay_s", [3.0, 6.0])), 2)
 
     # ------------------------------------------------------------ GUI info
 

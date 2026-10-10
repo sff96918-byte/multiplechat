@@ -34,6 +34,13 @@ class FlaggedError(ApiError):
     """403 /match 'Flagged' — account temporarily unmatchable (observed in capture)."""
 
 
+class SessionExpiredError(ApiError):
+    """401 — the saved session (token cookie) is no longer valid.
+
+    User-facing fix: dashboard 'Pull Session' again (or extract_session).
+    """
+
+
 @dataclass
 class ApiStats:
     requests: int = 0
@@ -104,6 +111,8 @@ class ChitchatApi:
                 body = text
             if resp.status >= 400:
                 self.stats.errors += 1
+                if resp.status == 401:
+                    raise SessionExpiredError(resp.status, path, body)
                 if resp.status == 403 and isinstance(body, dict) and body.get("message") == "Flagged":
                     raise FlaggedError(resp.status, path, body)
                 raise ApiError(resp.status, path, body)

@@ -103,7 +103,13 @@ class BotManager:
         cfg = _load_config()
 
         persona = Persona(**{k: v for k, v in (cfg.get("persona") or {}).items()})
-        engine = ReplyEngine(persona=persona, config=cfg.get("replies"))
+        engine_name = (cfg.get("engine") or "flow").lower()
+        if engine_name == "flow":
+            from ..brain.flow_reply_engine import FlowReplyEngine
+            engine = FlowReplyEngine(snap_usernames=cfg.get("snap_usernames"),
+                                     timing=cfg.get("timing"))
+        else:
+            engine = ReplyEngine(persona=persona, config=cfg.get("replies"))
         loop_cfg = LoopConfig(**{k: tuple(v) if isinstance(v, list) else v
                                  for k, v in (cfg.get("loop") or {}).items()})
 

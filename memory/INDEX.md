@@ -21,4 +21,7 @@
 4. Memory ভুয়া করার চেষ্টা করবে না — শুধু যা ঘটেছে যা
 
 <!-- auto-appended by ops.tools.memory -->
+| 2026-10-10 | `bug` | rebase --ours took wrong side, v4 wiring lost silently | Symptom: grep-এ ws_bot/server-এ engine_name নেই যদিও v4 commit ছিল। Cause: AA conflict-এ git checkout --ours = |
+| 2026-10-10 | `decision` | Human pacing from legacy config, not hardcoded | ইউজারের পুরনো প্রজেক্টের human_behavior/chat_timing মানগুলো config  section-এ সরানো হলো (DEFAULT_TIMING fallba |
+| 2026-10-10 | `session` | v6: realistic timing + session-expiry handling (+rebase lost-wiring fix) | Found: rebase conflict resolution (--ours) silently reverted v4 wiring in ws_bot.py/server.py/config example — |
 | 2026-10-10 | `session` | v5: agent memory system + AGENTS.md v2 | ইউজার চেয়েছিল: agents-দের জন্য memory + improved AGENTS.md |

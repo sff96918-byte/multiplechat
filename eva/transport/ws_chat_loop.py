@@ -303,8 +303,12 @@ class WsChatLoop:
             "match_no": self.stats.matches,
         })
 
-        # opener with human delay
-        await asyncio.sleep(random.uniform(*self.cfg.opener_delay_s))
+        # opener with human delay (flow engine-এর নিজস্ব timing থাকলে সেটাই)
+        opener_delay = getattr(self.engine, "opener_delay", None)
+        if callable(opener_delay):
+            await asyncio.sleep(opener_delay())
+        else:
+            await asyncio.sleep(random.uniform(*self.cfg.opener_delay_s))
         if self.conversation_id and self.state == LoopState.CHATTING:
             opener = self.engine.opener(self.partner.__dict__ | {"username": self.partner.username})
             await self._send(opener)
