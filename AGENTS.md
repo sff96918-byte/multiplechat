@@ -1,5 +1,13 @@
 # AGENTS.md — এই ফাইল প্রতিটা agent session-এর শুরুতে পড়ো (এটা mandatory)
 
+> **⚠ আগে এটা পড়ো:** ইউজারের মূল চালানোর project হলো
+> `picccccccfull-project-v15-AGENTS-SKILLS.zip`-এর ভিতরের `eva-full-project/`
+> (entry/, core/, chat/, data/ …)। সেখানকার **`AGENTS.md` + `skills/`** হলো মূল গাইড —
+> reply engine, SESSION CHAT, GUI, error fix, verify gate সব সেখানে।
+> এই repo-র `eva/` ফোল্ডার হলো protocol R&D/আগের workspace; এখানকার নিয়মগুলো
+> (memory protocol, protocol guess-নিষেধ) সেগুলোর সাথেও প্রযোজ্য।
+> Verify (এই repo): `python3 -m pytest tests/ -q` (38) · `python3 -m ops.tools.socket_smoke_test` (24/24) · `python3 -m ops.tools.session_smoke_test` (7/7)
+
 তুমি এই repo-তে **নতুন করে** এসেছো। তোমার আগের agent-রা অনেক কাজ করে গেছে —
 তাদের জ্ঞান `memory/` ফোল্ডারে জমানো। নিচের ৬টা ধাপ মানো, তাহলেই তুমি
 আগের চেয়ে অনেক দ্রুত ও নির্ভুল কাজ করতে পারবে।
@@ -76,9 +84,9 @@ capture-backed** — ইউজারের নিজের browser traffic captu
 3. **Secrets কখনো commit/zip হবে না** — `configs/session.json`, cookies, JWT।
 4. **Verification gate** — `eva/` বদলালে এই ৪টা test চালাও, সব PASS না হলে কাজ complete না:
 ```bash
-python -m unittest discover -s tests         # unit + flow (19)
-python -m ops.tools.socket_smoke_test        # protocol (24/24)
-python -m ops.tools.session_smoke_test       # session flow (7/7)
+python3 -m pytest tests/ -q                  # unit + flow + debugtools (38)
+python3 -m ops.tools.socket_smoke_test       # protocol (24/24)
+python3 -m ops.tools.session_smoke_test      # session flow (7/7)
 ```
 5. **Rate discipline** — request spacing ≥ 250ms; 403-Flagged backoff remove করবে না।
 6. **Memory write** — কাজ শেষে `ops.tools.memory` দিয়ে লিখবেই।
@@ -124,7 +132,7 @@ python -m ops.tools.session_smoke_test       # session flow (7/7)
 ## 6) CURRENT STATE SNAPSHOT (2026-10-10 অনুযায়ী — বিস্তারিত sessions.md)
 
 - v4 পর্যন্ত complete: transport + loop + web dashboard + PyQt6 EXE dashboard + flow engine merge
-- Tests: unit+flow 19, protocol smoke 24/24, session smoke 7/7 — সব সবুজ
+- Tests: pytest 38, protocol smoke 24/24, session smoke 7/7 — সব সবুজ (sandbox-এ যাচাই)
 - **Live test এখনো হয়নি** (ইউজারের PC-তে হবে) — প্রথম live report এলে `open_questions.md`-র জিনিসগুলো verify করো
 - পরের সম্ভাব্য কাজ: live-debug, multi-account, proxy — ইউজার চাইলেই
 
