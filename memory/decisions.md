@@ -63,3 +63,9 @@ Reply engine options final: flow = legacy funnel (input/output txt banks, snap_u
 
 ## 2026-10-09 | Reply pacing: typing indicator → engine delay → send
 - Capture flow: typing POST আসে message POST-এর ঠিক আগে (~0.5s)। Flow engine delay = reaction(0.5-1.2) + read(1-3) + typing@6-12cps (ইউজারের config.json ranges থেকে)।
+
+## 2026-10-10 | v18: END without snap -> farewell once, then next user
+- Problem (v17): snap না হয়ে engine END হলে প্রতিটা partner message-এ closer যেত ("ttyl, snap me") — chat কখনো শেষ হতো না।
+- Fix: eva_flow.reply() — stage END এবং farewell_sent=True হলে "" ফেরত; farewell প্রথমবার END-এ গেলে sets farewell_sent. Browser: empty reply → chat শেষ → পরের user. ws_chat_loop আগে থেকেই empty reply-তে পরের user-এ যায়।
+- Snap rules অপরিবর্তিত (_should_share, share/ask flow, stage functions). test_flow 126/0, test_live 44/44 (legacy engine, unchanged), test_fuzz 4/4.
+- Shipped: picccccccfull-project-v18-END-FAREWELL-ONCE.zip (v17 zip removed).

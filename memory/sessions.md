@@ -80,3 +80,8 @@ PERSONA puro bad (GUI group, ws_bot/server Persona branch, config example, docs)
 - KEY discovery: message SEND হয় REST দিয়ে (multipart content+nonce), WS শুধু receive+match lifecycle। Auth = cookies only।
 - Built: socketio_codec, chitchat_socket, chitchat_api, ws_chat_loop, ws_bot CLI, replies, extract_session, protocol_manifest.json, socket_smoke_test → 15/15।
 - পুরনো assumption ভাঙা: "README says do not guess" — এখন সব capture-backed।
+
+## 2026-10-10 | v18 delivered (END farewell once)
+- User approved the v18 fix. Edited eva_flow.py (reply guard), browser_automation.py (empty reply → next user), test_flow.py (2 post-END assertions updated + underage case added), AGENTS.md skip-rule line.
+- Repo pytest tests/ → 38 passed. Zip v18 built from /tmp/w17 (161 files, no account_sessions, no pyc).
+- Still not run: socket_smoke_test, session_smoke_test, live browser run.
