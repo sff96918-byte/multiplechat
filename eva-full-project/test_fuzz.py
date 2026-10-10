@@ -16,8 +16,7 @@ Fires N random stranger messages (seeded, reproducible) through
      allows a convo to stay in GREETING when the stranger never gives info)
 
 Run:  python test_fuzz.py [N]      (N = messages per run, default 100)
-      Standard batch: test_matcher.bat runs it (and test.bat runs the
-      interactive REPL after the automated checks).
+      Standard batch: test.bat runs it (matcher + live + fuzz + demo).
 Exit: 0 on success, 1 on any failure.
 """
 

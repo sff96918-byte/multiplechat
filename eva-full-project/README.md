@@ -113,7 +113,7 @@ chat/       rule_bot.py (engine switch) + rules.py (legacy engine)
 core/       config loader, resource governor, engine bridge, accounts
 data/       input/ + output/ categories, countries.txt, snap_ids.txt,
             local_db/, config.json (runtime behavior)
-docs/       architecture, flow spec, installers (INSTALL_SMOOTH.*)
+docs/       flow spec (FLOW_SPEC.md)
 tools/      live_chat.py REPL, coverage check
 eva_flow.py the diagram funnel engine (default)
 run_chat.py / demo_flow.py / test_flow.py   flow-engine tools

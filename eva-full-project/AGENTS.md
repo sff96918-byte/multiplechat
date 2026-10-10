@@ -54,7 +54,7 @@ Reply content আসে `data/input/` (ইউজার কী লিখল → t
 run.vbs                    → Windows GUI launcher (pythonw -m entry.main, console নেই)
 run_console.bat            → একই GUI, CMD window সহ (debug)
 install.bat / forceinstall.bat → venv + packages + Playwright/Camoufox setup
-test.bat / test_matcher.bat → Windows test runner (test.bat = matcher + live + fuzz + demo + tools/live_chat)
+test.bat → Windows test runner (matcher + live + fuzz + demo + tools/live_chat)
 entry/main.py              → PyQt6 GUI (pages: Dashboard, Live Chat, Sessions, Accounts, Settings) ~2600 লাইন।
                              Logs একটাই জায়গায়: Dashboard-এর "LIVE LOG" panel (`_build_logs_panel`)।
                              Settings → CHAT TIMING: "New Chat Delay (s)" (একটাই field, default 5) + "Silence timeout (s)" (default 90)।
@@ -73,24 +73,20 @@ core/config_loader.py      → config.json loader: load_chat_timing(), load_runt
 core/engine_bridge.py      → engine ↔ worker bridge
 core/account_manager.py    → account list / session store helpers
 core/resource_governor.py  → CPU/RAM watchdog (psutil)
-core/signin_window.py      → login window
 browser/browser_automation.py → LIVE BROWSER chat lifecycle (Camoufox/Chromium) — বড় ও fragile
 browser/browser_engine.py  → Camoufox বা Chromium launch abstraction (Playwright)
 browser/context_pool.py    → একটা browser, অনেক isolated context
 browser/account_session_store.py → account session persistence (storage_state.json, metadata.json …)
-browser/device_signin.py   → device sign-in flow (GUI gate)
 browser/human_behavior.py  → typing / pause / read-time helpers
 chat/rule_bot.py           → ChatRuleBot (public reply API) — EVA_ENGINE env (default flow)
 eva_flow.py                → funnel state machine (EvaFlowBot) ← মূল flow logic। EVA_MAX_REPLIES (default 0 = cap off)
 chat/rules.py              → legacy RuleEngine (EVA_ENGINE=legacy) + TXT matcher + middle-chat pool loader
 chat/common_scan.py        → regex classifier (gender/age/country)
 chat/geo_handler.py        → country / geo detection
-chat/content_filter.py     → reply content filter
 chat/style_analyzer.py     → user typing style mirror
 chat/persona.py            → persona layer (legacy engine)
 chat/tg_brain.py           → reference TG stage rules (optional fallback)
 chat/horny_flirty_db.py    → horny / flirty keyword DB (আলাদা file)
-chat/chat_db.py            → chat DB loader (EVA_BOT_DB_ROOT env)
 chat/database/loader.py    → DB loader (optional বড় DB; না থাকলে skip, crash নয়)
 data/config.json           → SETTINGS: chat_timing, human_behavior, background_tabs, performance, ban_detection,
                              replies, website_visits, context_pool, engine_config, resource_governor, runtime
@@ -106,11 +102,8 @@ run_chat.py                → interactive REPL: নিজে stranger হয়
 demo_chat.py / demo_flow.py → scripted stranger → END demo
 tools/live_chat.py         → interactive REPL (test.bat থেকে চলে)
 tools/coverage_check.py    → TXT matcher DB coverage checker
-flow_reference.py          → dev reference (flow + file location), কোনো code import করে না
-_analyze.py                → data/input ও data/output-এর line count helper (dev)
 test_*.py                  → test (নিচে §5)
-docs/                      → FLOW_SPEC.md, TASKS.md, PROJECT_STATE.md, Architecture.txt (⚠ পুরনো v4 যুগের),
-                             INSTALL_SMOOTH / RUN_SMOOTH (.bat/.ps1), start_bot.bat, TG_REFERENCE/ (reference .py)
+docs/                      → FLOW_SPEC.md (একমাত্র active spec),
 skills/                    → task-ভিত্তিক playbook (নিচে §3)
 ```
 
@@ -227,7 +220,7 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
   chitchat.gg network sandbox-এ ব্লকড — **final live test ইউজারের PC-তে বাকি।**
 - **Browser mode:** আগের মতোই, একই ChatRuleBot।
 - **Test (v20):** matcher ✓, live 44/44, fuzz 4/4, flow 126/126, demo ✓; `import core.ws_transport.*` ✓; Settings save logic (stubbed Qt) ✓ (sandbox-এ যাচাই)।
-- **Known risk:** `chat/chat_db.py` ও `chat/database/loader.py`-তে hard-coded DB path
+- **Known risk:** `chat/database/loader.py`-তে hard-coded DB path (`chat/chat_db.py` v22-তে মুছে ফেলা হয়েছে)
   আছে (`EVA_BOT_DB_ROOT` env দিয়ে override হয়)। `browser/browser_automation.py`
   বড় ও fragile — ছোঁয়ার আগে ভালো করে পড়ো।
 - **Session data sensitivity:** zip-এ `account_sessions/` থাকলে তাতে login token
@@ -245,3 +238,4 @@ GUI বদলালে: `QT_QPA_PLATFORM=offscreen python -c "import entry.main"
 
 - **v19:** Picture sender সম্পূর্ণ সরানো হয়েছে — Dashboard-এর PICTURE SENDER group, Pictures page, Settings-এর picture config, browser/thread_manager-এর pic পরামিতি ও upload কোড। Chat engine (eva_flow / chat/*) অপরিবর্তিত; user-এর "send pic" কথার keyword detection engine-এ আছে, সেটা picture sender নয়।
 - **v20 (recheck):** (1) `entry/main.py` Settings-এর New Chat Delay min/max + Rest UI → একটাই "New Chat Delay (s)" (default 5); save-এ rest key পাঠানো হয় না (config অক্ষত)। (2) `data/config.json` + `core/config_loader.py` default new_chat_delay 5/5। (3) `core/ws_transport/chitchat_api.py` `List` import ও `ws_chat_loop.py` অচেনা `ReplyEngine` type-hint ঠিক (আগে pyflakes-এ undefined name ছিল; runtime-এ lazy annotation-এর কারণে crash হতো না)। (4) `entry/main.py` unused `sms_enabled`। (5) `docs/FLOW_SPEC.md` Max Replies section আপডেট (cap off, horny 5-cap কোডে নেই)। (6) Gate-এ `ws import ok` লাইন যোগ। (7) Project folder repo-র ভিতরে `eva-full-project/` হিসেবে এলো। (8) Browser rest বন্ধ (`_schedule_next_rest`/`_maybe_take_rest`), rest config key সরানো, CLI-এর "Chat Timeout 30s" hard-code → আসল silence timeout দেখায়। (9) `config/eva_config.json` (কোনো code পড়ত না) মুছে ফেলা হয়েছে।
+- **v22 (debug-pass cleanup):** dead module মুছে ফেলা: `_analyze.py`, `flow_reference.py`, `chat/chat_db.py`, `chat/content_filter.py`, `browser/device_signin.py`, `core/signin_window.py` (কোনো entry থেকে import নেই; `entry/main.py`-তে `signin_window` reference সরানো হয়েছে, আচরণ অপরিবর্তিত)। Junk মুছে: `browser/unique_sites.txt` (১০ লাখ লাইন, কোনো code পড়ে না — active list `data/unique_sites.txt`), `data/snapchat_fallback.txt`, `data/local_db/archive_flirty_questions.txt`, `data/local_db/keyword_db_*.zip` (কোনো reference নেই)। Installer/runner duplicate মুছে: `docs/INSTALL_SMOOTH.*`, `docs/RUN_SMOOTH.*`, `docs/start_bot.bat`, `test_matcher.bat` (test.bat-এ আছে)। Stale doc মুছে: `docs/Architecture.txt`, `docs/PROJECT_STATE.md`, `docs/TASKS.md`, `docs/readme.txt`, `docs/TG_REFERENCE/`। Runtime cache `data/.*.idx` নিজে থেকে আবার তৈরি হয় (round-robin position reset মাত্র)। Kept: `install.bat`, `forceinstall.bat`, `run.vbs`, `run_console.bat`, `test.bat`, `demo_flow.py`, `tools/coverage_check.py`, legacy engine-এর `data/local_db/stage_rules/`। Verify: gate সব PASS (§5), `tools/doctor` Qt widgets FAIL শুধু sandbox-এ libGL নেই বলে। 

@@ -1,4 +1,0 @@
-@ %username%
-k: %username%
-ok %username%
-kk %username%

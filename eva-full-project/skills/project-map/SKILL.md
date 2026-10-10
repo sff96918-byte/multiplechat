@@ -44,5 +44,5 @@ GUI-তে এগুলো Live Chat feed-এ `[S97]` হিসেবে দে�
 ## Fragile ফাইল (সাবধানে)
 - `browser/browser_automation.py` (~3600 লাইন) — login/chat lifecycle; thread-safe ধরবে না।
 - `entry/thread_manager.py` (~1250) — orchestration + Qt signal।
-- `entry/main.py` (~2600) — GUI; device-signin gate। Settings → CHAT TIMING: New Chat Delay (একটা field) + Silence timeout।
+- `entry/main.py` (~2600) — GUI। Settings → CHAT TIMING: New Chat Delay (একটা field) + Silence timeout।
 - `chat/rules.py` (~1300) — legacy engine + TXT matcher।

@@ -2108,7 +2108,6 @@ class ApplicationController:
         self.app = app
         self.development_mode = development_mode
         self.main_window = None
-        self.signin_window = None
         self.stats_timer = None
 
     def start(self):
@@ -2116,11 +2115,6 @@ class ApplicationController:
 
     def on_signin_successful(self):
         self.main_window = ChitchatBotGUI(development_mode=self.development_mode)
-
-        if self.signin_window and self.signin_window.device_signin:
-            device_id = self.signin_window.device_signin.get_device_id()
-            if device_id:
-                self.main_window.log_message(f"Authenticated - Device ID: {str(device_id)[:8]}...")
 
         def update_system_stats():
             try:

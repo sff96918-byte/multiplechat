@@ -44,5 +44,5 @@ token-subset → regex fallback (countries.txt)।
 - কোনো file-এ ফাঁকা লাইন/ডুপ্লিকেট যোগ করো না; UTF-8 সেভ করো।
 - `{snap}` placeholder `_resolve_snap_reply()` দিয়ে resolve হয় — হাতে বসাবে না।
 - Funnel state-এর নাম বদলালে `eva_flow.py` ও `docs/FLOW_SPEC.md` একসাথে আপডেট।
-- Adult/explicit content: বর্তমান content filter (`chat/content_filter.py`) ও horny রুট
+- Adult/explicit content: বর্তমান horny রুট (`chat/horny_flirty_db.py`); আলাদা content filter module নেই
   বদলাবে না — সেটা ইউজারের সিদ্ধান্ত।
