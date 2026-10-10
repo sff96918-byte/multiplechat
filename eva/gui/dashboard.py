@@ -169,7 +169,6 @@ class BotWorker:
         from ..transport.protocol import DEFAULT_UA
         from ..transport.ws_chat_loop import LoopConfig, WsChatLoop
 
-        persona_cfg = cfg.get("persona") or {}
         loop_cfg = LoopConfig(**{k: tuple(v) if isinstance(v, list) else v
                                  for k, v in (cfg.get("loop") or {}).items()})
         self.api = ChitchatApi(cookies, user_agent=ua or DEFAULT_UA,
@@ -178,14 +177,14 @@ class BotWorker:
         socket = ChitchatSocket(cookies, user_agent=ua or DEFAULT_UA)
 
         engine_name = (cfg.get("engine") or "flow").lower()
-        if engine_name == "flow":
+        if engine_name == "fixed":
+            from ..brain.fixed_reply_engine import FixedReplyEngine
+            engine = FixedReplyEngine(script_path=cfg.get("fixed_file"),
+                                      timing=cfg.get("timing"))
+        else:
             from ..brain.flow_reply_engine import FlowReplyEngine
             engine = FlowReplyEngine(snap_usernames=cfg.get("snap_usernames"),
                                      timing=cfg.get("timing"))
-        else:
-            from ..replies import Persona, ReplyEngine
-            persona = Persona(**{k: v for k, v in persona_cfg.items()})
-            engine = ReplyEngine(persona=persona, config=cfg.get("replies"))
 
         self.chat_loop = WsChatLoop(self.api, socket, engine, loop_cfg)
         await self.chat_loop.start()
@@ -306,7 +305,8 @@ def run_gui() -> int:
     from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                                  QHBoxLayout, QGridLayout, QPushButton, QTextEdit,
                                  QLabel, QGroupBox, QCheckBox, QComboBox, QFrame,
-                                 QLineEdit, QSpinBox, QDoubleSpinBox, QMessageBox)
+                                 QLineEdit, QSpinBox, QDoubleSpinBox, QMessageBox,
+                                 QFileDialog)
 
     log_q: "queue.Queue[str]" = queue.Queue()
     qh = QueueLogHandler(log_q)
@@ -394,8 +394,10 @@ def run_gui() -> int:
     eng_group = QGroupBox("ENGINE & SNAP")
     eg = QGridLayout(eng_group)
     engine_combo = QComboBox()
-    engine_combo.addItems(["flow — txt banks (greeting→age→country→flirty→snap)",
-                           "simple — persona templates"])
+    engine_combo.addItems([
+        "flow — SMS detect → input/output matching reply (funnel logic)",
+        "fixed — একটা fixed txt ফাইল, line-by-line reply",
+    ])
     eg.addWidget(QLabel("Engine:"), 0, 0)
     eg.addWidget(engine_combo, 0, 1, 1, 3)
     snap_edit = QLineEdit()
@@ -404,16 +406,24 @@ def run_gui() -> int:
     eg.addWidget(snap_edit, 1, 1, 1, 3)
     eng_row.addWidget(eng_group, 2)
 
-    persona_group = QGroupBox("PERSONA")
-    pg = QGridLayout(persona_group)
-    p_name = QLineEdit(); p_age = QSpinBox(); p_age.setRange(18, 60); p_age.setValue(21)
-    p_gender = QComboBox(); p_gender.addItems(["f", "m"])
-    p_country = QLineEdit(); p_country.setText("Germany")
-    pg.addWidget(QLabel("Name"), 0, 0); pg.addWidget(p_name, 0, 1)
-    pg.addWidget(QLabel("Age"), 0, 2); pg.addWidget(p_age, 0, 3)
-    pg.addWidget(QLabel("Gender"), 1, 0); pg.addWidget(p_gender, 1, 1)
-    pg.addWidget(QLabel("Country"), 1, 2); pg.addWidget(p_country, 1, 3)
-    eng_row.addWidget(persona_group, 1)
+    fixed_group = QGroupBox("FIXED SCRIPT (engine=fixed হলে)")
+    fg = QGridLayout(fixed_group)
+    fixed_edit = QLineEdit()
+    fixed_edit.setPlaceholderText("configs/fixed_script.txt (প্রতি লাইনে একটা reply, ক্রম অনুযায়ী)")
+    btn_browse = QPushButton("Browse…")
+    fg.addWidget(QLabel("File:"), 0, 0); fg.addWidget(fixed_edit, 0, 1)
+    fg.addWidget(btn_browse, 0, 2)
+    fixed_hint = QLabel("line শেষ হলে bot match skip করে next-এ যাবে")
+    fixed_hint.setObjectName("dim")
+    fixed_hint.setWordWrap(True)
+    fg.addWidget(fixed_hint, 1, 0, 1, 3)
+
+    def browse_fixed() -> None:
+        path, _ = QFileDialog.getOpenFileName(win, "Fixed script বাছাই করো", "", "Text files (*.txt);;All files (*)")
+        if path:
+            fixed_edit.setText(path)
+    btn_browse.clicked.connect(browse_fixed)
+    eng_row.addWidget(fixed_group, 1)
     cl.addLayout(eng_row)
 
     # ---- loop settings row
@@ -533,13 +543,9 @@ def run_gui() -> int:
 
     def save_settings() -> None:
         cfg = _load_config()
-        engine = "flow" if engine_combo.currentIndex() == 0 else "simple"
-        cfg["engine"] = engine
+        cfg["engine"] = "flow" if engine_combo.currentIndex() == 0 else "fixed"
         cfg["snap_usernames"] = [s.strip() for s in snap_edit.text().split(",") if s.strip()]
-        cfg.setdefault("persona", {}).update({
-            "name": p_name.text() or "Alex", "age": p_age.value(),
-            "gender": p_gender.currentText(), "country": p_country.text() or "Germany",
-        })
+        cfg["fixed_file"] = fixed_edit.text().strip() or "configs/fixed_script.txt"
         cfg.setdefault("loop", {}).update({
             "skip_idle_s": idle_spin.value(),
             "typing_indicator": typing_cb.isChecked(),
@@ -626,9 +632,7 @@ def run_gui() -> int:
     cfg = _load_config()
     engine_combo.setCurrentIndex(0 if (cfg.get("engine", "flow") == "flow") else 1)
     snap_edit.setText(", ".join(cfg.get("snap_usernames") or []))
-    pr = cfg.get("persona") or {}
-    p_name.setText(pr.get("name", "Alex")); p_age.setValue(int(pr.get("age", 21)))
-    p_gender.setCurrentText(pr.get("gender", "f")); p_country.setText(pr.get("country", "Germany"))
+    fixed_edit.setText(cfg.get("fixed_file", "configs/fixed_script.txt"))
     lp = cfg.get("loop") or {}
     idle_spin.setValue(int(lp.get("skip_idle_s", 90)))
     typing_cb.setChecked(bool(lp.get("typing_indicator", True)))

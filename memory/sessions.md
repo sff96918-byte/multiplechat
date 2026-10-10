@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v7: persona removed, flow/fixed engine selector
+
+PERSONA puro bad (GUI group, ws_bot/server Persona branch, config example, docs)। Engine selector: flow (SMS detect -> input/output bank matching) | fixed (FixedReplyEngine, configs/fixed_script.txt, opener=line1, per-partner pointer, exhaust -> loop skips match via leave_match)। tests/test_fixed_engine.py 7 tests। Suite 33/33, protocol 24/24, session 7/7।
 ## 2026-10-10 | v6.1: DASHBOARD_OPTIONS_BN.md (A-Z options mapping doc)
 
 - ইউজার চাইলেন dashboard-এর সব option + config mapping A-Z করে দেখাতে। docs/DASHBOARD_OPTIONS_BN.md বানানো হলো (17টা UI option + config keys + timing + txt banks + troubleshooting)। zip-এ docs/ ফোল্ডারে থাকবে।

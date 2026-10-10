@@ -21,9 +21,9 @@
 
 | # | Group / Option | কী করে | Config key |
 |---|----------------|--------|------------|
-| 7 | **ENGINE combo** | `flow — txt banks` = আপনার পুরনো funnel (greeting→age→country→flirty→snap) [DEFAULT] / `simple — persona templates` = বাক্য template engine | `engine`: `"flow"` বা `"simple"` |
+| 7 | **ENGINE combo** | `flow — SMS detect → input/output matching reply` = আপনার পুরনো funnel logic (greeting→age→country→flirty→snap) [DEFAULT] / `fixed — একটা fixed txt ফাইল, line-by-line reply` = পুরনো Fixed SMS মোড | `engine`: `"flow"` বা `"fixed"` |
 | 8 | **Snap** | Snap username (কমা দিয়ে একাধিক দিলে round-robin ঘুরবে)। Reply-র `%username%` placeholder এখান থেকে বসে। লেখা হয় `eva/brain/data/snap_ids.txt`। ⚠️ flow engine-এ এটা অবশ্যই লাগবে | `snap_usernames`: `["name1","name2"]` |
-| 9 | **PERSONA** (name/age/gender/country) | শুধু `simple` engine-এ কাজ করে (flow engine txt bank থেকে নিজেই উত্তর দেয়) | `persona`: `{name, age, gender, country}` |
+| 9 | **FIXED SCRIPT** (file + Browse) | শুধু `fixed` engine-এ কাজ করে — txt ফাইলের প্রতি লাইন = একটা reply, ক্রম অনুযায়ী যাবে। opener = ১ম লাইন, প্রতিটা partner SMS-এ পরের লাইন। লাইন ফুরালে bot match skip করে next-এ যায়। `#` = comment | `fixed_file`: `"configs/fixed_script.txt"` |
 | 10 | **Skip idle (sec)** | Partner এত সেকেন্যু চুপ থাকলে আমরা skip করে next-এ যাব (typing করলে থামবে; আপনার নিজের typing echo গোনা হয় না) | `loop.skip_idle_s` (15–600, default 90) |
 | 11 | **Typing indicator** | ON হলে message পাঠানোর আগে `POST .../typing` যাবে (partner-এর screen-এ "typing..." দেখবে — realistic) | `loop.typing_indicator` (true/false) |
 | 12 | **Auto next match** | ON হলে এক match শেষ (partner skip/আমাদের skip) → 2–5s পর আবার queue। OFF হলে এক match শেষে থেমে থাকবে | `loop.auto_next` (true/false) |
@@ -37,9 +37,9 @@
 
 | Key | মানে | Default |
 |-----|------|---------|
-| `engine` | flow বা simple | `"flow"` |
+| `engine` | flow বা fixed | `"flow"` |
 | `snap_usernames` | snap pool (rotate) | — |
-| `persona.*` | simple engine-এর পরিচয় | example অনুযায়ী |
+| `fixed_file` | fixed engine-এর script txt-এর path | `"configs/fixed_script.txt"` |
 | `loop.*` | উপরের 10–13 + `next_delay_s:[2,5]`, `min_reply_delay_s:1.0`, `opener_delay_s`, `queue_timeout_s:120`, `skip_after_msgs:25` | example অনুযায়ী |
 | `message_body_format` | `"multipart"` (capture-backed) / `"json"` (fallback, multipart reject হলে auto-try-ও হয়) | `"multipart"` |
 | `timing.*` | **মানুষের মতো pacing (v6)** — নিচে বিস্তারিত | legacy মান |
@@ -57,6 +57,16 @@
 
 ### 💬 REPLY BANKS (flow engine — ফাইল এডিট করলেই behavior বদলায়)
 
+**fixed engine (line-by-line):** `configs/fixed_script.txt` — প্রতি non-empty লাইন একটা reply:
+
+```
+# comment লাইন skip হয়
+hii :)
+19 f, n u?
+oh nice.. from?
+```
+opener = ১ম লাইন। প্রতিটা partner SMS-এ পরের লাইন। প্রতি partner-এর pointer আলাদা। লাইন ফুরালে bot ওই match skip করে next match-এ চলে যায়।
+
 ```
 eva/brain/data/input/<category>.txt   = partner যা লিখলে ধরা পড়বে (trigger)
 eva/brain/data/output/<category>.txt  = আমরা যা reply দেব
@@ -68,7 +78,7 @@ Flow: `greeting` → `age_gender` → `country` → `flirty_questions` → `horn
 
 ## 🌐 WEB DASHBOARD (বিকল্প, run_dashboard.bat → :8800)
 
-একই কাজ web-এ: 🔑 Session panel (Launch Browser/Save Session/browser path) + 🤖 Bot control (Start/Stop, stats) + ⚙️ Config (persona, skip idle, typing, auto next) + 📜 Live log (2.5s refresh)।
+একই কাজ web-এ: 🔑 Session panel (Launch Browser/Save Session/browser path) + 🤖 Bot control (Start/Stop, stats) + ⚙️ Config (engine, fixed file, skip idle, typing, auto next) + 📜 Live log (2.5s refresh)।
 
 ---
 

@@ -6,7 +6,7 @@ Run:  python -m eva.dashboard.server            (http://127.0.0.1:8800)
 Panels:
   1. SESSION    — Launch Browser (CDP) -> manual login -> Save Session
   2. BOT        — Start / Stop, live state, partner, stats
-  3. CONFIG     — persona + loop tuning (saved to configs/chitchat_bot.json)
+  3. CONFIG     — engine + fixed file + loop tuning (saved to configs/chitchat_bot.json)
   4. LOGS       — live log tail
 """
 
@@ -23,7 +23,6 @@ from typing import Optional
 
 from aiohttp import web
 
-from ..replies import Persona, ReplyEngine
 from ..transport.chitchat_api import ChitchatApi
 from ..transport.chitchat_socket import ChitchatSocket
 from ..transport.protocol import DEFAULT_UA
@@ -102,14 +101,15 @@ class BotManager:
         ua = session.get("user_agent") or DEFAULT_UA
         cfg = _load_config()
 
-        persona = Persona(**{k: v for k, v in (cfg.get("persona") or {}).items()})
         engine_name = (cfg.get("engine") or "flow").lower()
-        if engine_name == "flow":
+        if engine_name == "fixed":
+            from ..brain.fixed_reply_engine import FixedReplyEngine
+            engine = FixedReplyEngine(script_path=cfg.get("fixed_file"),
+                                      timing=cfg.get("timing"))
+        else:
             from ..brain.flow_reply_engine import FlowReplyEngine
             engine = FlowReplyEngine(snap_usernames=cfg.get("snap_usernames"),
                                      timing=cfg.get("timing"))
-        else:
-            engine = ReplyEngine(persona=persona, config=cfg.get("replies"))
         loop_cfg = LoopConfig(**{k: tuple(v) if isinstance(v, list) else v
                                  for k, v in (cfg.get("loop") or {}).items()})
 
@@ -230,8 +230,10 @@ def build_app() -> web.Application:
         except Exception:  # noqa: BLE001
             return web.json_response({"ok": False, "error": "bad json"}, status=400)
         cfg = _load_config()
-        if "persona" in body:
-            cfg.setdefault("persona", {}).update(body["persona"])
+        if "engine" in body:
+            cfg["engine"] = body["engine"]
+        if "fixed_file" in body:
+            cfg["fixed_file"] = body["fixed_file"]
         if "loop" in body:
             cfg.setdefault("loop", {}).update(body["loop"])
         _save_config(cfg)
@@ -348,12 +350,14 @@ HTML_PAGE = """<!doctype html>
   </div>
 
   <div class="card">
-    <h2>⚙️ কনফিগ (persona + loop)</h2>
+    <h2>⚙️ কনফিগ (engine + loop)</h2>
     <div class="row">
-      name <input id="cName" style="width:90px">
-      age <input id="cAge" type="number" style="width:64px">
-      gender <input id="cGender" style="width:44px" placeholder="m/f">
-      country <input id="cCountry" style="width:100px">
+      engine
+      <select id="cEngine">
+        <option value="flow">flow — SMS detect → input/output matching</option>
+        <option value="fixed">fixed — txt ফাইল line-by-line</option>
+      </select>
+      fixed file <input id="cFixed" class="wide" placeholder="configs/fixed_script.txt">
     </div>
     <div class="row">
       skip idle (sec) <input id="cIdle" type="number" style="width:70px">
@@ -434,18 +438,15 @@ async function botStop(){
 }
 async function loadConfig(){
   try{const c=await (await fetch('/api/config')).json();
-    $id('cName').value=(c.persona&&c.persona.name)||'Alex';
-    $id('cAge').value=(c.persona&&c.persona.age)||24;
-    $id('cGender').value=(c.persona&&c.persona.gender)||'m';
-    $id('cCountry').value=(c.persona&&c.persona.country)||'Germany';
+    $id('cEngine').value=c.engine||'flow';
+    $id('cFixed').value=c.fixed_file||'configs/fixed_script.txt';
     $id('cIdle').value=(c.loop&&c.loop.skip_idle_s)||90;
     $id('cTyping').value=String((c.loop&&c.loop.typing_indicator)??true);
     $id('cAuto').value=String((c.loop&&c.loop.auto_next)??true);
   }catch(e){}
 }
 async function saveConfig(){
-  const body={persona:{name:$id('cName').value,age:parseInt($id('cAge').value)||24,
-                gender:$id('cGender').value||'m',country:$id('cCountry').value},
+  const body={engine:$id('cEngine').value,fixed_file:$id('cFixed').value,
               loop:{skip_idle_s:parseFloat($id('cIdle').value)||90,
                 typing_indicator:$id('cTyping').value==='true',
                 auto_next:$id('cAuto').value==='true'}};

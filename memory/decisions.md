@@ -2,6 +2,9 @@
 
 **নিয়ম:** এখানকার decision ভাঙতে চাইলে আগে নতুন entry লিখে justify করো।
 
+## 2026-10-10 | v7 engine model: flow|fixed only
+
+Reply engine options final: flow = legacy funnel (input/output txt banks, snap_usernames) ar fixed = fixed txt line-by-line (user-er purano Fixed SMS mode)। Persona/template engine UI+config theke sorano; eva/replies.py module rakha hoyeche shudhu test compat-er jonno।
 ## 2026-10-10 | Human pacing from legacy config, not hardcoded
 
 - ইউজারের পুরনো প্রজেক্টের human_behavior/chat_timing মানগুলো config-এর `timing` section-এ সরানো হলো (DEFAULT_TIMING fallback)। কারণ: realism টিউন করা ইউজার code ছাড়াই পারবে; মানগুলো তার নিজের প্রজেক্টে proven।

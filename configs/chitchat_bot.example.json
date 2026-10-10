@@ -1,54 +1,5 @@
 {
-  "_comment": "Copy to configs/chitchat_bot.json and tune. Persona = what the bot claims in chat.",
-  "persona": {
-    "name": "Alex",
-    "age": 24,
-    "gender": "m",
-    "country": "Germany",
-    "interests": [
-      "music",
-      "games",
-      "movies"
-    ]
-  },
-  "replies": {
-    "greetings": [
-      "hey {name} :)",
-      "hi! how's it going?",
-      "hey there",
-      "hii"
-    ],
-    "gender_answers": [
-      "{gender}",
-      "{gender} u?",
-      "{gender}, you?"
-    ],
-    "age_answers": [
-      "{age}",
-      "{age} u?",
-      "{age}, you?"
-    ],
-    "smalltalk": [
-      "nice :) what's up?",
-      "haha true",
-      "oh cool, tell me more",
-      "same here tbh",
-      "what do you do for fun?",
-      "sounds fun",
-      "hbu?",
-      "lol yeah",
-      "interesting.. go on"
-    ],
-    "interest_questions": [
-      "so what are you into?",
-      "any hobbies?",
-      "music taste? :)"
-    ],
-    "bye": [
-      "nice talking! take care",
-      "cya :)"
-    ]
-  },
+  "_comment": "engine: 'flow' = SMS detect → input/output txt matching reply (funnel logic) | 'fixed' = একটা fixed txt ফাইল থেকে line-by-line reply (fixed_file path)",
   "loop": {
     "auto_next": true,
     "next_delay_s": [
@@ -93,6 +44,7 @@
       6.0
     ]
   },
-  "_comment2": "engine: 'flow' = old EVA txt-bank funnel (eva/brain/data), 'simple' = persona templates",
-  "_comment3": "timing = realistic human pacing (legacy project-এর human_behavior/chat_timing মান)"
+  "_comment2": "snap_usernames = %username% pool। timing = human pacing। loop = matching behavior।",
+  "_comment3": "timing = realistic human pacing (legacy project-এর human_behavior/chat_timing মান)",
+  "fixed_file": "configs/fixed_script.txt"
 }

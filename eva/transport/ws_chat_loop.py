@@ -384,6 +384,15 @@ class WsChatLoop:
             return
 
         reply = self.engine.reply(self.partner.__dict__ | {"username": self.partner.username} if self.partner else {}, content)
+        # FIXED engine: script-এর line ফুরালে reply খালি আসে → মসৃণভাবে next match
+        if not (reply or "").strip():
+            log.info("engine-এর আর reply নেই (fixed script শেষ) — match skip")
+            try:
+                await self.api.leave_match()
+            except Exception:  # noqa: BLE001
+                pass
+            self._end_match()
+            return
         await self._send(reply)
 
     async def _send(self, text: str) -> None:

@@ -31,7 +31,6 @@ from .chitchat_api import ChitchatApi, SessionExpiredError
 from .chitchat_socket import ChitchatSocket
 from .protocol import DEFAULT_UA
 from .ws_chat_loop import LoopConfig, WsChatLoop
-from ..replies import Persona, ReplyEngine
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -59,16 +58,17 @@ async def run(args: argparse.Namespace) -> None:
     if cfg_path.exists():
         cfg_data = json.loads(cfg_path.read_text(encoding="utf-8"))
 
-    persona = Persona(**{k: v for k, v in (cfg_data.get("persona") or {}).items()})
     engine_name = (cfg_data.get("engine") or "flow").lower()
-    if engine_name == "flow":
+    if engine_name == "fixed":
+        from ..brain.fixed_reply_engine import FixedReplyEngine
+        engine = FixedReplyEngine(script_path=cfg_data.get("fixed_file"),
+                                  timing=cfg_data.get("timing"))
+        print(f"[i] reply engine: FIXED (line-by-line) file={engine.script_path}")
+    else:
         from ..brain.flow_reply_engine import FlowReplyEngine
         engine = FlowReplyEngine(snap_usernames=cfg_data.get("snap_usernames"),
                                  timing=cfg_data.get("timing"))
-        print(f"[i] reply engine: FLOW (txt banks) snap={cfg_data.get('snap_usernames')}")
-    else:
-        engine = ReplyEngine(persona=persona, config=cfg_data.get("replies"))
-        print("[i] reply engine: SIMPLE (persona templates)")
+        print(f"[i] reply engine: FLOW (SMS detect → input/output matching) snap={cfg_data.get('snap_usernames')}")
     loop_cfg = LoopConfig(**{k: tuple(v) if isinstance(v, list) else v
                              for k, v in (cfg_data.get("loop") or {}).items()})
 

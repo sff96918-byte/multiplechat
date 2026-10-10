@@ -1,0 +1,14 @@
+# Fixed SMS script — প্রতি লাইনে একটা reply (ক্রম অনুযায়ী যাবে)
+# '#' দিয়ে শুরু হলে comment (skip হবে)
+# ব্যবহার: এই ফাইলটা configs/fixed_script.txt নামে copy করে এডিট করো,
+#          dashboard-এ Engine = "fixed" সিলেক্ট করে Script path দাও।
+# line শেষ হয়ে গেলে bot match skip করে next-এ যাবে।
+hii :)
+19 f, n u?
+oh nice.. from?
+hehe same here
+so what do u do for fun?
+sounds fun tbh
+btw do u use snap?
+here's mine -> %username%
+it was nice talking, cya :)
