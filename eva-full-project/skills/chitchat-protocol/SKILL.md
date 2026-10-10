@@ -40,3 +40,11 @@ match closed (reason=INTENTIONAL by=partner)   ← partner skip
 
 ## Session/token
 Token চাওয়া/দেখানো নিষেধ। Debug-এ শুধু user label ও "token আছে/নেই"।
+
+## v23 — send_message duplicate guard (ws_transport)
+- `send_message` শুধু ambiguous failure-এ (timeout, socket drop, 5xx) `GET /users/me/conversations/{cid}/messages?limit=20` দিয়ে একই `nonce` খোঁজে। পেলে সেই message-কে সফল ধরে, আবার POST করে না।
+- 4xx definitive, 403 `Flagged` → আগের মতোই raise (`FlaggedError`)।
+- Unit test: `python test_ws_transport.py` (22 checks, synthetic fixture)।
+- Open unknown (গোপনে ধরে নেবে না): send request-এর exact body/field name capture-এ নেই (14/14 POST body খালি)। `capture.py`-তে `Network.getRequestPostData` ডাকা হয় না — নতুন capture-এ এটা যাচাই করতে হবে।
+- Timing evidence (এক session, n=10): inbound chatMessage → bot reply 4.5–11.8 s (median 6.3 s)। Timing পরিবর্তন এই evidence দিয়ে হবে না — আলাদা অনুমোদন লাগবে।
+

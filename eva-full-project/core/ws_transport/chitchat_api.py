@@ -23,6 +23,24 @@ from . import protocol as P
 log = logging.getLogger("eva.chitchat_api")
 
 
+def find_message_by_nonce(messages: Any, nonce: str) -> Optional[dict]:
+    """Return the message whose client `nonce` matches, else None.
+
+    Accepts a plain list or a {"messages": [...]} wrapper. Used after an
+    ambiguous send failure to see whether the server already stored our message.
+    """
+    if not nonce:
+        return None
+    if isinstance(messages, dict):
+        messages = messages.get("messages")
+    if not isinstance(messages, list):
+        return None
+    for m in messages:
+        if isinstance(m, dict) and m.get("nonce") == nonce:
+            return m
+    return None
+
+
 class ApiError(RuntimeError):
     def __init__(self, status: int, path: str, body: Any) -> None:
         self.status = status
@@ -180,7 +198,7 @@ class ChitchatApi:
         path = P.EP_CONVERSATION_MESSAGES.format(cid=conversation_id)
         return await self._request("GET", path, params={"limit": str(limit), "offset": str(offset)})
 
-    async def send_message(self, conversation_id: str, content: str, nonce: Optional[str] = None) -> dict:
+    async def _post_message_once(self, conversation_id: str, content: str, nonce: str) -> Any:
         """POST /users/me/conversations/{cid}/messages.
 
         Capture proves: content-type multipart/form-data, response 201 Message
@@ -189,7 +207,6 @@ class ChitchatApi:
         we retry once with a JSON body (config switch message_body_format).
         """
         path = P.EP_CONVERSATION_MESSAGES.format(cid=conversation_id)
-        nonce = nonce or str(uuid.uuid4())
 
         if self._msg_format == P.MESSAGE_BODY_FORMAT_MULTIPART:
             form = aiohttp.FormData()
@@ -210,8 +227,37 @@ class ChitchatApi:
         else:
             body = await self._request("POST", path, json={"content": content, "nonce": nonce})
 
+        return body
+    async def send_message(self, conversation_id: str, content: str, nonce: Optional[str] = None) -> dict:
+        """POST /users/me/conversations/{cid}/messages, with a duplicate guard.
+
+        Only an *ambiguous* failure (timeout, socket drop, 5xx) triggers a check:
+        if our nonce already appears in the conversation, the message was stored
+        and we return it instead of raising (no double send). 4xx errors are
+        definitive and propagate unchanged.
+        """
+        nonce = nonce or str(uuid.uuid4())
+        try:
+            body = await self._post_message_once(conversation_id, content, nonce)
+        except (asyncio.TimeoutError, aiohttp.ClientError, ApiError) as exc:
+            if isinstance(exc, ApiError) and exc.status < 500:
+                raise
+            found = await self._confirm_sent(conversation_id, nonce)
+            if found is None:
+                raise
+            log.warning("send ambiguous (%s) but nonce %s is stored — not re-sending", exc, nonce[:8])
+            body = found
         self.stats.messages_sent += 1
         return body if isinstance(body, dict) else {}
+
+    async def _confirm_sent(self, conversation_id: str, nonce: str) -> Optional[dict]:
+        """Look for our nonce in the newest messages. Any lookup error -> None."""
+        try:
+            messages = await self.fetch_messages(conversation_id, limit=20)
+        except Exception:  # noqa: BLE001 — lookup is best-effort
+            log.exception("nonce lookup failed")
+            return None
+        return find_message_by_nonce(messages, nonce)
 
     # ------------------------------------------------------------ helpers
 
