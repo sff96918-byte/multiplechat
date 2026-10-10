@@ -1,5 +1,8 @@
 # SESSIONS (নতুন আগে — newest first)
 
+## 2026-10-10 | v6.1: DASHBOARD_OPTIONS_BN.md (A-Z options mapping doc)
+
+- ইউজার চাইলেন dashboard-এর সব option + config mapping A-Z করে দেখাতে। docs/DASHBOARD_OPTIONS_BN.md বানানো হলো (17টা UI option + config keys + timing + txt banks + troubleshooting)। zip-এ docs/ ফোল্ডারে থাকবে।
 ## 2026-10-10 | v6: realistic timing + session-expiry handling (+rebase lost-wiring fix)
 
 - Found: rebase conflict resolution (--ours) silently reverted v4 wiring in ws_bot.py/server.py/config example — engine selection was missing there (gui had it). Re-applied + added v6 on top.
